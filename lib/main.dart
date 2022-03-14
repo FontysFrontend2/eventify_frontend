@@ -57,7 +57,7 @@ class MyAppState extends State<MyApp> {
 
                   // Painikkeet alhaalla: events, home, map
                   Container(
-                      color: Colors.orange,
+                      color: Colors.amber,
                       width: double.infinity,
                       padding: const EdgeInsets.all(10.0),
                       child: Align(
@@ -66,16 +66,25 @@ class MyAppState extends State<MyApp> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextButton(
-                                  onPressed: () => _stateCounter(0),
-                                  child: const Text('HOME'),
+                                  onPressed: () => _stateCounter(1),
+                                  child: const Text('EVENTS',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                                 TextButton(
-                                  onPressed: () => _stateCounter(1),
-                                  child: const Text('EVENTS'),
+                                  onPressed: () => _stateCounter(0),
+                                  child: const Text('HOME',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                                 TextButton(
                                   onPressed: () => _stateCounter(2),
-                                  child: const Text('MAP'),
+                                  child: const Text('MAP',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
                                 )
                               ])))
                 ])))));
