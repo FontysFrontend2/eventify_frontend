@@ -1,7 +1,9 @@
 import 'package:eventify_frontend/views/events_view.dart';
 import 'package:eventify_frontend/views/home_view.dart';
+import 'package:eventify_frontend/views/map_view.dart';
+import 'package:eventify_frontend/views/profile_view.dart';
+import 'package:eventify_frontend/views/eventcard_view.dart';
 import 'package:flutter/material.dart';
-import 'views/map_view.dart';
 
 /*void main() {
   runApp(MyApp());
@@ -46,14 +48,30 @@ class MyAppState extends State<MyApp> {
                   }
                   return true;
                 },
-                // Näkymät: state 0 = home, state 1 = events, state 2 = map
+                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card
                 child: Column(
                     children: ([
                   _state == 0
-                      ? (Expanded(flex: 2, child: homeView))
+                      ? (Expanded(
+                          flex: 2,
+                          child: Column(children: [
+                            TextButton(
+                              onPressed: () => _stateCounter(3),
+                              child: const Text('Profile',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                            Expanded(flex: 2, child: homeView)
+                          ])))
                       : _state == 1
                           ? (Expanded(flex: 2, child: eventsView))
-                          : (Expanded(flex: 2, child: mapView)),
+                          : _state == 2
+                              ? (Expanded(flex: 2, child: mapView))
+                              : _state == 3
+                                  ? (Expanded(flex: 2, child: profileView))
+                                  : (Expanded(flex: 2, child: eventcardView)),
 
                   // Painikkeet alhaalla: events, home, map
                   Container(
@@ -86,7 +104,15 @@ class MyAppState extends State<MyApp> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
                                 )
-                              ])))
+                              ]))),
+                  TextButton(
+                    onPressed: () => _stateCounter(4),
+                    child: const Text('Test Button for event card view',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                 ])))));
   }
 }
