@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 @override
 Widget homeView = Container(
-    color: Colors.redAccent,
+    color: Colors.red,
     width: double.infinity,
     height: 100.0,
     padding: const EdgeInsets.all(10.0),
-    child: Align(
+    child: const Align(
         alignment: Alignment.center,
         child: Text(
           'This is home view',

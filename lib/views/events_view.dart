@@ -6,7 +6,7 @@ Widget eventsView = Container(
     width: double.infinity,
     height: 100.0,
     padding: const EdgeInsets.all(10.0),
-    child: Align(
+    child: const Align(
         alignment: Alignment.center,
         child: Text(
           'This is events view',

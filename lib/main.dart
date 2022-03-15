@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
   runApp(MyApp());
 }*/
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return MyAppState();
@@ -35,7 +37,7 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text('My App'),
+              title: const Text('Eventify'),
             ),
             body: WillPopScope(
                 // Takaisinnäppäimen hallinta, muista näkymistä vie homeen ja homesta sulkee sovelluksen
@@ -55,6 +57,7 @@ class MyAppState extends State<MyApp> {
                       ? (Expanded(
                           flex: 2,
                           child: Column(children: [
+                            // profile painike
                             TextButton(
                               onPressed: () => _stateCounter(3),
                               child: const Text('Profile',
@@ -73,7 +76,7 @@ class MyAppState extends State<MyApp> {
                                   ? (Expanded(flex: 2, child: profileView))
                                   : (Expanded(flex: 2, child: eventcardView)),
 
-                  // Painikkeet alhaalla: events, home, map
+                  // Painikkeet alhaalla: events, home, map ja event card
                   Container(
                       color: Colors.amber,
                       width: double.infinity,
@@ -105,6 +108,7 @@ class MyAppState extends State<MyApp> {
                                           fontWeight: FontWeight.bold)),
                                 )
                               ]))),
+                  // Painike event card test
                   TextButton(
                     onPressed: () => _stateCounter(4),
                     child: const Text('Test Button for event card view',
