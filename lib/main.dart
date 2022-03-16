@@ -24,6 +24,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 0;
 
+  // State määrittää näytettävän näkymän (0-5)
   void _stateCounter(int i) {
     setState(() {
       _state = i;
@@ -51,6 +52,7 @@ class MyAppState extends State<MyApp> {
                   }
                   return true;
                 },
+
                 // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card, state 5 = joined event
                 child: Column(
                     children: ([
@@ -81,7 +83,7 @@ class MyAppState extends State<MyApp> {
                                       : (Expanded(
                                           flex: 2, child: joinedeventView)),
 
-                  // Painikkeet alhaalla: events, home, map ja event card
+                  // Painikkeet alhaalla: events, home, map
                   Container(
                       color: Colors.amber,
                       width: double.infinity,
@@ -113,12 +115,13 @@ class MyAppState extends State<MyApp> {
                                           fontWeight: FontWeight.bold)),
                                 )
                               ]))),
+
                   // Painike event card test and joined event test
-                  // Event cardin voi myöhemmin avata mapista tai feedistä ennen liittymistä ja joined eventin kun on liittynyt eventtiin
-                  Row(children: [
+                  // Event cardin voi myöhemmin avata mapista tai homesta ennen liittymistä ja joined eventin kun on liittynyt eventtiin
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     TextButton(
                       onPressed: () => _stateCounter(4),
-                      child: const Text('Test Button for event card view',
+                      child: const Text('Test: event card view',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -126,7 +129,7 @@ class MyAppState extends State<MyApp> {
                     ),
                     TextButton(
                       onPressed: () => _stateCounter(5),
-                      child: const Text('Test Button for joined event view',
+                      child: const Text('Test: joined event view',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
