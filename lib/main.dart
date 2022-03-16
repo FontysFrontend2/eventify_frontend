@@ -1,5 +1,6 @@
 import 'package:eventify_frontend/views/events_view.dart';
 import 'package:eventify_frontend/views/home_view.dart';
+import 'package:eventify_frontend/views/joinedevent_view.dart';
 import 'package:eventify_frontend/views/map_view.dart';
 import 'package:eventify_frontend/views/profile_view.dart';
 import 'package:eventify_frontend/views/eventcard_view.dart';
@@ -50,7 +51,7 @@ class MyAppState extends State<MyApp> {
                   }
                   return true;
                 },
-                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card
+                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card, state 5 = joined event
                 child: Column(
                     children: ([
                   _state == 0
@@ -74,7 +75,11 @@ class MyAppState extends State<MyApp> {
                               ? (Expanded(flex: 2, child: mapView))
                               : _state == 3
                                   ? (Expanded(flex: 2, child: profileView))
-                                  : (Expanded(flex: 2, child: eventcardView)),
+                                  : _state == 4
+                                      ? (Expanded(
+                                          flex: 2, child: eventcardView))
+                                      : (Expanded(
+                                          flex: 2, child: joinedeventView)),
 
                   // Painikkeet alhaalla: events, home, map ja event card
                   Container(
@@ -108,15 +113,26 @@ class MyAppState extends State<MyApp> {
                                           fontWeight: FontWeight.bold)),
                                 )
                               ]))),
-                  // Painike event card test
-                  TextButton(
-                    onPressed: () => _stateCounter(4),
-                    child: const Text('Test Button for event card view',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
+                  // Painike event card test and joined event test
+                  // Event cardin voi myöhemmin avata mapista tai feedistä ennen liittymistä ja joined eventin kun on liittynyt eventtiin
+                  Row(children: [
+                    TextButton(
+                      onPressed: () => _stateCounter(4),
+                      child: const Text('Test Button for event card view',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    TextButton(
+                      onPressed: () => _stateCounter(5),
+                      child: const Text('Test Button for joined event view',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ])
                 ])))));
   }
 }
