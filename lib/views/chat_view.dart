@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChatView extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const ChatView();
+  const ChatView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

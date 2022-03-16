@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const ProfileView();
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
