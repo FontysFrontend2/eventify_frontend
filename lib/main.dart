@@ -1,6 +1,6 @@
 import 'package:eventify_frontend/views/events_view.dart';
 import 'package:eventify_frontend/views/home_view.dart';
-import 'package:eventify_frontend/views/joinedevent_view.dart';
+import 'package:eventify_frontend/views/chat_view.dart';
 import 'package:eventify_frontend/views/map_view.dart';
 import 'package:eventify_frontend/views/profile_view.dart';
 import 'package:eventify_frontend/views/eventcard_view.dart';
@@ -69,19 +69,20 @@ class MyAppState extends State<MyApp> {
                                     fontWeight: FontWeight.bold,
                                   )),
                             ),
-                            Expanded(flex: 2, child: homeView)
+                            const Expanded(flex: 2, child: HomeView())
                           ])))
                       : _state == 1
-                          ? (Expanded(flex: 2, child: eventsView))
+                          ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
-                              ? (Expanded(flex: 2, child: mapView))
+                              ? (const Expanded(flex: 2, child: MapView()))
                               : _state == 3
-                                  ? (Expanded(flex: 2, child: profileView))
+                                  ? (const Expanded(
+                                      flex: 2, child: ProfileView()))
                                   : _state == 4
-                                      ? (Expanded(
-                                          flex: 2, child: eventcardView))
-                                      : (Expanded(
-                                          flex: 2, child: joinedeventView)),
+                                      ? (const Expanded(
+                                          flex: 2, child: EventCardView()))
+                                      : (const Expanded(
+                                          flex: 2, child: ChatView())),
 
                   // Painikkeet alhaalla: events, home, map
                   Container(
