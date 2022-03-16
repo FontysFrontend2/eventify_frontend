@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomeView extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const HomeView();
 
   Widget build(BuildContext context) {
