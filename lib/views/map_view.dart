@@ -5,10 +5,11 @@ class MapView extends StatefulWidget {
   final VoidCallback _selectHandler;
 
   // ignore: use_key_in_widget_constructors
-  MapView(this._selectHandler);
+  const MapView(this._selectHandler);
 
   @override
-  _MapScreenState createState() => _MapScreenState(this._selectHandler);
+  // ignore: no_logic_in_create_state
+  _MapScreenState createState() => _MapScreenState(_selectHandler);
 }
 
 class _MapScreenState extends State<MapView> {
@@ -61,8 +62,7 @@ class _MapScreenState extends State<MapView> {
               markerId: const MarkerId('event1'),
               infoWindow: InfoWindow(
                 title: 'event1',
-                snippet:
-                    'This is example event number 1.\nJoin this event by tapping this',
+                snippet: 'Tap to see event info and join',
                 onTap: () => _selectHandler(),
               ),
               icon: BitmapDescriptor.defaultMarkerWithHue(
@@ -72,9 +72,8 @@ class _MapScreenState extends State<MapView> {
             Marker(
               markerId: const MarkerId('event2'),
               infoWindow: InfoWindow(
-                title: 'event1',
-                snippet:
-                    'This is example event number 2.\nJoin this event by tapping this',
+                title: 'event2',
+                snippet: 'Tap to see event info and join',
                 onTap: () => _selectHandler(),
               ),
               icon: BitmapDescriptor.defaultMarkerWithHue(
