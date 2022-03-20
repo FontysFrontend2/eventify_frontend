@@ -8,6 +8,7 @@ import 'package:eventify_frontend/views/profile_view.dart';
 import 'package:eventify_frontend/views/eventcard_view.dart';
 import 'package:flutter/material.dart';
 
+// sprintti2
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
