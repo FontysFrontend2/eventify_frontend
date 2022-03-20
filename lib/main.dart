@@ -8,6 +8,7 @@ import 'package:eventify_frontend/views/profile_view.dart';
 import 'package:eventify_frontend/views/eventcard_view.dart';
 import 'package:flutter/material.dart';
 
+// sprintti2
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
@@ -72,7 +73,9 @@ class MyAppState extends State<MyApp> {
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
-                              ? (const Expanded(flex: 2, child: MapView()))
+                              ? (Expanded(
+                                  flex: 2,
+                                  child: MapView(() => _stateCounter(4))))
                               : _state == 3
                                   ? (const Expanded(
                                       flex: 2, child: ProfileView()))
