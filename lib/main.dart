@@ -73,7 +73,9 @@ class MyAppState extends State<MyApp> {
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
-                              ? (const Expanded(flex: 2, child: MapView()))
+                              ? (Expanded(
+                                  flex: 2,
+                                  child: MapView(() => _stateCounter(4))))
                               : _state == 3
                                   ? (const Expanded(
                                       flex: 2, child: ProfileView()))
