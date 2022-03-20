@@ -24,6 +24,7 @@ class _MapScreenState extends State<MapView> {
       CameraPosition(target: LatLng(65.012615, 25.471453), zoom: 11.5);
 
   late GoogleMapController _googleMapController;
+  /*
   final Marker _event1 = Marker(
     markerId: const MarkerId('event1'),
     infoWindow: const InfoWindow(
@@ -40,7 +41,7 @@ class _MapScreenState extends State<MapView> {
         snippet: 'This is example event number 2.\nJoin this event'),
     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
     position: const LatLng(65.022615, 25.481453),
-  );
+  );*/
 
   @override
   void dispose() {
