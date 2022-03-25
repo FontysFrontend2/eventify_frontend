@@ -13,7 +13,7 @@ class SelectLocation extends StatelessWidget {
         child: const Align(
             alignment: Alignment.center,
             child: Text(
-              'This is Create event view',
+              'This is Select Location view',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             )));
   }

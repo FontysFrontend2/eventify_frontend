@@ -1,4 +1,5 @@
 import 'package:eventify_frontend/create_event/create_event_view.dart';
+import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/event/events_view.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/chat/chat_view.dart';
@@ -42,7 +43,7 @@ class MyAppState extends State<MyApp> {
               title: const Text('Eventify'),
             ),
             body: WillPopScope(
-                // Takaisinnäppäimen hallinta, muista näkymistä vie homeen ja homesta sulkee sovelluksen
+                // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
                 onWillPop: () async {
                   if (_state != 0) {
                     setState(() {
@@ -54,7 +55,7 @@ class MyAppState extends State<MyApp> {
                 },
 
                 // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card,
-                // state 5 = chat, state 6 = create event, state 7 = login, state 8 = register
+                // state 5 = chat, state 6 = create event, state 7 = login, state 8 = register, state 9 = select location
                 child: Column(
                     children: ([
                   _state == 0
@@ -62,9 +63,7 @@ class MyAppState extends State<MyApp> {
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
-                              ? (Expanded(
-                                  flex: 2,
-                                  child: MapView(() => _stateCounter(4))))
+                              ? (const Expanded(flex: 2, child: MapView()))
 
                               // Below test buttons that should be implemented on their own pages
                               : _state == 3
@@ -84,12 +83,17 @@ class MyAppState extends State<MyApp> {
                                                   ? (const Expanded(
                                                       flex: 2,
                                                       child: LoginView()))
-                                                  : (const Expanded(
-                                                      flex: 2,
-                                                      child:
-                                                          RegisterationView())),
+                                                  : _state == 8
+                                                      ? (const Expanded(
+                                                          flex: 2,
+                                                          child:
+                                                              RegisterationView()))
+                                                      : (const Expanded(
+                                                          flex: 2,
+                                                          child:
+                                                              SelectLocation())),
 
-                  // Painikkeet alhaalla: events, home, map
+                  // PAINIKKEET ALHAALLA: events, home, map
                   Container(
                       color: Colors.amber,
                       width: double.infinity,
@@ -122,47 +126,51 @@ class MyAppState extends State<MyApp> {
                                 )
                               ]))),
 
-                  // Testipainikkeet
+                  // TESTIPAINIKKEET
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    // event card painike
                     TextButton(
                       onPressed: () => _stateCounter(4),
-                      child: const Text('Test: event card',
+                      child: const Text('event card',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
+                    // joined event painike
                     TextButton(
                       onPressed: () => _stateCounter(5),
-                      child: const Text('Test: joined event',
+                      child: const Text('joined event',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
+                    // login painike
                     TextButton(
                       onPressed: () => _stateCounter(7),
-                      child: const Text('Test: loginscreen',
+                      child: const Text('login',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
-                  ]),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    // register painike
                     TextButton(
                         onPressed: () => _stateCounter(8),
-                        child: const Text('Test registerscreen',
+                        child: const Text('register',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ))),
+                  ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     // profile painike
                     TextButton(
                       onPressed: () => _stateCounter(3),
                       child: const Text('Profile',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
@@ -171,7 +179,16 @@ class MyAppState extends State<MyApp> {
                       onPressed: () => _stateCounter(6),
                       child: const Text('Create Event',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    // select location painike
+                    TextButton(
+                      onPressed: () => _stateCounter(9),
+                      child: const Text('Select Location',
+                          style: TextStyle(
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
