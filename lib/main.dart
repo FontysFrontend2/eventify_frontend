@@ -1,11 +1,11 @@
-import 'package:eventify_frontend/views/events_view.dart';
-import 'package:eventify_frontend/views/home_view.dart';
-import 'package:eventify_frontend/views/chat_view.dart';
-import 'package:eventify_frontend/views/login_registeration/login_view.dart';
-import 'package:eventify_frontend/views/login_registeration/registeration_view.dart';
-import 'package:eventify_frontend/views/map_view.dart';
-import 'package:eventify_frontend/views/profile_view.dart';
-import 'package:eventify_frontend/views/eventcard_view.dart';
+import 'package:eventify_frontend/event/events_view.dart';
+import 'package:eventify_frontend/feed/home_view.dart';
+import 'package:eventify_frontend/chat/chat_view.dart';
+import 'package:eventify_frontend/login/login_view.dart';
+import 'package:eventify_frontend/login/registeration_view.dart';
+import 'package:eventify_frontend/map/map_view.dart';
+import 'package:eventify_frontend/profile/profile_view.dart';
+import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 
 // sprintti2
