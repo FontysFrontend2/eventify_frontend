@@ -1,3 +1,4 @@
+import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/event/events_view.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/chat/chat_view.dart';
@@ -52,7 +53,8 @@ class MyAppState extends State<MyApp> {
                   return true;
                 },
 
-                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card, state 5 = chat, state 5 = login
+                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card,
+                //state 5 = chat, state 6 = create event, state 7 = login, state 8 = register
                 child: Column(
                     children: ([
                   _state == 0
@@ -63,6 +65,14 @@ class MyAppState extends State<MyApp> {
                             TextButton(
                               onPressed: () => _stateCounter(3),
                               child: const Text('Profile',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                            TextButton(
+                              onPressed: () => _stateCounter(6),
+                              child: const Text('Create Event',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -86,28 +96,34 @@ class MyAppState extends State<MyApp> {
                                           ? (const Expanded(
                                               flex: 2, child: ChatView()))
                                           : _state == 6
-                                              ? (Expanded(
+                                              ? (const Expanded(
                                                   flex: 2,
-                                                  child: Column(children: [
-                                                    const Expanded(
-                                                        flex: 2,
-                                                        child: LoginView()),
-                                                    // Registation View
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          _stateCounter(7),
-                                                      child: const Text(
-                                                          'Register new user',
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          )),
-                                                    ),
-                                                  ])))
-                                              : (const Expanded(
-                                                  flex: 2,
-                                                  child: RegisterationView())),
+                                                  child: CreateEventView()))
+                                              : _state == 7
+                                                  ? (Expanded(
+                                                      flex: 2,
+                                                      child: Column(children: [
+                                                        const Expanded(
+                                                            flex: 2,
+                                                            child: LoginView()),
+                                                        // Registation View
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              _stateCounter(7),
+                                                          child: const Text(
+                                                              'Register new user',
+                                                              style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                        ),
+                                                      ])))
+                                                  : (const Expanded(
+                                                      flex: 2,
+                                                      child:
+                                                          RegisterationView())),
 
                   // Painikkeet alhaalla: events, home, map
                   Container(
