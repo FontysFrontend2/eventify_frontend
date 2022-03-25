@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:eventify_frontend/event/eventcard_shortview.dart';
+import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -49,8 +49,8 @@ class _MapScreenState extends State<MapView> {
                         _googleMapController = controller,
                     markers: getmarkers(),
                   ))
-                : (Column(children: const [
-                    Expanded(flex: 2, child: EventCardView())
+                : (Column(children: [
+                    Expanded(flex: 2, child: EventCardView(_state))
                   ]))));
   }
 
@@ -78,6 +78,7 @@ class _MapScreenState extends State<MapView> {
     setState(() {
       var counter = 0;
       for (var element in markersFromApi) {
+        String markervalue = markersFromApi[counter]['id'];
         log(element.toString());
         markerlist.add(Marker(
           //add first marker
@@ -88,7 +89,7 @@ class _MapScreenState extends State<MapView> {
             //popup info
             title: markersFromApi[counter]['title'],
             snippet: markersFromApi[counter]['snippet'] + ' tap to join',
-            onTap: () => selectEvent('0'),
+            onTap: () => selectEvent(markervalue),
           ),
           icon: BitmapDescriptor.defaultMarker, //Icon for Marker
         ));

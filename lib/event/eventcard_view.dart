@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EventCardView extends StatelessWidget {
-  const EventCardView({Key? key}) : super(key: key);
+  final String? id;
+  const EventCardView(this.id);
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +11,10 @@ class EventCardView extends StatelessWidget {
         width: double.infinity,
         height: 100.0,
         padding: const EdgeInsets.all(10.0),
-        child: const Align(
+        child: Align(
             alignment: Alignment.center,
             child: Text(
-              'This is Eventcard view',
+              'This is Eventcard view\n Event id is: ' + id!,
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             )));
   }
