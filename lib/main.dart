@@ -1,5 +1,5 @@
 import 'package:eventify_frontend/event/events_view.dart';
-import 'package:eventify_frontend/feed/home_view.dart';
+import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/chat/chat_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
@@ -68,7 +68,7 @@ class MyAppState extends State<MyApp> {
                                     fontWeight: FontWeight.bold,
                                   )),
                             ),
-                            const Expanded(flex: 2, child: HomeView())
+                            const Expanded(flex: 2, child: HomeFeedView())
                           ])))
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))

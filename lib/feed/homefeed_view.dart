@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+class HomeFeedView extends StatelessWidget {
+  const HomeFeedView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class HomeView extends StatelessWidget {
         child: const Align(
             alignment: Alignment.center,
             child: Text(
-              'This is home view',
+              'This is home feed view',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             )));
   }
