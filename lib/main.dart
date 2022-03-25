@@ -71,7 +71,7 @@ class MyAppState extends State<MyApp> {
                                       flex: 2, child: ProfileView()))
                                   : _state == 4
                                       ? (const Expanded(
-                                          flex: 2, child: EventCardView()))
+                                          flex: 2, child: EventCardView('')))
                                       : _state == 5
                                           ? (const Expanded(
                                               flex: 2, child: ChatView()))

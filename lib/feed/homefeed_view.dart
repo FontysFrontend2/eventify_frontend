@@ -19,4 +19,4 @@ class HomeFeedView extends StatelessWidget {
   }
 }
 
-// open eventcard view = Column(children: const [Expanded(flex: 2, child: EventCardView())])
+// open eventcard view = Column(children: const [Expanded(flex: 2, child: EventCardView('id'))])
