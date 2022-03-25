@@ -54,38 +54,19 @@ class MyAppState extends State<MyApp> {
                 },
 
                 // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card,
-                //state 5 = chat, state 6 = create event, state 7 = login, state 8 = register
+                // state 5 = chat, state 6 = create event, state 7 = login, state 8 = register
                 child: Column(
                     children: ([
                   _state == 0
-                      ? (Expanded(
-                          flex: 2,
-                          child: Column(children: [
-                            // profile painike
-                            TextButton(
-                              onPressed: () => _stateCounter(3),
-                              child: const Text('Profile',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ),
-                            TextButton(
-                              onPressed: () => _stateCounter(6),
-                              child: const Text('Create Event',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ),
-                            const Expanded(flex: 2, child: HomeFeedView())
-                          ])))
+                      ? (const Expanded(flex: 2, child: HomeFeedView()))
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
                               ? (Expanded(
                                   flex: 2,
                                   child: MapView(() => _stateCounter(4))))
+
+                              // Below test buttons that should be implemented on their own pages
                               : _state == 3
                                   ? (const Expanded(
                                       flex: 2, child: ProfileView()))
@@ -100,26 +81,9 @@ class MyAppState extends State<MyApp> {
                                                   flex: 2,
                                                   child: CreateEventView()))
                                               : _state == 7
-                                                  ? (Expanded(
+                                                  ? (const Expanded(
                                                       flex: 2,
-                                                      child: Column(children: [
-                                                        const Expanded(
-                                                            flex: 2,
-                                                            child: LoginView()),
-                                                        // Registation View
-                                                        TextButton(
-                                                          onPressed: () =>
-                                                              _stateCounter(7),
-                                                          child: const Text(
-                                                              'Register new user',
-                                                              style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                        ),
-                                                      ])))
+                                                      child: LoginView()))
                                                   : (const Expanded(
                                                       flex: 2,
                                                       child:
@@ -158,9 +122,7 @@ class MyAppState extends State<MyApp> {
                                 )
                               ]))),
 
-                  // Painike event card test, chat test, login/register test
-                  // Event cardin voi myöhemmin avata mapista tai homesta ennen liittymistä ja joined eventin kun on liittynyt eventtiin
-                  // Login ja register tulee sitten ennen kun muut näkyvät
+                  // Testipainikkeet
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     TextButton(
                       onPressed: () => _stateCounter(4),
@@ -179,10 +141,37 @@ class MyAppState extends State<MyApp> {
                           )),
                     ),
                     TextButton(
-                      onPressed: () => _stateCounter(6),
+                      onPressed: () => _stateCounter(7),
                       child: const Text('Test: loginscreen',
                           style: TextStyle(
                             fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                  ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    TextButton(
+                        onPressed: () => _stateCounter(8),
+                        child: const Text('Test registerscreen',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ))),
+                    // profile painike
+                    TextButton(
+                      onPressed: () => _stateCounter(3),
+                      child: const Text('Profile',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    // create event painike
+                    TextButton(
+                      onPressed: () => _stateCounter(6),
+                      child: const Text('Create Event',
+                          style: TextStyle(
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
