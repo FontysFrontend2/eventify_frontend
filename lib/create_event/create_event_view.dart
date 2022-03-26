@@ -18,3 +18,5 @@ class CreateEventView extends StatelessWidget {
             )));
   }
 }
+
+// event location is in select location class under variable location as a string
