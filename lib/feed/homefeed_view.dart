@@ -1,4 +1,6 @@
+import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
+import 'package:eventify_frontend/event/eventcard_shortview.dart';
 
 class HomeFeedView extends StatelessWidget {
   const HomeFeedView({Key? key}) : super(key: key);
@@ -6,16 +8,15 @@ class HomeFeedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.red,
-        width: double.infinity,
-        height: 100.0,
-        padding: const EdgeInsets.all(10.0),
-        child: const Align(
-            alignment: Alignment.center,
-            child: Text(
-              'This is home feed view',
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            )));
+      color: Colors.white,
+      width: double.infinity,
+      height: 100.0,
+      padding: const EdgeInsets.all(10.0),
+      child: Align(
+        alignment: Alignment.center,
+        child: EventCardShortView(),
+      ),
+    );
   }
 }
 
