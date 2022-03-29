@@ -90,6 +90,7 @@ class _NewEventFormState extends State<NewEventForm> {
   }
 }
 
+// event location is in select location class under variable location as a string
 void SendData(String name, String description) {
   print(name + description);
 }

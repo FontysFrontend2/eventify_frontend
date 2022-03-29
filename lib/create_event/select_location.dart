@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelectLocation extends StatefulWidget {
@@ -10,7 +11,7 @@ class SelectLocation extends StatefulWidget {
 }
 
 class _MapScreenState extends State<SelectLocation> {
-  final Set<Marker> markerlist = new Set(); //markers for google map
+  final Set<Marker> markerlist = {}; //markers for google map
   _MapScreenState();
 
   var locationMarker;
@@ -31,13 +32,13 @@ class _MapScreenState extends State<SelectLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: (GoogleMap(
+      body: GoogleMap(
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
           initialCameraPosition: _initialCameraPosition,
           onMapCreated: (controller) => _googleMapController = controller,
           markers: {if (locationMarker != null) locationMarker},
-          onTap: _addMarker)),
+          onTap: _addMarker),
       floatingActionButton: SizedBox(
           height: 120.0,
           width: 340,
@@ -49,7 +50,7 @@ class _MapScreenState extends State<SelectLocation> {
             Text(
               'SELECT THIS LOCATION FOR YOUR EVENT:\n' + location,
               style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Colors.blueAccent,
                   fontWeight: FontWeight.bold),
             ),
