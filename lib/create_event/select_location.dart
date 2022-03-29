@@ -1,10 +1,11 @@
+import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelectLocation extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
-  const SelectLocation();
+
+  const SelectLocation({Key? key}) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -15,7 +16,7 @@ class _MapScreenState extends State<SelectLocation> {
   _MapScreenState();
 
   var locationMarker;
-  var location = '';
+  var location = 'null';
 
   static const _initialCameraPosition =
       CameraPosition(target: LatLng(65.012615, 25.471453), zoom: 11.5);
@@ -44,7 +45,7 @@ class _MapScreenState extends State<SelectLocation> {
           width: 340,
           child: Column(children: [
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pop(context, location),
               child: const Text('Select'),
             ),
             Text(
@@ -59,7 +60,11 @@ class _MapScreenState extends State<SelectLocation> {
   }
 
   void _addMarker(LatLng pos) {
-    location = pos.toString();
+    location = pos
+        .toString()
+        .replaceAll('(', '')
+        .replaceAll(')', '')
+        .replaceAll('LatLng', '');
     setState(() {
       locationMarker = Marker(
           markerId: const MarkerId('location'),
