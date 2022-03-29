@@ -62,6 +62,7 @@ class MyAppState extends State<MyApp> {
 
       // bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _navState,
         type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -80,7 +81,6 @@ class MyAppState extends State<MyApp> {
             backgroundColor: Colors.purple,
           ),
         ],
-        currentIndex: _navState,
         selectedItemColor: Colors.amber[800],
         onTap: _stateCounter,
       ),
