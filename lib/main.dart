@@ -24,9 +24,13 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   int _state = 1;
+  int _navState = 1;
 
-  // State määrittää näytettävän näkymän (0-5)
+  // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
+    if (i <= 2) {
+      _navState = i;
+    }
     setState(() {
       _state = i;
     });
@@ -55,12 +59,38 @@ class MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('Eventify'),
       ),
+
+      // bottom navigation bar
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_list_bulleted),
+            label: 'Events',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map_outlined),
+            label: 'Map',
+            backgroundColor: Colors.purple,
+          ),
+        ],
+        currentIndex: _navState,
+        selectedItemColor: Colors.amber[800],
+        onTap: _stateCounter,
+      ),
+
       body: WillPopScope(
           // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
           onWillPop: () async {
-            if (_state != 0) {
+            if (_state != _navState) {
               setState(() {
-                _state = 0;
+                _state = _navState;
               });
               return false;
             }
@@ -71,13 +101,16 @@ class MyAppState extends State<MyApp> {
             _widgetOptions.elementAt(_state),
 
             // TESTIPAINIKKEET
+            // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
+
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               // event card painike
               TextButton(
                 onPressed: () => _stateCounter(4),
                 child: const Text('event card',
                     style: TextStyle(
-                      fontSize: 10,
+                      //
+                      fontSize: 10, //
                       fontWeight: FontWeight.bold,
                     )),
               ),
@@ -86,10 +119,11 @@ class MyAppState extends State<MyApp> {
                 onPressed: () => _stateCounter(5),
                 child: const Text('joined event',
                     style: TextStyle(
-                      fontSize: 10,
+                      //
+                      fontSize: 10, //
                       fontWeight: FontWeight.bold,
-                    )),
-              ),
+                    )), //
+              ), //
               // login painike
               TextButton(
                 onPressed: () => _stateCounter(7),
@@ -104,7 +138,7 @@ class MyAppState extends State<MyApp> {
                   onPressed: () => _stateCounter(8),
                   child: const Text('register',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 10, //
                         fontWeight: FontWeight.bold,
                       ))),
             ]),
@@ -114,7 +148,7 @@ class MyAppState extends State<MyApp> {
                 onPressed: () => _stateCounter(3),
                 child: const Text('Profile',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 10, //
                       fontWeight: FontWeight.bold,
                     )),
               ),
@@ -139,28 +173,7 @@ class MyAppState extends State<MyApp> {
             ])
           ]))),
 
-      // bottom navigation bar
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Events',
-            backgroundColor: Colors.red,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Home',
-            backgroundColor: Colors.green,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Map',
-            backgroundColor: Colors.purple,
-          ),
-        ],
-        selectedItemColor: Colors.amber[800],
-        onTap: _stateCounter,
-      ),
+      // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
     ));
   }
 }
