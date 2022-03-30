@@ -1,4 +1,5 @@
 import 'package:eventify_frontend/create_event/select_location.dart';
+import 'package:eventify_frontend/create_event/select_tags.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const CreateEventView());
@@ -28,6 +29,7 @@ class _NewEventFormState extends State<NewEventForm> {
   // of the TextField.
   bool _useLocation = false;
   String infoTestString = '';
+  String _type = '';
   String _posLat = '';
   String _posLong = '';
   final _formKey = GlobalKey<FormState>();
@@ -45,10 +47,16 @@ class _NewEventFormState extends State<NewEventForm> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text(
-        'Create new event, select information',
-        style: TextStyle(fontSize: 20),
-      ),
+      Container(
+          width: double.infinity,
+          color: Colors.amber,
+          padding: const EdgeInsets.all(20),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(bottom: 20),
+          child: const Text(
+            'Create new event',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          )),
       Form(
           key: _formKey,
           child: Column(
@@ -57,32 +65,45 @@ class _NewEventFormState extends State<NewEventForm> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   )),
-              Padding(padding: EdgeInsets.only(top: 10)),
-              TextFormField(
-                controller: nameController,
-                validator: (eventValue) {
-                  if (eventValue == null || eventValue.isEmpty) {
-                    return 'Please fill text field';
-                  }
-                  return null;
-                },
-              ),
+              Container(
+                  padding: EdgeInsets.all(20),
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    controller: nameController,
+                    validator: (eventValue) {
+                      if (eventValue == null || eventValue.isEmpty) {
+                        return 'The event needs a title';
+                      }
+                      return null;
+                    },
+                  )),
               const Text('Event description:',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              TextFormField(
-                controller: descriptionController,
-                validator: (descriptionValue) {
-                  if (descriptionValue == null || descriptionValue.isEmpty) {
-                    return 'Please fill text field';
-                  }
+              Container(
+                  padding: EdgeInsets.all(20),
+                  child: TextFormField(
+                    controller: descriptionController,
+                    validator: (descriptionValue) {
+                      if (descriptionValue == null ||
+                          descriptionValue.isEmpty) {
+                        return 'The event needs a description';
+                      }
 
-                  return null;
-                },
-              ),
+                      return null;
+                    },
+                  )),
+              ElevatedButton(
+                  onPressed: () => _showTagSelection(context),
+                  child: const Text('Select tags')),
+              const Text('Selected tags:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+              Text(_type),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Use Location '),
+                  const Text('Use Location'),
                   Switch(
                       value: _useLocation,
                       onChanged: (bool newValue) {
@@ -93,38 +114,57 @@ class _NewEventFormState extends State<NewEventForm> {
                 ],
               ),
               (_useLocation)
-                  ? (Column(
-                      children: [
-                        TextButton(
-                          onPressed: () =>
-                              _navigateAndDisplaySelection(context),
-                          child: const Text('Select Location',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        Column(children: [
-                          const Text('Location for your event:'),
-                          Text(_posLat + ' ' + _posLong),
-                        ])
-                      ],
-                    ))
+                  ? (Container(
+                      color: Colors.amber,
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 10, left: 40, right: 40),
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => _showLocationSelection(context),
+                            child: const Text('Set Location',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                          Column(children: [
+                            const Text('Location for your event:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Text(_posLat + ' ' + _posLong),
+                          ]),
+                        ],
+                      )))
                   : (Container()),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    sendData(nameController.text, descriptionController.text,
-                        _posLat, _posLong);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text('Processing Data: ' + infoTestString)),
-                    );
+                    if (_useLocation && _posLat == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                                'If you are using location You have to set it first!')),
+                      );
+                    } else {
+                      // If the form is valid, display a snackbar. In the real world,
+                      // you'd often call a server or save the information in a database.
+                      sendData(nameController.text, descriptionController.text,
+                          _posLat, _posLong);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Processing Data: ' + infoTestString)),
+                      );
+                    }
                   }
                 },
-                child: const Icon(Icons.switch_access_shortcut_rounded),
+                child: const Text('SUBMIT',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    )),
               ),
             ],
           ))
@@ -134,18 +174,27 @@ class _NewEventFormState extends State<NewEventForm> {
 // event location is in select location class under variable location as a string
   void sendData(
       String name, String description, String posLat, String posLong) {
-    infoTestString = '\nname: ' +
-        name +
-        '\ndescription: ' +
-        description +
-        '\nLat: ' +
-        posLat +
-        '\nLong: ' +
-        posLong;
+    if (!_useLocation) {
+      infoTestString = '\nname: ' +
+          name +
+          '\ndescription: ' +
+          description +
+          '\nLocationBased = false';
+    } else {
+      infoTestString = '\nname: ' +
+          name +
+          '\ndescription: ' +
+          description +
+          '\nLocationBased = true' +
+          '\nLat: ' +
+          posLat +
+          '\nLong: ' +
+          posLong;
+    }
   }
 
 // event location is in select location class under variable location as a string
-  void _navigateAndDisplaySelection(BuildContext context) async {
+  void _showLocationSelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
     final result = await Navigator.push(
@@ -159,6 +208,20 @@ class _NewEventFormState extends State<NewEventForm> {
     setState(() {
       _posLat = _latLong[0];
       _posLong = _latLong[1];
+    });
+  }
+
+  void _showTagSelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => const SelectTags()),
+    );
+    print('result:' + '$result');
+    setState(() {
+      _type = '$result';
     });
   }
 }
