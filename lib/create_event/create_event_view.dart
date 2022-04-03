@@ -1,5 +1,7 @@
+import 'package:eventify_frontend/create_event/select_datetime.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const CreateEventView());
@@ -27,11 +29,20 @@ class _NewEventFormState extends State<NewEventForm> {
   // Create a text controller
   //and use it to retrieve the current value
   // of the TextField.
+
+  String _maxPeople = '1';
+  DateTime _startTime = DateTime.now();
   bool _useLocation = false;
+  bool _selectingDate = false;
   String infoTestString = '';
   String _tags = '';
   String _posLat = '';
   String _posLong = '';
+  String _date = '';
+  String _time = '';
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -52,15 +63,15 @@ class _NewEventFormState extends State<NewEventForm> {
       viewTitle(context),
       Form(
           key: _formKey,
-          child: Column(
-            children: [
-              titleForm(context),
-              descriptionForm(context),
-              selectTagsForm(context),
-              selectLocationForm(context),
-              submit(context),
-            ],
-          ))
+          child: Column(children: [
+            titleForm(context),
+            descriptionForm(context),
+            selectTagsForm(context),
+            selectLocationForm(context),
+            maxPeopleForm(context),
+            dateTimeForm(context),
+            submit(context),
+          ]))
     ]);
   }
 
@@ -116,18 +127,23 @@ class _NewEventFormState extends State<NewEventForm> {
   }
 
   Widget selectTagsForm(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-            onPressed: () => _showTagSelection(context),
-            child: const Text('Select tags')),
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Container(
+          alignment: Alignment.centerLeft,
+          child: ElevatedButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey,
+              ),
+              onPressed: () => _showTagSelection(context),
+              child: const Text('Select tags'))),
+      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Text('Selected tags:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
         Text(_tags),
-      ],
-    );
+      ])
+    ]);
   }
 
   Widget selectLocationForm(BuildContext context) {
@@ -136,7 +152,8 @@ class _NewEventFormState extends State<NewEventForm> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Use Location'),
+            const Text('Use Location',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             Switch(
                 value: _useLocation,
                 onChanged: (bool newValue) {
@@ -175,6 +192,78 @@ class _NewEventFormState extends State<NewEventForm> {
     );
   }
 
+  Widget maxPeopleForm(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Max People: ',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        DropdownButton<String>(
+          value: _maxPeople,
+          icon: const Icon(
+            Icons.arrow_drop_down_circle,
+          ),
+          iconSize: 20,
+          elevation: 16,
+          style: const TextStyle(
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (String? newValue) {
+            setState(() {
+              _maxPeople = newValue!;
+            });
+          },
+          items: <String>['1', '2', '3', '4', '5']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        )
+      ],
+    );
+  }
+
+  Widget dateTimeForm(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            const Text('Select date and time: ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Column(children: [
+                ElevatedButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                    ),
+                    onPressed: () => _selectDate(context),
+                    child: const Text('Select date')),
+                Text(
+                    "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
+              ]),
+              Column(
+                children: [
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      ),
+                      onPressed: () => _selectTime(context),
+                      child: const Text('Select time')),
+                  Text("${selectedTime.hour}.${selectedTime.minute}")
+                ],
+              )
+            ])
+          ],
+        ));
+  }
+
 // submit button and handling for the information
   Widget submit(BuildContext context) {
     return ElevatedButton(
@@ -196,7 +285,7 @@ class _NewEventFormState extends State<NewEventForm> {
               // If the form is valid, display a snackbar. In the real world,
               // you'd often call a server or save the information in a database.
               sendData(nameController.text, descriptionController.text, _posLat,
-                  _posLong, _tags);
+                  _posLong, _tags, _date, _time, _maxPeople);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Processing Data: ' + infoTestString)),
               );
@@ -212,7 +301,38 @@ class _NewEventFormState extends State<NewEventForm> {
     );
   }
 
-  // LOCATION SET AND TAGS SET HANDLING:
+  // handling other sets:
+
+  // gets tags from tag class
+  void _selectDate(BuildContext context) async {
+    final DateTime? selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2010),
+      lastDate: DateTime(2025),
+    );
+    if (selected != null && selected != selectedDate) {
+      setState(() {
+        selectedDate = selected;
+        _date =
+            "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+      });
+    }
+  }
+
+  void _selectTime(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if (timeOfDay != null && timeOfDay != selectedTime) {
+      setState(() {
+        selectedTime = timeOfDay;
+        _time = "${selectedTime.hour}.${selectedTime.minute}";
+      });
+    }
+  }
 
 // gets location from location class
   void _showLocationSelection(BuildContext context) async {
@@ -249,7 +369,7 @@ class _NewEventFormState extends State<NewEventForm> {
 
   // sends data to database
   void sendData(String title, String description, String posLat, String posLong,
-      String tags) {
+      String tags, String date, String time, String maxPeople) {
     if (!_useLocation) {
       infoTestString = '\nname: ' +
           title +
@@ -257,7 +377,13 @@ class _NewEventFormState extends State<NewEventForm> {
           description +
           '\nLocationBased = false' +
           '\nTags: ' +
-          _tags;
+          _tags +
+          '\ndate: ' +
+          _date +
+          '\ntime: ' +
+          _time +
+          '\nmax people: ' +
+          _maxPeople;
     } else {
       infoTestString = '\nname: ' +
           title +
@@ -269,7 +395,13 @@ class _NewEventFormState extends State<NewEventForm> {
           '\nLong: ' +
           posLong +
           '\nTags: ' +
-          _tags;
+          _tags +
+          '\ndate: ' +
+          _date +
+          '\ntime: ' +
+          _time +
+          '\nmax people: ' +
+          _maxPeople;
     }
   }
 }
