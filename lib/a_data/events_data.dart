@@ -1,4 +1,4 @@
-List eventsWithLocation = [
+const eventsWithLocation = [
   {
     "id": 0,
     "description": "Picnic at the park",
