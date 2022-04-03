@@ -141,7 +141,7 @@ const eventsOfInterest = [
 
 const eventsWithNoLocation = [
   {
-    "id": 5,
+    "id": 6,
     "description": "CS Tournament for noobs and amateurs",
     "interests": [0],
     "members": [0],
@@ -156,7 +156,7 @@ const eventsWithNoLocation = [
     "hasStarted": false
   },
   {
-    "id": 6,
+    "id": 7,
     "description": "Studying together, everyone welcome!",
     "interests": [0],
     "members": [0],

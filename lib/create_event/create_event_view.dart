@@ -1,7 +1,5 @@
-import 'package:eventify_frontend/create_event/select_datetime.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const CreateEventView());
