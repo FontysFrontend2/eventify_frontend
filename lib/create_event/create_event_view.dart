@@ -31,9 +31,7 @@ class _NewEventFormState extends State<NewEventForm> {
   // of the TextField.
 
   String _maxPeople = '1';
-  DateTime _startTime = DateTime.now();
   bool _useLocation = false;
-  bool _selectingDate = false;
   String infoTestString = '';
   String _tags = '';
   String _posLat = '';
@@ -245,8 +243,7 @@ class _NewEventFormState extends State<NewEventForm> {
                     ),
                     onPressed: () => _selectDate(context),
                     child: const Text('Select date')),
-                Text(
-                    "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"),
+                Text(_date),
               ]),
               Column(
                 children: [
@@ -256,7 +253,7 @@ class _NewEventFormState extends State<NewEventForm> {
                       ),
                       onPressed: () => _selectTime(context),
                       child: const Text('Select time')),
-                  Text("${selectedTime.hour}.${selectedTime.minute}")
+                  Text(_time)
                 ],
               )
             ])
@@ -282,13 +279,26 @@ class _NewEventFormState extends State<NewEventForm> {
                         'If you are using location You have to set it first!')),
               );
             } else {
-              // If the form is valid, display a snackbar. In the real world,
-              // you'd often call a server or save the information in a database.
-              sendData(nameController.text, descriptionController.text, _posLat,
-                  _posLong, _tags, _date, _time, _maxPeople);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Processing Data: ' + infoTestString)),
-              );
+              if (_date == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('You have to set date!')),
+                );
+              } else {
+                if (_time == '') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('You have to set time!')),
+                  );
+                } else {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  sendData(nameController.text, descriptionController.text,
+                      _posLat, _posLong, _tags, _date, _time, _maxPeople);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text('Processing Data: ' + infoTestString)),
+                  );
+                }
+              }
             }
           }
         }
