@@ -29,7 +29,7 @@ class _NewEventFormState extends State<NewEventForm> {
   // of the TextField.
   bool _useLocation = false;
   String infoTestString = '';
-  String _type = '';
+  String _tags = '';
   String _posLat = '';
   String _posLong = '';
   final _formKey = GlobalKey<FormState>();
@@ -125,7 +125,7 @@ class _NewEventFormState extends State<NewEventForm> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
-        Text(_type),
+        Text(_tags),
       ],
     );
   }
@@ -180,20 +180,27 @@ class _NewEventFormState extends State<NewEventForm> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          if (_useLocation && (_posLat == '' || _posLat == 'null')) {
+          if (_tags == '' || _tags == '[]' || _tags == 'null') {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                  content: Text(
-                      'If you are using location You have to set it first!')),
+                  content: Text('You have to set at least one tag!')),
             );
           } else {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            sendData(nameController.text, descriptionController.text, _posLat,
-                _posLong);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Processing Data: ' + infoTestString)),
-            );
+            if (_useLocation && (_posLat == '' || _posLat == 'null')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text(
+                        'If you are using location You have to set it first!')),
+              );
+            } else {
+              // If the form is valid, display a snackbar. In the real world,
+              // you'd often call a server or save the information in a database.
+              sendData(nameController.text, descriptionController.text, _posLat,
+                  _posLong, _tags);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Processing Data: ' + infoTestString)),
+              );
+            }
           }
         }
       },
@@ -203,28 +210,6 @@ class _NewEventFormState extends State<NewEventForm> {
             fontWeight: FontWeight.bold,
           )),
     );
-  }
-
-  // sends data to database
-  void sendData(
-      String name, String description, String posLat, String posLong) {
-    if (!_useLocation) {
-      infoTestString = '\nname: ' +
-          name +
-          '\ndescription: ' +
-          description +
-          '\nLocationBased = false';
-    } else {
-      infoTestString = '\nname: ' +
-          name +
-          '\ndescription: ' +
-          description +
-          '\nLocationBased = true' +
-          '\nLat: ' +
-          posLat +
-          '\nLong: ' +
-          posLong;
-    }
   }
 
   // LOCATION SET AND TAGS SET HANDLING:
@@ -258,7 +243,33 @@ class _NewEventFormState extends State<NewEventForm> {
     );
     print('result:' + '$result');
     setState(() {
-      _type = '$result';
+      _tags = '$result';
     });
+  }
+
+  // sends data to database
+  void sendData(String title, String description, String posLat, String posLong,
+      String tags) {
+    if (!_useLocation) {
+      infoTestString = '\nname: ' +
+          title +
+          '\ndescription: ' +
+          description +
+          '\nLocationBased = false' +
+          '\nTags: ' +
+          _tags;
+    } else {
+      infoTestString = '\nname: ' +
+          title +
+          '\ndescription: ' +
+          description +
+          '\nLocationBased = true' +
+          '\nLat: ' +
+          posLat +
+          '\nLong: ' +
+          posLong +
+          '\nTags: ' +
+          _tags;
+    }
   }
 }
