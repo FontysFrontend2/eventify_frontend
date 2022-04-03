@@ -91,7 +91,7 @@ const eventsWithLocation = [
   }
 ];
 
-List eventsOfInterest = [
+const eventsOfInterest = [
   {
     "id": 3,
     "description": "Lets play airsoft for fun",
@@ -139,7 +139,7 @@ List eventsOfInterest = [
   }
 ];
 
-List eventsWithNoLocation = [
+const eventsWithNoLocation = [
   {
     "id": 5,
     "description": "CS Tournament for noobs and amateurs",
