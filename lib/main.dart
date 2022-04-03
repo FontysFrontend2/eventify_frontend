@@ -84,7 +84,6 @@ class MyAppState extends State<MyApp> {
         selectedItemColor: Colors.amber[800],
         onTap: _stateCounter,
       ),
-
       body: WillPopScope(
           // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
           onWillPop: () async {
