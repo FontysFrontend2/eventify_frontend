@@ -51,7 +51,7 @@ class _MapScreenState extends State<MapView> {
             markers: getmarkers(),
           ),
           floatingActionButton: Container(
-              color: Colors.deepOrange,
+              color: Colors.white,
               padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
               child: DropdownButton<String>(
                 value: _filterValue,
@@ -61,13 +61,9 @@ class _MapScreenState extends State<MapView> {
                 iconSize: 24,
                 elevation: 16,
                 style: const TextStyle(
-                    color: Colors.deepPurple,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
                 onChanged: (String? newValue) {
                   setState(() {
                     _filterValue = newValue!;
