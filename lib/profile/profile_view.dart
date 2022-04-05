@@ -6,6 +6,7 @@ import 'package:eventify_frontend/profile/interests.dart';
 import 'edit_profile.dart';
 import 'package:eventify_frontend/profile/darkktheme.dart';
 import 'package:eventify_frontend/profile/notifications.dart';
+import '../main.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -16,16 +17,16 @@ class ProfileView extends StatelessWidget {
     const user = UserInformation.myUser;
 
     //checks the theme
+    final initTheme = isPlatformDark ? Themes.dark : Themes.light;
     return ThemeProvider(
-      initTheme: user.isDarkMode ? Themes.dark : Themes.light,
-      child: Builder(
-        builder: (context) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeProvider.of(context),
-          title: title,
-          home: ProfilePage(),
-        ),
-      ),
+      initTheme: initTheme,
+      builder: (_, myTheme) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: myTheme,
+          home: const ProfilePage(),
+        );
+      },
     );
   }
 }
@@ -39,7 +40,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfileState extends State<ProfilePage> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final user = UserInformation.myUser;
 
     return ThemeSwitchingArea(
@@ -50,15 +51,15 @@ class ProfileState extends State<ProfilePage> {
             physics: BouncingScrollPhysics(),
             children: [
               Profile(
-              path: user.path,
-              onClicked: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => EditProfile()) //edit through a button
-                );
-              }
-            ),
-            const SizedBox(height: 25),
-            name(user),
+                  path: user.path,
+                  onClicked: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                EditProfile()) //edit through a button
+                        );
+                  }),
+              const SizedBox(height: 25),
+              name(user),
               const SizedBox(height: 24),
               Ranking(),
               const SizedBox(height: 50),
@@ -77,9 +78,10 @@ class ProfileState extends State<ProfilePage> {
               ElevatedButton(
                 child: Text('Edit Profile'),
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => EditProfile()) //edit through a button
-                  );
+                  Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              EditProfile()) //edit through a button
+                      );
                 },
               ),
             ],
@@ -91,72 +93,71 @@ class ProfileState extends State<ProfilePage> {
 
   //name and email boxes
   Widget name(User user) => Column(
-    children: [
-      Text(
-        user.name,
-        style: TextStyle(fontSize: 24),
-      ),
-       SizedBox(height: 4),
-      Text(
-        user.email,
-        style: TextStyle(color: Colors.grey),
-      )
-    ],
-  );
+        children: [
+          Text(
+            user.name,
+            style: TextStyle(fontSize: 24),
+          ),
+          SizedBox(height: 4),
+          Text(
+            user.email,
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
+      );
 
   //password box
   Widget password(User user) => Container(
-    padding: EdgeInsets.symmetric(horizontal: 50),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Password',
-          style: TextStyle(fontSize: 24),
-        ),
-        SizedBox(height: 4),
-        Text(
-          changePassword(user),
-          style: TextStyle(fontSize: 16, height: 1.4),
-        ),
-      ],
-    )
-  );
-
-  //biography box
-  Widget description(User user) => Container(
-    padding: EdgeInsets.symmetric(horizontal: 50),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Description',
-          style: TextStyle(fontSize: 24),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          user.description,
-          style: const TextStyle(fontSize: 16, height: 1.4),
-        ),
-      ],
-    ),
-  );
-
-  //interests
-  Widget interests(User user) => Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
-            'My interests',
+            'Password',
             style: TextStyle(fontSize: 24),
           ),
-          SizedBox(height: 16),
-          SwitchScreen(),
+          SizedBox(height: 4),
+          Text(
+            changePassword(user),
+            style: TextStyle(fontSize: 16, height: 1.4),
+          ),
         ],
-      ),
-  );
+      ));
+
+  //biography box
+  Widget description(User user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Description',
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              user.description,
+              style: const TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
+        ),
+      );
+
+  //interests
+  Widget interests(User user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'My interests',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 16),
+            SwitchScreen(),
+          ],
+        ),
+      );
 
   /*Widget themeWid() => Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -176,55 +177,58 @@ class ProfileState extends State<ProfilePage> {
   ); */
 
   Widget eventChatNot() => Container(
-    padding: EdgeInsets.symmetric(horizontal: 50),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row( children: const [
-          Text(
-            'Event chat notifications',
-            style: TextStyle(fontSize: 24),
-          ),
-          SwitchEventNot(),
-        ],
-        )
-      ],
-    ),
-  );
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: const [
+                Text(
+                  'Event chat notifications',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SwitchEventNot(),
+              ],
+            )
+          ],
+        ),
+      );
 
   Widget interestChatNot() => Container(
-    padding: EdgeInsets.symmetric(horizontal: 50),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row( children: const [
-          Text(
-            'Interest chat notifications',
-            style: TextStyle(fontSize: 24),
-          ),
-          SwitchInterestNot(),
-        ],
-        )
-      ],
-    ),
-  );
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: const [
+                Text(
+                  'Interest chat notifications',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SwitchInterestNot(),
+              ],
+            )
+          ],
+        ),
+      );
 
   Widget feedNot() => Container(
-    padding: EdgeInsets.symmetric(horizontal: 50),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row( children: const [
-          Text(
-            'Feed notifications',
-            style: TextStyle(fontSize: 24),
-          ),
-          SwitchFeedNot(),
-        ],
-        )
-      ],
-    ),
-  );
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: const [
+                Text(
+                  'Feed notifications',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SwitchFeedNot(),
+              ],
+            )
+          ],
+        ),
+      );
 }
 
 class Profile extends StatelessWidget {
@@ -237,7 +241,7 @@ class Profile extends StatelessWidget {
     required this.path,
     this.edit = false,
     required this.onClicked,
-}) : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -277,18 +281,18 @@ class Profile extends StatelessWidget {
 
   //edit profile through the picture
   Widget buildEditIcon(Color color) => buildCircle(
-    color: Colors.white,
-    all: 3,
-    child: buildCircle(
-      color: color,
-      all: 8,
-      child: Icon(
-        edit ? Icons.add_a_photo : Icons.edit,
         color: Colors.white,
-        size: 20,
-      ),
-    ),
-  );
+        all: 3,
+        child: buildCircle(
+          color: color,
+          all: 8,
+          child: Icon(
+            edit ? Icons.add_a_photo : Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
 
   Widget buildCircle({
     required Widget child,
@@ -310,43 +314,42 @@ class Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      numberButton(context, rank , 'Ranking'),
-      divider(),
-      numberButton(context, friends, 'Friends'),
-    ],
-  );
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          numberButton(context, rank, 'Ranking'),
+          divider(),
+          numberButton(context, friends, 'Friends'),
+        ],
+      );
 
   Widget divider() => Container(
-    height: 24,
-    child: VerticalDivider(),
-  );
+        height: 24,
+        child: VerticalDivider(),
+      );
 
-
-Widget numberButton(BuildContext context, int value, String text) =>
-    MaterialButton(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      onPressed: () {
-        //näkyy kaverit
-      },
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            value.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          SizedBox(height: 2),
-          Text(
-            text,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-   );
+  Widget numberButton(BuildContext context, int value, String text) =>
+      MaterialButton(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        onPressed: () {
+          //näkyy kaverit
+        },
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              value.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            SizedBox(height: 2),
+            Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
 }
 
 class ButtonWidget extends StatelessWidget {
@@ -361,14 +364,14 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      shape: StadiumBorder(),
-      onPrimary: Colors.red,
-      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-    ),
-    child: Text(text),
-    onPressed: onClicked,
-  );
+        style: ElevatedButton.styleFrom(
+          shape: StadiumBorder(),
+          onPrimary: Colors.red,
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        ),
+        child: Text(text),
+        onPressed: onClicked,
+      );
 }
 
 //appbar and a button for switching to darkmode
@@ -386,8 +389,9 @@ AppBar appBar(BuildContext context) {
           icon: Icon(icon),
           onPressed: () {
             final theme = isDarkMode ? Themes.light : Themes.dark;
+            initTheme = isPlatformDark ? Themes.dark : Themes.light;
 
-            final switcher = ThemeSwitcher.of(context)!;
+            final switcher = ThemeSwitcher.of(context);
             switcher.changeTheme(theme: theme);
           },
         ),
@@ -395,9 +399,3 @@ AppBar appBar(BuildContext context) {
     ],
   );
 }
-
-
-
-
-
-

@@ -15,12 +15,12 @@ class EditProfile extends StatefulWidget {
   EditProfileState createState() => EditProfileState();
 }
 
-class EditProfileState extends State<EditProfile>{
+class EditProfileState extends State<EditProfile> {
   User user = UserInformation.myUser;
 
   @override
   Widget build(BuildContext context) => ThemeSwitchingArea(
-      child: Builder(
+          child: Builder(
         builder: (context) => Scaffold(
           appBar: appBar(context),
           body: ListView(
@@ -46,9 +46,9 @@ class EditProfileState extends State<EditProfile>{
               ),
               const SizedBox(height: 24),
               TextFieldd(
-                  label: 'Password',
-                  text: changePassword(user),
-                  onChanged: (password) {},
+                label: 'Password',
+                text: changePassword(user),
+                onChanged: (password) {},
               ),
               const SizedBox(height: 24),
               TextFieldd(
@@ -58,14 +58,15 @@ class EditProfileState extends State<EditProfile>{
                 onChanged: (description) {},
               ),
               const SizedBox(height: 24),
-          ElevatedButton(
-            child: Text('Save'),
-            onPressed: () {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => ProfilePage())
-              );
-            },
-          ),
+              ElevatedButton(
+                child: Text('Save'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => ProfilePage()));
+                },
+              ),
               FluttermojiCircleAvatar(
                 backgroundColor: Colors.grey[200],
                 radius: 100,
@@ -76,20 +77,16 @@ class EditProfileState extends State<EditProfile>{
                   icon: Icon(Icons.edit),
                   label: Text("Customize"),
                   onPressed: () => Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => NewAvatar())
-                  ),
+                      new MaterialPageRoute(builder: (context) => NewAvatar())),
                 ),
               ),
             ],
           ),
         ),
-      )
-  );
+      ));
 }
 
-
 class TextFieldd extends StatefulWidget {
-
   final int maxlines;
   final String label;
   final String text;
@@ -101,7 +98,7 @@ class TextFieldd extends StatefulWidget {
     required this.label,
     required this.text,
     required this.onChanged,
-}) : super(key: key);
+  }) : super(key: key);
 
   @override
   TextFielddState createState() => TextFielddState();
@@ -124,8 +121,7 @@ class TextFielddState extends State<TextFieldd> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Column(
+  Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -146,7 +142,7 @@ class TextFielddState extends State<TextFieldd> {
       );
 }
 
-void saveNewName(String old){
+void saveNewName(String old) {
   var newName = old;
   print(newName);
 }
@@ -164,7 +160,7 @@ class NewAvatar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+                padding: const EdgeInsets.symmetric(vertical: 30),
                 child: FluttermojiCircleAvatar(
                   radius: 100,
                   backgroundColor: Colors.grey[200],
@@ -180,13 +176,14 @@ class NewAvatar extends StatelessWidget {
                     ),
                     Spacer(),
                     FluttermojiSaveWidget(
-                      //onTap: encodeMySVGtoString(),
-                    )
+                        //onTap: encodeMySVGtoString(),
+                        )
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
                 child: FluttermojiCustomizer(
                   scaffoldWidth: min(600, width * 0.85),
                   autosave: false,
@@ -201,11 +198,4 @@ class NewAvatar extends StatelessWidget {
       ),
     );
   }
-
 }
-
-
-
-
-
-
