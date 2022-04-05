@@ -6,14 +6,14 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.purple,
+        color: Colors.blueAccent,
         width: double.infinity,
         height: 100.0,
         padding: const EdgeInsets.all(10.0),
         child: const Align(
             alignment: Alignment.center,
             child: Text(
-              'This is joined event view',
+              'This is chat view',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             )));
   }

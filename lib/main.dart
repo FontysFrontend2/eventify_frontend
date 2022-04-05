@@ -1,9 +1,9 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
-import 'package:eventify_frontend/event/events_view.dart';
-import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/chat/chat_view.dart';
+import 'package:eventify_frontend/feed/homefeed_view.dart';
+import 'package:eventify_frontend/chat/chatfeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
@@ -47,7 +47,7 @@ class MyAppState extends State<MyApp> {
   // code here
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Expanded(flex: 2, child: EventsView()),
+    Expanded(flex: 2, child: ChatFeedView()),
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: ProfileView()),
@@ -148,7 +148,7 @@ class MyAppState extends State<MyApp> {
                   // joined event painike
                   TextButton(
                     onPressed: () => _stateCounter(5),
-                    child: const Text('joined event',
+                    child: const Text('Chat wiew',
                         style: TextStyle(
                           //
                           fontSize: 10, //
