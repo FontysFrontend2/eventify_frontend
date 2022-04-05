@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'profile/themes.dart';
 
 var isPlatformDark = false;
-var initTheme = isPlatformDark ? Themes.dark : Themes.light;
 
 // sprint 3
 void main() => runApp(const MyApp());
@@ -31,6 +30,8 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 1;
   int _navState = 1;
+
+  var initTheme = isPlatformDark ? Themes.dark : Themes.light;
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
@@ -107,6 +108,27 @@ class MyAppState extends State<MyApp> {
               },
               child: Column(
                   children: ([
+                // select theme painike
+                (_state == 3)
+                    ? (TextButton(
+                        onPressed: () => {
+                          setState(() {
+                            if (isPlatformDark) {
+                              isPlatformDark = false;
+                            } else {
+                              isPlatformDark = true;
+                            }
+                            initTheme =
+                                isPlatformDark ? Themes.dark : Themes.light;
+                          })
+                        },
+                        child: const Text('Change theme',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ))
+                    : (Column()),
                 _widgetOptions.elementAt(_state),
 
                 // TESTIPAINIKKEET
@@ -165,15 +187,6 @@ class MyAppState extends State<MyApp> {
                   TextButton(
                     onPressed: () => _stateCounter(6),
                     child: const Text('Create Event',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  // select location painike
-                  TextButton(
-                    onPressed: () => _stateCounter(9),
-                    child: const Text('Select Location',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,

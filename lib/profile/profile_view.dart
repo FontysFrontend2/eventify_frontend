@@ -389,7 +389,6 @@ AppBar appBar(BuildContext context) {
           icon: Icon(icon),
           onPressed: () {
             final theme = isDarkMode ? Themes.light : Themes.dark;
-            initTheme = isPlatformDark ? Themes.dark : Themes.light;
 
             final switcher = ThemeSwitcher.of(context);
             switcher.changeTheme(theme: theme);
