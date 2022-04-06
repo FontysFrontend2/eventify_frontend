@@ -1,8 +1,8 @@
-import 'package:eventify_frontend/chat/chat_card_list.dart';
+import 'package:eventify_frontend/chat/Chat_card_list.dart';
 import 'package:flutter/material.dart';
 import '../a_data/events_data.dart';
 
-import 'chat_card_list.dart';
+import 'chat_card.dart';
 
 class ChatFeedView extends StatefulWidget {
   const ChatFeedView({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _ChatFeedViewState extends State<ChatFeedView> {
               padding: const EdgeInsets.only(top: 20.0),
               children: [
                 ...data.map((data) {
-                  return ChatCardList(
+                  return ChatList(
                       id: data['id'],
                       title: data['title'],
                       description: data['description']);

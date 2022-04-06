@@ -6,5 +6,5 @@ class ChatCard {
   String messageText;
   String time;
   ChatCard(
-      {required this.title, required this.messageText, required this.time, id});
+      {required this.title, required this.messageText, required this.time});
 }
