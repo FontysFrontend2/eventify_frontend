@@ -100,7 +100,7 @@ class _ChatViewState extends State<ChatView> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: (messages[index].messageType == "receiver"
-                          ? Colors.grey.shade200
+                          ? Colors.grey.shade500
                           : Colors.blue[200]),
                     ),
                     padding: EdgeInsets.all(16),
