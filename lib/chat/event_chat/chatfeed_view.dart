@@ -12,7 +12,7 @@ class ChatFeedView extends StatefulWidget {
 }
 
 class _ChatFeedViewState extends State<ChatFeedView> {
-  List data = eventsWithLocation;
+  List data = eventsOfInterest;
 
   @override
   Widget build(BuildContext context) {
