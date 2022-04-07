@@ -4,9 +4,16 @@ import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:eventify_frontend/profile/user.dart';
 import 'dart:math';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:fluttermoji/fluttermoji_assets/face/eyes/eyes.dart';
+import 'package:fluttermoji/fluttermoji_assets/fluttermojimodel.dart';
+import 'package:fluttermoji/fluttermoji_assets/style.dart';
+import 'package:fluttermoji/fluttermoji_assets/top/hairStyles/hairStyle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //edit profile information
 // post/get into database later
+
+String aaction = '';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -147,6 +154,14 @@ void saveNewName(String old) {
   print(newName);
 }
 
+Future<String?> pree() async {
+  final prefs = await SharedPreferences.getInstance();
+  final String? action = prefs.getString('fluttermoji');
+  aaction = prefs.getString('fluttermoji')!;
+  print(prefs.getString('fluttermoji')!);
+  return action;
+}
+
 class NewAvatar extends StatelessWidget {
   const NewAvatar({Key? key}) : super(key: key);
 
@@ -176,8 +191,10 @@ class NewAvatar extends StatelessWidget {
                     ),
                     Spacer(),
                     FluttermojiSaveWidget(
-                        //onTap: encodeMySVGtoString(),
-                        )
+                      onTap: () => {
+                        pree(),
+                      },
+                    )
                   ],
                 ),
               ),

@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/chat/chat_view.dart';
@@ -52,7 +51,7 @@ class MyAppState extends State<MyApp> {
     Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: ProfileView()),
     Expanded(flex: 2, child: EventCardView('')),
-    Expanded(flex: 2, child: ChatView()),
+    //Expanded(flex: 2, child: ChatView(id: )),
     Expanded(flex: 2, child: CreateEventView()),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),
