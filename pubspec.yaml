@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   animated_theme_switcher: "^2.0.6"
+  shared_preferences: 
 
   dio: ^4.0.0
   flutter_polyline_points: ^0.2.6

@@ -4,9 +4,16 @@ import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:eventify_frontend/profile/user.dart';
 import 'dart:math';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:fluttermoji/fluttermoji_assets/face/eyes/eyes.dart';
+import 'package:fluttermoji/fluttermoji_assets/fluttermojimodel.dart';
+import 'package:fluttermoji/fluttermoji_assets/style.dart';
+import 'package:fluttermoji/fluttermoji_assets/top/hairStyles/hairStyle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //edit profile information
 // post/get into database later
+
+String aaction = '';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -123,11 +130,4 @@ class TextFielddState extends State<TextFieldd> {
         ],
       );
 }
-
-
-
-
-
-
-
 

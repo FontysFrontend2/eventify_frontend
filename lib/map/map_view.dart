@@ -96,7 +96,7 @@ class _MapScreenState extends State<MapView> {
 // Get list items from api
     List markersFromApi = eventsWithLocation;
 
-    List filteredMarkersFromApi = eventsOfInterest;
+    List filteredMarkersFromApi = eventsOfInterestWithLocation;
 
     setState(() {
       markerlist.clear();
