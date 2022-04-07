@@ -1,4 +1,4 @@
-import 'package:eventify_frontend/chat/Chat_card_list.dart';
+/*import 'package:eventify_frontend/chat/Chat_card_list.dart';
 import 'package:flutter/material.dart';
 import '../a_data/events_data.dart';
 
@@ -61,7 +61,7 @@ class _ChatFeedViewState extends State<ChatFeedView> {
               padding: const EdgeInsets.only(top: 20.0),
               children: [
                 ...data.map((data) {
-                  return ChatList(
+                  return Chat(
                       id: data['id'],
                       title: data['title'],
                       description: data['description']);
@@ -72,3 +72,4 @@ class _ChatFeedViewState extends State<ChatFeedView> {
     );
   }
 }
+*/

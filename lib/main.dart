@@ -51,7 +51,7 @@ class MyAppState extends State<MyApp> {
     Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: ProfileView()),
     Expanded(flex: 2, child: EventCardView('')),
-    //Expanded(flex: 2, child: ChatView('a', 'a', 'a', 'a', true)),
+    //Expanded(flex: 2, child: ChatView(id: )),
     Expanded(flex: 2, child: CreateEventView()),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),
