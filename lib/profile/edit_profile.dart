@@ -10,7 +10,6 @@ import 'package:fluttermoji/fluttermoji.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
-
   @override
   EditProfileState createState() => EditProfileState();
 }
@@ -19,10 +18,9 @@ class EditProfileState extends State<EditProfile> {
   User user = UserInformation.myUser;
 
   @override
-  Widget build(BuildContext context) => Container( //ennen themeswitchingarea
+  Widget build(BuildContext context) => Container(
           child: Builder(
         builder: (context) => Scaffold(
-          appBar: appBar(context),
           body: ListView(
             padding: EdgeInsets.symmetric(horizontal: 34),
             physics: BouncingScrollPhysics(),
@@ -61,24 +59,8 @@ class EditProfileState extends State<EditProfile> {
               ElevatedButton(
                 child: Text('Save'),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => ProfilePage()));
+                  Navigator.pop(context);
                 },
-              ),
-              FluttermojiCircleAvatar(
-                backgroundColor: Colors.grey[200],
-                radius: 100,
-              ),
-              Container(
-                height: 35,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.edit),
-                  label: Text("Customize"),
-                  onPressed: () => Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => NewAvatar())),
-                ),
               ),
             ],
           ),
@@ -142,60 +124,10 @@ class TextFielddState extends State<TextFieldd> {
       );
 }
 
-void saveNewName(String old) {
-  var newName = old;
-  print(newName);
-}
 
-class NewAvatar extends StatelessWidget {
-  const NewAvatar({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: FluttermojiCircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.grey[200],
-                ),
-              ),
-              SizedBox(
-                width: min(600, width * 0.85),
-                child: Row(
-                  children: [
-                    Text(
-                      'Customize avatar',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    Spacer(),
-                    FluttermojiSaveWidget(
-                        //onTap: encodeMySVGtoString(),
-                        )
-                  ],
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
-                child: FluttermojiCustomizer(
-                  scaffoldWidth: min(600, width * 0.85),
-                  autosave: false,
-                  theme: FluttermojiThemeData(
-                    boxDecoration: BoxDecoration(boxShadow: [BoxShadow()]),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+
+
+
+
+

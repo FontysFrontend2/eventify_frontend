@@ -50,7 +50,7 @@ class MyAppState extends State<MyApp> {
     Expanded(flex: 2, child: EventsView()),
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: ProfileView()),
+    Expanded(flex: 2, child: ProfilePage()),
     Expanded(flex: 2, child: EventCardView('')),
     Expanded(flex: 2, child: ChatView()),
     Expanded(flex: 2, child: CreateEventView()),
