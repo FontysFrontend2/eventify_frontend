@@ -4,32 +4,10 @@ import 'package:eventify_frontend/profile/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventify_frontend/profile/interests.dart';
 import 'edit_profile.dart';
-import 'package:eventify_frontend/profile/darkktheme.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:eventify_frontend/profile/notifications.dart';
 import '../main.dart';
 
-class ProfileView extends StatelessWidget {
-  const ProfileView({Key? key}) : super(key: key);
-  static const String title = 'Profile';
-
-  @override
-  Widget build(BuildContext context) {
-    const user = UserInformation.myUser;
-
-    //checks the theme
-    final initTheme = isPlatformDark ? Themes.dark : Themes.light;
-    return ThemeProvider(
-      initTheme: initTheme,
-      builder: (_, myTheme) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: myTheme,
-          home: const ProfilePage(),
-        );
-      },
-    );
-  }
-}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -43,11 +21,7 @@ class ProfileState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final user = UserInformation.myUser;
 
-    return ThemeSwitchingArea(
-      child: Builder(
-        builder: (context) => Scaffold(
-          appBar: appBar(context),
-          body: ListView(
+    return ListView(
             physics: BouncingScrollPhysics(),
             children: [
               Profile(
@@ -85,10 +59,10 @@ class ProfileState extends State<ProfilePage> {
                 },
               ),
             ],
-          ),
-        ),
+          );
+        /*),
       ),
-    );
+    );*/
   }
 
   //name and email boxes
@@ -158,23 +132,6 @@ class ProfileState extends State<ProfilePage> {
           ],
         ),
       );
-
-  /*Widget themeWid() => Container(
-      padding: EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-        Row( children: const [
-          Text(
-            'Darktheme',
-            style: TextStyle(fontSize: 24),
-          ),
-          ModeSwitcher(),
-        ],
-        )
-      ],
-      ),
-  ); */
 
   Widget eventChatNot() => Container(
         padding: EdgeInsets.symmetric(horizontal: 50),
@@ -331,7 +288,6 @@ class Ranking extends StatelessWidget {
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 4),
         onPressed: () {
-          //näkyy kaverit
         },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
@@ -374,8 +330,7 @@ class ButtonWidget extends StatelessWidget {
       );
 }
 
-//appbar and a button for switching to darkmode
-AppBar appBar(BuildContext context) {
+/*AppBar appBar(BuildContext context) {
   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
   final icon = CupertinoIcons.moon_stars;
 
@@ -397,4 +352,4 @@ AppBar appBar(BuildContext context) {
       ),
     ],
   );
-}
+}*/

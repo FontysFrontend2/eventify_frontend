@@ -22,7 +22,6 @@ class User {
 String changePassword(User user){
    String newPassword = '';
    String char = '*';
-
   for(var i=0; i<user.password.length; i++){
     newPassword += char;
   }

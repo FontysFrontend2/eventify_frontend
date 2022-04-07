@@ -74,9 +74,12 @@ class SwitchButton extends State<SwitchScreen> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
           children: [
+            Row(
+              children: [
+                Text(textValue1,
+                  style: const TextStyle(fontSize: 15),
+                ),
             Transform.scale(
               scale: 1,
               child: Switch(
@@ -88,10 +91,14 @@ class SwitchButton extends State<SwitchScreen> {
                 inactiveThumbColor: Colors.black54,
               ),
             ),
-            Text(
-              textValue1,
-              style: const TextStyle(fontSize: 12),
+    ],
             ),
+            Row(
+              children: [
+                Text(
+                  textValue2,
+                  style: const TextStyle(fontSize: 15),
+                ),
             Transform.scale(
               scale: 1,
               child: Switch(
@@ -103,10 +110,14 @@ class SwitchButton extends State<SwitchScreen> {
                 inactiveThumbColor: Colors.black54,
               ),
             ),
-            Text(
-              textValue2,
-              style: const TextStyle(fontSize: 15),
+              ],
             ),
+            Row(
+              children: [
+                Text(
+                  textValue3,
+                  style: const TextStyle(fontSize: 15),
+                ),
             Transform.scale(
               scale: 1,
               child: Switch(
@@ -118,14 +129,14 @@ class SwitchButton extends State<SwitchScreen> {
                 inactiveThumbColor: Colors.black54,
               ),
             ),
-            Text(
-              textValue3,
-              style: const TextStyle(fontSize: 15),
+              ],
             ),
-          ],
-        ),
-        Row(
-          children: [
+            Row(
+              children: [
+                Text(
+                  textValue4,
+                  style: const TextStyle(fontSize: 15),
+                ),
             Transform.scale(
               scale: 1,
               child: Switch(
@@ -137,13 +148,9 @@ class SwitchButton extends State<SwitchScreen> {
                 inactiveThumbColor: Colors.black54,
               ),
             ),
-            Text(
-              textValue4,
-              style: const TextStyle(fontSize: 15),
-            ),
+              ],
+            )
           ],
-        ),
-      ],
     );
   }
 }
