@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 
 import 'chat_message.dart';
+import 'chat_info.dart';
 
 class ChatView extends StatefulWidget {
-  int id;
+  final id;
   ChatView({required this.id});
 
   @override
@@ -21,24 +22,6 @@ class _ChatViewState extends State<ChatView> {
     ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
     ChatMessage(
         messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
-
-  List joined_event = [
-    {
-      "id": 0,
-      "description": "Picnic at the park",
-      "interests": [0],
-      "members": [0],
-      "title": "Picnic",
-      "locationBased": true,
-      "latitude": 65.012615,
-      "longitude": 25.412615,
-      "hostID": 0,
-      "maxPeople": 10,
-      "minPeople": 0,
-      "startEvent": "2022-04-25T11:34:59.506Z",
-      "hasStarted": false
-    }
   ];
 
   @override
@@ -99,19 +82,7 @@ class _ChatViewState extends State<ChatView> {
           ),
         ),
         body: Column(children: [
-          Align(
-              child: Container(
-                  padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  height: 270,
-                  width: double.infinity,
-                  color: Colors.grey,
-                  child: Column(children: [
-                    Text(joined_event[0]["title"],
-                        style: TextStyle(fontSize: 20)),
-                    Text(joined_event[0]["description"],
-                        style: TextStyle(fontSize: 20)),
-                    Text('joo', style: TextStyle(fontSize: 20))
-                  ]))),
+          ChatInfo(widget.id),
           Expanded(
               child: Stack(
             children: <Widget>[

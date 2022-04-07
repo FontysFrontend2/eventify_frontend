@@ -1,6 +1,6 @@
-import 'package:eventify_frontend/chat/chat_card_list.dart';
+import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
 import 'package:flutter/material.dart';
-import '../a_data/events_data.dart';
+import '/a_data/events_data.dart';
 
 import 'chat_card_list.dart';
 
@@ -12,7 +12,7 @@ class ChatFeedView extends StatefulWidget {
 }
 
 class _ChatFeedViewState extends State<ChatFeedView> {
-  List data = eventsWithLocation;
+  List data = eventsOfInterest;
 
   @override
   Widget build(BuildContext context) {
