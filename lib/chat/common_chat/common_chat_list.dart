@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 
 import 'chat_view.dart';
@@ -66,3 +66,4 @@ class _ChatListState extends State<ChatList> {
     );
   }
 }
+*/
