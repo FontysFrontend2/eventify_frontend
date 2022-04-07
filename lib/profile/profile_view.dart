@@ -26,8 +26,8 @@ class ProfileView extends StatelessWidget {
           theme: myTheme,
           home: const ProfilePage(),
         );
-      },
-    );
+      }
+   );
   }
 }
 
@@ -158,23 +158,6 @@ class ProfileState extends State<ProfilePage> {
           ],
         ),
       );
-
-  /*Widget themeWid() => Container(
-      padding: EdgeInsets.symmetric(horizontal: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-        Row( children: const [
-          Text(
-            'Darktheme',
-            style: TextStyle(fontSize: 24),
-          ),
-          ModeSwitcher(),
-        ],
-        )
-      ],
-      ),
-  ); */
 
   Widget eventChatNot() => Container(
         padding: EdgeInsets.symmetric(horizontal: 50),
@@ -374,7 +357,6 @@ class ButtonWidget extends StatelessWidget {
       );
 }
 
-//appbar and a button for switching to darkmode
 AppBar appBar(BuildContext context) {
   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
   final icon = CupertinoIcons.moon_stars;

@@ -19,7 +19,7 @@ class EditProfileState extends State<EditProfile> {
   User user = UserInformation.myUser;
 
   @override
-  Widget build(BuildContext context) => ThemeSwitchingArea(
+  Widget build(BuildContext context) => Container( //ennen themeswitchingarea
           child: Builder(
         builder: (context) => Scaffold(
           appBar: appBar(context),
