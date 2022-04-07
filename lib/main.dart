@@ -1,8 +1,7 @@
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
-import 'package:eventify_frontend/chat/chat_view.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
-import 'package:eventify_frontend/chat/chatfeed_view.dart';
+import 'package:eventify_frontend/chat/event_chat/chatfeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
