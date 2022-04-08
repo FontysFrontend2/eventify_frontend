@@ -1,20 +1,36 @@
-import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eventify_frontend/event/eventcard_shortview.dart';
 
 class HomeFeedView extends StatelessWidget {
-  const HomeFeedView({Key? key}) : super(key: key);
+  HomeFeedView({Key? key}) : super(key: key);
+
+  final d1 = [
+    {
+      'name': 'Tapahtuma1',
+      'desc': 'Testitapahtuma',
+      'long': 123.12,
+      'lat': 123.12,
+    },
+    {
+      'name': 'Tapahtuma2',
+      'desc': 'Testitapahtuma',
+      'long': 132.12,
+      'lat': 111.12,
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       width: double.infinity,
-      height: 100.0,
       padding: const EdgeInsets.all(10.0),
-      child: Align(
-        alignment: Alignment.center,
-        child: EventCardShortView(),
+      child: Column(
+        children: [
+          ...d1.map((e) {
+            return EventCardShortView(e);
+          }).toList(),
+        ],
       ),
     );
   }
