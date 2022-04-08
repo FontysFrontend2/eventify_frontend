@@ -59,7 +59,7 @@ class MyAppState extends State<MyApp> {
                 child: Column(
                     children: ([
                   _state == 0
-                      ? (const Expanded(flex: 2, child: HomeFeedView()))
+                      ? (Expanded(flex: 2, child: HomeFeedView()))
                       : _state == 1
                           ? (const Expanded(flex: 2, child: EventsView()))
                           : _state == 2
