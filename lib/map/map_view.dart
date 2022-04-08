@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:eventify_frontend/event/eventcard_view.dart';
+import 'package:eventify_frontend/models/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../a_data/events_data.dart';
@@ -17,6 +18,14 @@ class _MapScreenState extends State<MapView> {
   final Set<Marker> markerlist = new Set(); //markers for google map
   _MapScreenState();
   bool _filtered = false;
+
+  late Future<EventData> futureEventData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureEventData = fetchEventData();
+  }
 
   var _state = '';
   String _filterValue = 'INTERESTS';
@@ -40,6 +49,7 @@ class _MapScreenState extends State<MapView> {
 
   @override
   Widget build(BuildContext context) {
+    //print('eventdata: ' + (futureEventData.data.title).toString());
     if (_state == '') {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
@@ -90,44 +100,35 @@ class _MapScreenState extends State<MapView> {
   }
 
   Set<Marker> getmarkers() {
-    //markers to place on map
-    log(_filtered.toString());
-
 // Get list items from api
-    List markersFromApi = eventsWithLocation;
+    Future<EventData> markersFromApi = futureEventData;
 
     List filteredMarkersFromApi = eventsOfInterestWithLocation;
 
     setState(() {
       markerlist.clear();
-      List setMarkers;
+      Future<EventData> setMarkers;
       var counter = 0;
       if (_filtered) {
-        log('filtered' + _filtered.toString());
         setMarkers = markersFromApi;
       } else {
-        log('all' + _filtered.toString());
-        setMarkers = filteredMarkersFromApi;
+        setMarkers = futureEventData;
       }
-      log('markers' + setMarkers.toString());
-      for (var element in setMarkers) {
-        String markervalue = setMarkers[counter]['id'].toString();
-        log(element.toString());
-        markerlist.add(Marker(
-          //add first marker
-          markerId: MarkerId(setMarkers[counter]['id'].toString()),
-          position: LatLng(setMarkers[counter]['latitude'.toString()],
-              setMarkers[counter]['longitude'.toString()]), //position of marker
-          infoWindow: InfoWindow(
-            //popup info
-            title: setMarkers[counter]['title'],
-            snippet: setMarkers[counter]['description'] + ' tap to join',
-            onTap: () => selectEvent(markervalue),
-          ),
-          icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-        ));
-        counter += 1;
-      }
+      setMarkers.then((value) => {
+            markerlist.add(Marker(
+              //add first marker
+              markerId: MarkerId(value.toString()),
+              position: LatLng(value.latitude.toDouble(),
+                  value.longitude.toDouble()), //position of marker
+              infoWindow: InfoWindow(
+                //popup info
+                title: value.title,
+                snippet: value.description + ' tap to join',
+                onTap: () => selectEvent(value.id.toString()),
+              ),
+              icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+            ))
+          });
     });
     return markerlist;
   }
