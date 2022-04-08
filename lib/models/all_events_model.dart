@@ -51,18 +51,15 @@ class AllEventsData {
   }
 }
 
-Future<AllEventsData> fetchAllEventsData() async {
+Future<List<AllEventsData>> fetchAllEventsData() async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
-  print('response: ' + response.body.toString());
-
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return AllEventsData.fromJson(jsonDecode(response.body)[1]);
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse
+        .map((data) => new AllEventsData.fromJson(data))
+        .toList();
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Unexpected error occured!');
   }
 }
