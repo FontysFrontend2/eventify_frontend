@@ -32,28 +32,81 @@ class _ChatFeedViewState extends State<ChatFeedView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Fetch Data Example',
-        theme: ThemeData(
-          primaryColor: Colors.lightBlueAccent,
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: SafeArea(
+            child: Container(
+              color: Colors.amber,
+              padding: EdgeInsets.only(right: 16),
+              child: Row(
+                children: <Widget>[
+                  /*IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    ),
+                  ),*/
+                  SizedBox(
+                    width: 2,
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 6,
+                        ),
+                        Text(
+                          "EVENTS",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 28,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    "CHATROOMS",
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 20,
+                      backgroundColor: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        home: Scaffold(
-            body: FutureBuilder<List>(
-                future: futureAllEventsData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (_, index) => Center(
-                            child: ChatCardList(
-                                id: int.parse("${snapshot.data![index].id}"),
-                                title: "${snapshot.data![index].title}",
-                                description:
-                                    "${snapshot.data![index].description}")));
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                })));
+        body: FutureBuilder<List>(
+            future: futureAllEventsData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (_, index) => Center(
+                          child: ChatCardList(
+                              id: int.parse("${snapshot.data![index].id}"),
+                              title: "${snapshot.data![index].title}",
+                              description:
+                                  "${snapshot.data![index].description}"),
+                        ));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   Set getmarkers() {

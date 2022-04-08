@@ -2,22 +2,22 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-class AllEventsData {
-  final int id;
-  final String description;
+class EventFromIdData {
+  final int? id;
+  final String? description;
   final List? interests;
   final List? members;
-  final String title;
-  final bool locationBased;
-  final double latitude;
-  final double longitude;
-  final int hostID;
-  final int maxPeople;
-  final int minPeople;
-  final String startEvent;
-  final bool hasStarted;
+  final String? title;
+  final bool? locationBased;
+  final double? latitude;
+  final double? longitude;
+  final int? hostID;
+  final int? maxPeople;
+  final int? minPeople;
+  final String? startEvent;
+  final bool? hasStarted;
 
-  const AllEventsData(
+  const EventFromIdData(
       {required this.id,
       required this.description,
       required this.interests,
@@ -32,8 +32,8 @@ class AllEventsData {
       required this.startEvent,
       required this.hasStarted});
 
-  factory AllEventsData.fromJson(Map<String, dynamic> json) {
-    return AllEventsData(
+  factory EventFromIdData.fromJson(Map<String, dynamic> json) {
+    return EventFromIdData(
       id: json['id'],
       description: json['description'],
       interests: json['interests'],
@@ -51,15 +51,16 @@ class AllEventsData {
   }
 }
 
-Future<List<AllEventsData>> fetchAllEventsData() async {
+Future<EventFromIdData> fetchEventFromId(int id) async {
   final response = await http
-      .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
+      .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
   if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse
-        .map((data) => new AllEventsData.fromJson(data))
-        .toList();
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return EventFromIdData.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Unexpected error occured!');
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
   }
 }

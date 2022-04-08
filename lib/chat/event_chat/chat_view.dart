@@ -1,3 +1,4 @@
+import 'package:eventify_frontend/models/event_from_id.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 
@@ -23,6 +24,29 @@ class _ChatViewState extends State<ChatView> {
     ChatMessage(
         messageContent: "Is there any thing wrong?", messageType: "sender"),
   ];
+
+  final Set markerlist = new Set();
+  late Map<String, Object> lista = {'id': 1212, 'title': '', 'description': ''};
+  late Future futureAllEventsData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAllEventsData = fetchEventFromId(4);
+    futureAllEventsData.then((value) => lista = {
+          'id': value.id.toString(),
+          'title': value.title.toString(),
+          'description': value.description.toString(),
+          'longitude': 12,
+          'latitude': 21
+        });
+    print('lista' + lista['title'].toString());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
