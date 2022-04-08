@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-class EventData {
+class AllEventsData {
   final int id;
   final String description;
   final List? interests;
@@ -17,7 +17,7 @@ class EventData {
   final String startEvent;
   final bool hasStarted;
 
-  const EventData(
+  const AllEventsData(
       {required this.id,
       required this.description,
       required this.interests,
@@ -32,8 +32,8 @@ class EventData {
       required this.startEvent,
       required this.hasStarted});
 
-  factory EventData.fromJson(Map<String, dynamic> json) {
-    return EventData(
+  factory AllEventsData.fromJson(Map<String, dynamic> json) {
+    return AllEventsData(
       id: json['id'],
       description: json['description'],
       interests: json['interests'],
@@ -51,7 +51,7 @@ class EventData {
   }
 }
 
-Future<EventData> fetchEventData() async {
+Future<AllEventsData> fetchAllEventsData() async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
   print('response: ' + response.body.toString());
@@ -59,7 +59,7 @@ Future<EventData> fetchEventData() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return EventData.fromJson(jsonDecode(response.body)[1]);
+    return AllEventsData.fromJson(jsonDecode(response.body)[1]);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.

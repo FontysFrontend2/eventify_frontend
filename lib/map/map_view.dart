@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:eventify_frontend/event/eventcard_view.dart';
-import 'package:eventify_frontend/models/event_model.dart';
+import 'package:eventify_frontend/models/all_events_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../a_data/events_data.dart';
@@ -19,12 +19,12 @@ class _MapScreenState extends State<MapView> {
   _MapScreenState();
   bool _filtered = false;
 
-  late Future<EventData> futureEventData;
+  late Future<AllEventsData> futureAllEventsData;
 
   @override
   void initState() {
     super.initState();
-    futureEventData = fetchEventData();
+    futureAllEventsData = fetchAllEventsData();
   }
 
   var _state = '';
@@ -101,18 +101,18 @@ class _MapScreenState extends State<MapView> {
 
   Set<Marker> getmarkers() {
 // Get list items from api
-    Future<EventData> markersFromApi = futureEventData;
+    Future<AllEventsData> markersFromApi = futureAllEventsData;
 
     List filteredMarkersFromApi = eventsOfInterestWithLocation;
 
     setState(() {
       markerlist.clear();
-      Future<EventData> setMarkers;
+      Future<AllEventsData> setMarkers;
       var counter = 0;
       if (_filtered) {
         setMarkers = markersFromApi;
       } else {
-        setMarkers = futureEventData;
+        setMarkers = futureAllEventsData;
       }
       setMarkers.then((value) => {
             markerlist.add(Marker(
