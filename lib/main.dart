@@ -1,8 +1,7 @@
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
-import 'package:eventify_frontend/event/events_view.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
-import 'package:eventify_frontend/chat/chat_view.dart';
+import 'package:eventify_frontend/chat/event_chat/chatfeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
@@ -10,7 +9,11 @@ import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 
-// sprintti2
+import 'profile/themes.dart';
+
+var isPlatformDark = false;
+
+// sprint 3
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
@@ -23,176 +26,175 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  int _state = 0;
+  int _state = 1;
+  int _navState = 1;
 
-  // State määrittää näytettävän näkymän (0-5)
+  var initTheme = isPlatformDark ? Themes.dark : Themes.light;
+
+  // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
+    initTheme = isPlatformDark ? Themes.dark : Themes.light;
+    print('initheme: ' + isPlatformDark.toString());
+    if (i <= 2) {
+      _navState = i;
+    }
     setState(() {
       _state = i;
     });
   }
   // code here
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    Expanded(flex: 2, child: ChatFeedView()),
+    Expanded(flex: 2, child: HomeFeedView()),
+    Expanded(flex: 2, child: MapView()),
+    Expanded(flex: 2, child: ProfilePage()),
+    Expanded(flex: 2, child: EventCardView('')),
+    //Expanded(flex: 2, child: ChatView(id: )),
+    Expanded(flex: 2, child: CreateEventView()),
+    Expanded(flex: 2, child: LoginView()),
+    Expanded(flex: 2, child: RegisterationView()),
+    Expanded(flex: 2, child: SelectLocation()),
+  ];
+
   @override
   Widget build(BuildContext context) {
     // code here
+//checks the theme
 
     return MaterialApp(
+        theme: initTheme,
         home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Eventify'),
-            ),
-            body: WillPopScope(
-                // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
-                onWillPop: () async {
-                  if (_state != 0) {
-                    setState(() {
-                      _state = 0;
-                    });
-                    return false;
-                  }
-                  return true;
-                },
 
-                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card,
-                // state 5 = chat, state 6 = create event, state 7 = login, state 8 = register, state 9 = select location
-                child: Column(
-                    children: ([
-                  _state == 0
-                      ? (Expanded(flex: 2, child: HomeFeedView()))
-                      : _state == 1
-                          ? (const Expanded(flex: 2, child: EventsView()))
-                          : _state == 2
-                              ? (const Expanded(flex: 2, child: MapView()))
+          appBar: AppBar(
+            title: const Text('Eventify'),
+          ),
 
-                              // Below test buttons that should be implemented on their own pages
-                              : _state == 3
-                                  ? (const Expanded(
-                                      flex: 2, child: ProfileView()))
-                                  : _state == 4
-                                      ? (const Expanded(
-                                          flex: 2, child: EventCardView('')))
-                                      : _state == 5
-                                          ? (const Expanded(
-                                              flex: 2, child: ChatView()))
-                                          : _state == 6
-                                              ? (const Expanded(
-                                                  flex: 2,
-                                                  child: CreateEventView()))
-                                              : _state == 7
-                                                  ? (const Expanded(
-                                                      flex: 2,
-                                                      child: LoginView()))
-                                                  : _state == 8
-                                                      ? (const Expanded(
-                                                          flex: 2,
-                                                          child:
-                                                              RegisterationView()))
-                                                      : (const Expanded(
-                                                          flex: 2,
-                                                          child:
-                                                              SelectLocation())),
-
-                  // PAINIKKEET ALHAALLA: events, home, map
-                  Container(
-                      color: Colors.amber,
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(10.0),
-                      child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  onPressed: () => _stateCounter(1),
-                                  child: const Text('EVENTS',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                TextButton(
-                                  onPressed: () => _stateCounter(0),
-                                  child: const Text('HOME',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                TextButton(
-                                  onPressed: () => _stateCounter(2),
-                                  child: const Text('MAP',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                )
-                              ]))),
-
-                  // TESTIPAINIKKEET
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    // event card painike
-                    TextButton(
-                      onPressed: () => _stateCounter(4),
-                      child: const Text('event card',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    // joined event painike
-                    TextButton(
-                      onPressed: () => _stateCounter(5),
-                      child: const Text('joined event',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    // login painike
-                    TextButton(
-                      onPressed: () => _stateCounter(7),
-                      child: const Text('login',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    // register painike
-                    TextButton(
-                        onPressed: () => _stateCounter(8),
-                        child: const Text('register',
+          // bottom navigation bar
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _navState,
+            type: BottomNavigationBarType.shifting,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.format_list_bulleted),
+                label: 'Events',
+                backgroundColor: Colors.blue,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+                backgroundColor: Colors.pink,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.map_outlined),
+                label: 'Map',
+                backgroundColor: Colors.purple,
+              ),
+            ],
+            selectedItemColor: Colors.amber[800],
+            onTap: _stateCounter,
+          ),
+          body: WillPopScope(
+              // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
+              onWillPop: () async {
+                if (_state != _navState) {
+                  setState(() {
+                    _state = _navState;
+                  });
+                  return false;
+                }
+                return true;
+              },
+              child: Column(
+                  children: ([
+                // select theme painike
+                (_state == 3)
+                    ? (TextButton(
+                        onPressed: () => {
+                          setState(() {
+                            if (isPlatformDark) {
+                              isPlatformDark = false;
+                            } else {
+                              isPlatformDark = true;
+                            }
+                            initTheme =
+                                isPlatformDark ? Themes.dark : Themes.light;
+                          })
+                        },
+                        child: const Text('Change theme',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
-                            ))),
-                  ]),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    // profile painike
-                    TextButton(
-                      onPressed: () => _stateCounter(3),
-                      child: const Text('Profile',
+                            )),
+                      ))
+                    : (Column()),
+                _widgetOptions.elementAt(_state),
+
+                // TESTIPAINIKKEET
+                // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
+
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  // event card painike
+                  TextButton(
+                    onPressed: () => _stateCounter(4),
+                    child: const Text('event card',
+                        style: TextStyle(
+                          //
+                          fontSize: 10, //
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  // joined event painike
+                  TextButton(
+                    onPressed: () => _stateCounter(5),
+                    child: const Text('Chat wiew',
+                        style: TextStyle(
+                          //
+                          fontSize: 10, //
+                          fontWeight: FontWeight.bold,
+                        )), //
+                  ), //
+                  // login painike
+                  TextButton(
+                    onPressed: () => _stateCounter(7),
+                    child: const Text('login',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  // register painike
+                  TextButton(
+                      onPressed: () => _stateCounter(8),
+                      child: const Text('register',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 10, //
                             fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    // create event painike
-                    TextButton(
-                      onPressed: () => _stateCounter(6),
-                      child: const Text('Create Event',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    // select location painike
-                    TextButton(
-                      onPressed: () => _stateCounter(9),
-                      child: const Text('Select Location',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                  ])
-                ])))));
+                          ))),
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  // profile painike
+                  TextButton(
+                    onPressed: () => _stateCounter(3),
+                    child: const Text('Profile',
+                        style: TextStyle(
+                          fontSize: 10, //
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  // create event painike
+                  TextButton(
+                    onPressed: () => _stateCounter(6),
+                    child: const Text('Create Event',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ])
+              ]))),
+
+          // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
+        ));
   }
 }
