@@ -19,12 +19,13 @@ class _MapScreenState extends State<MapView> {
   _MapScreenState();
   bool _filtered = false;
 
-  late Future<AllEventsData> futureAllEventsData;
+  late Future<List> futureAllEventsData;
 
   @override
   void initState() {
     super.initState();
     futureAllEventsData = fetchAllEventsData();
+    print('mappi' + futureAllEventsData.toString());
   }
 
   var _state = '';
@@ -101,33 +102,38 @@ class _MapScreenState extends State<MapView> {
 
   Set<Marker> getmarkers() {
 // Get list items from api
-    Future<AllEventsData> markersFromApi = futureAllEventsData;
+    Future<List> markersFromApi = futureAllEventsData;
 
     List filteredMarkersFromApi = eventsOfInterestWithLocation;
+    print('mappi' + futureAllEventsData.toString());
 
     setState(() {
       markerlist.clear();
-      Future<AllEventsData> setMarkers;
+      Future<List> setMarkers;
       var counter = 0;
       if (_filtered) {
         setMarkers = markersFromApi;
       } else {
         setMarkers = futureAllEventsData;
       }
+
       setMarkers.then((value) => {
-            markerlist.add(Marker(
-              //add first marker
-              markerId: MarkerId(value.toString()),
-              position: LatLng(value.latitude.toDouble(),
-                  value.longitude.toDouble()), //position of marker
-              infoWindow: InfoWindow(
-                //popup info
-                title: value.title,
-                snippet: value.description + ' tap to join',
-                onTap: () => selectEvent(value.id.toString()),
-              ),
-              icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-            ))
+            print('lenght' + value.length.toString()),
+            for (int i = 0; i < value.length; i++)
+              {
+                print('valuetitle: ' + value[i].title),
+                markerlist.add(Marker(
+                  markerId: MarkerId(value.toString()),
+                  position: LatLng(65.025615, 25.421453), //position of marker
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: value[i].title,
+                    snippet: value[i].description + ' tap to join',
+                    onTap: () => selectEvent(value[i].id.toString()),
+                  ),
+                  icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+                ))
+              }
           });
     });
     return markerlist;

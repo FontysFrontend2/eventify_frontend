@@ -1,5 +1,6 @@
 import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
 import 'package:flutter/material.dart';
+import '../../models/all_events_model.dart';
 import '/a_data/events_data.dart';
 
 import 'chat_card_list.dart';
@@ -12,63 +13,72 @@ class ChatFeedView extends StatefulWidget {
 }
 
 class _ChatFeedViewState extends State<ChatFeedView> {
-  List data = eventsOfInterest;
+  final Set markerlist = new Set();
+  late List<dynamic> lista = [
+    {'id': 1212, 'title': '', 'description': ''}
+  ];
+  late Future<List> futureAllEventsData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAllEventsData = fetchAllEventsData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "EVENTS",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.pink[50],
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          "CHAT ROOMS",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          ListView(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 20.0),
-              children: [
-                ...data.map((data) {
-                  return ChatCardList(
-                      id: data['id'],
-                      title: data['title'],
-                      description: data['description']);
-                }).toList()
-              ]),
-        ],
-      ),
-    );
+    return MaterialApp(
+        title: 'Fetch Data Example',
+        theme: ThemeData(
+          primaryColor: Colors.lightBlueAccent,
+        ),
+        home: Scaffold(
+            body: FutureBuilder<List>(
+                future: futureAllEventsData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (_, index) => Center(
+                            child: ChatCardList(
+                                id: int.parse("${snapshot.data![index].id}"),
+                                title: "${snapshot.data![index].title}",
+                                description:
+                                    "${snapshot.data![index].description}")));
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                })));
+  }
+
+  Set getmarkers() {
+// Get list items from api
+    Future<List> markersFromApi = futureAllEventsData;
+
+    print('mappi' + futureAllEventsData.toString());
+
+    setState(() {
+      Future<List> setMarkers;
+      var counter = 0;
+
+      markersFromApi.then((value) => {
+            print('lenght' + value.length.toString()),
+            for (int i = 0; i < value.length; i++)
+              {
+                print('valuetitle: ' + value[i].title),
+                markerlist.add({
+                  'id': value[i].id,
+                  'title': value[i].title,
+                  'description': value[i].description
+                })
+              }
+          });
+    });
+    return markerlist;
   }
 }
