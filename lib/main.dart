@@ -65,37 +65,9 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
         theme: initTheme,
         home: Scaffold(
-<<<<<<< HEAD
           appBar: AppBar(
             title: const Text('Eventify'),
           ),
-=======
-            appBar: AppBar(
-              title: const Text('Eventify'),
-            ),
-            body: WillPopScope(
-                // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
-                onWillPop: () async {
-                  if (_state != 0) {
-                    setState(() {
-                      _state = 0;
-                    });
-                    return false;
-                  }
-                  return true;
-                },
-
-                // Näkymät: state 0 = home, state 1 = events, state 2 = map, state 3 = profile, state 4 = event card,
-                // state 5 = chat, state 6 = create event, state 7 = login, state 8 = register, state 9 = select location
-                child: Column(
-                    children: ([
-                  _state == 0
-                      ? (Expanded(flex: 2, child: HomeFeedView()))
-                      : _state == 1
-                          ? (const Expanded(flex: 2, child: EventsView()))
-                          : _state == 2
-                              ? (const Expanded(flex: 2, child: MapView()))
->>>>>>> 92c4880 (EventShortCard)
 
           // bottom navigation bar
           bottomNavigationBar: BottomNavigationBar(

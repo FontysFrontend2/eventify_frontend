@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class EventCardShortView extends StatelessWidget {
   final d;
 
-  EventCardShortView(this.d);
+  const EventCardShortView(this.d);
 
   @override
   Widget build(BuildContext context) {
