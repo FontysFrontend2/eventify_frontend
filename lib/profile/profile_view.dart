@@ -142,7 +142,7 @@ class ProfileState extends State<ProfilePage> {
               children: const [
                 Text(
                   'Event chat notifications',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 15),
                 ),
                 SwitchEventNot(),
               ],
@@ -160,7 +160,7 @@ class ProfileState extends State<ProfilePage> {
               children: const [
                 Text(
                   'Interest chat notifications',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 15),
                 ),
                 SwitchInterestNot(),
               ],
@@ -178,7 +178,7 @@ class ProfileState extends State<ProfilePage> {
               children: const [
                 Text(
                   'Feed notifications',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 15),
                 ),
                 SwitchFeedNot(),
               ],
