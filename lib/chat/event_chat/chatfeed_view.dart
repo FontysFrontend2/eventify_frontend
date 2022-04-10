@@ -13,10 +13,6 @@ class ChatFeedView extends StatefulWidget {
 }
 
 class _ChatFeedViewState extends State<ChatFeedView> {
-  final Set markerlist = new Set();
-  late List<dynamic> lista = [
-    {'id': 1212, 'title': '', 'description': ''}
-  ];
   late Future<List> futureAllEventsData;
 
   @override
@@ -107,31 +103,5 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                 return Center(child: CircularProgressIndicator());
               }
             }));
-  }
-
-  Set getmarkers() {
-// Get list items from api
-    Future<List> markersFromApi = futureAllEventsData;
-
-    print('mappi' + futureAllEventsData.toString());
-
-    setState(() {
-      Future<List> setMarkers;
-      var counter = 0;
-
-      markersFromApi.then((value) => {
-            print('lenght' + value.length.toString()),
-            for (int i = 0; i < value.length; i++)
-              {
-                print('valuetitle: ' + value[i].title),
-                markerlist.add({
-                  'id': value[i].id,
-                  'title': value[i].title,
-                  'description': value[i].description
-                })
-              }
-          });
-    });
-    return markerlist;
   }
 }

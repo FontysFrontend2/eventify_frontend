@@ -14,8 +14,10 @@ import '../../a_data/events_data.dart';
 import '../../create_event/select_location.dart';
 
 class ChatInfo extends StatefulWidget {
-  final int id;
-  ChatInfo(this.id);
+  int id;
+  String title;
+  String description;
+  ChatInfo({required this.id, required this.title, required this.description});
 
   @override
   _ChatInfoState createState() => _ChatInfoState();
@@ -32,7 +34,7 @@ class _ChatInfoState extends State<ChatInfo> {
   @override
   void initState() {
     super.initState();
-    futureAllEventsData = fetchEventFromId(widget.id);
+    //futureAllEventsData = fetchEventFromId(widget.id);
   }
 
   @override

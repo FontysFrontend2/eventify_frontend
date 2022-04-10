@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EventFromIdData {
-  final int? id;
+  final int id;
   final String? description;
   final List? interests;
   final List? members;
-  final String? title;
-  final bool? locationBased;
-  final double? latitude;
-  final double? longitude;
-  final int? hostID;
-  final int? maxPeople;
-  final int? minPeople;
-  final String? startEvent;
-  final bool? hasStarted;
+  final String title;
+  final bool locationBased;
+  final double latitude;
+  final double longitude;
+  final int hostID;
+  final int maxPeople;
+  final int minPeople;
+  final String startEvent;
+  final bool hasStarted;
 
   const EventFromIdData(
       {required this.id,
@@ -33,6 +33,7 @@ class EventFromIdData {
       required this.hasStarted});
 
   factory EventFromIdData.fromJson(Map<String, dynamic> json) {
+    print('json' + json.toString());
     return EventFromIdData(
       id: json['id'],
       description: json['description'],
@@ -51,9 +52,10 @@ class EventFromIdData {
   }
 }
 
-Future<EventFromIdData> fetchEventFromId(int id) async {
+Future<EventFromIdData> fetchEventFromId(String id) async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
+
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
