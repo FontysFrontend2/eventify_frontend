@@ -52,7 +52,7 @@ class EventFromIdData {
   }
 }
 
-Future<EventFromIdData> fetchEventFromId(String id) async {
+Future<EventFromIdData> fetchEventFromId(int id) async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
 

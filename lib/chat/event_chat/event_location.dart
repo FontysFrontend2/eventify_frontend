@@ -4,8 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class EventLocation extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
 
-  final latitude;
-  final longitude;
+  final double latitude;
+  final double longitude;
   const EventLocation(this.latitude, this.longitude);
 
   @override

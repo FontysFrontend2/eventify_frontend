@@ -9,7 +9,7 @@ import 'chat_message.dart';
 import 'chat_info.dart';
 
 class ChatView extends StatefulWidget {
-  final id;
+  final int id;
   ChatView({required this.id});
 
   @override
@@ -33,7 +33,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    futureEventFromId = fetchEventFromId('4');
+    futureEventFromId = fetchEventFromId(widget.id);
     print('iidee');
   }
 
@@ -106,7 +106,13 @@ class _ChatViewState extends State<ChatView> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print('snapdata:' + snapshot.data!.title);
-                    return Text(snapshot.data!.title);
+                    return ChatInfo(
+                        id: snapshot.data!.id,
+                        title: snapshot.data!.title,
+                        description: snapshot.data!.description,
+                        latitude: snapshot.data!.latitude,
+                        longitude: snapshot.data!.longitude,
+                        locationBased: snapshot.data!.locationBased);
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
