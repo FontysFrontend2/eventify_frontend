@@ -13,38 +13,24 @@ import 'package:flutter/rendering.dart';
 import '../../a_data/events_data.dart';
 import '../../create_event/select_location.dart';
 
-class ChatInfo extends StatefulWidget {
-  int id;
-  String title;
-  String description;
-  ChatInfo({required this.id, required this.title, required this.description});
-
-  @override
-  _ChatInfoState createState() => _ChatInfoState();
-}
-
-class _ChatInfoState extends State<ChatInfo> {
-  Set markerlist = new Set();
-  late List<dynamic> lista = [
-    {'id': 1212, 'title': '', 'description': ''}
-  ];
-  late Future futureAllEventsData;
-
-  Map event = {'id': 1, 'title': 'title', 'description': 'desc'};
-  @override
-  void initState() {
-    super.initState();
-    //futureAllEventsData = fetchEventFromId(widget.id);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+class ChatInfo extends StatelessWidget {
+  int? id;
+  String? title;
+  String? description;
+  double? latitude;
+  double? longitude;
+  bool locationBased;
+  ChatInfo(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.latitude,
+      required this.longitude,
+      required this.locationBased});
 
   @override
   Widget build(BuildContext context) {
-    bool locationBased = true;
+    bool locationOnOff = locationBased;
 
     return Align(
         child: Container(
@@ -55,7 +41,7 @@ class _ChatInfoState extends State<ChatInfo> {
               Container(
                 alignment: Alignment.topCenter,
                 margin: EdgeInsets.only(bottom: 10),
-                child: Text(event["title"] as String,
+                child: Text(title.toString(),
                     style:
                         TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               ),
@@ -64,44 +50,18 @@ class _ChatInfoState extends State<ChatInfo> {
                 padding: EdgeInsets.all(6),
                 margin: EdgeInsets.only(bottom: 10),
                 color: Colors.orange[200],
-                child: Text(event["description"] as String,
+                child: Text(description.toString(),
                     style: TextStyle(fontSize: 16)),
               ),
               Container(
                   alignment: Alignment.topCenter,
                   margin: EdgeInsets.only(bottom: 10),
                   color: Colors.orange[200],
-                  child: Text('Members: ' + event['members'].toString())),
-              (locationBased)
+                  child: Text('Members: ')),
+              (locationOnOff)
                   ? (SizedBox(
-                      height: 60,
-                      child:
-                          EventLocation(event['latitude'], event['longitude'])))
+                      height: 60, child: EventLocation(latitude!, longitude!)))
                   : (Container())
             ])));
-  }
-
-  Map getmarkers() {
-// Get list items from api
-    Future markersFromApi = futureAllEventsData;
-
-    print('mappi' + futureAllEventsData.toString());
-    Map setMarkers = {
-      'id': 1,
-      'title': 'value[i].title',
-      'description': 'value[i].description'
-    };
-
-    setState(() {
-      var counter = 0;
-      markersFromApi.then((value) => {
-            setMarkers = {
-              'id': value.id,
-              'title': value.title,
-              'description': value.description
-            }
-          });
-    });
-    return setMarkers;
   }
 }
