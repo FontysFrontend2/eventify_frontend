@@ -1,5 +1,6 @@
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
+import 'package:eventify_frontend/models/post_event_model.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const CreateEventView());
@@ -179,7 +180,7 @@ class _NewEventFormState extends State<NewEventForm> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           )),
-                      Text(_posLat + ' ' + _posLong),
+                      Text(_posLat.toString() + ' ' + _posLong.toString()),
                     ]),
                   ],
                 )))
@@ -290,7 +291,18 @@ class _NewEventFormState extends State<NewEventForm> {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
                   sendData(nameController.text, descriptionController.text,
-                      _posLat, _posLong, _tags, _date, _time, _maxPeople);
+                      _posLat, _posLong, _date, _time, _maxPeople);
+                  PostEvent(
+                      description: descriptionController.text,
+                      title: nameController.text,
+                      locationBased: "false",
+                      latitude: "0",
+                      longitude: "0",
+                      hostID: "0",
+                      maxPeople: _maxPeople,
+                      minPeople: "1",
+                      startEvent: "2022-05-14T08:34:59.506Z",
+                      hasStarted: "false");
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text('Processing Data: ' + infoTestString)),
@@ -377,8 +389,19 @@ class _NewEventFormState extends State<NewEventForm> {
 
   // sends data to database
   void sendData(String title, String description, String posLat, String posLong,
-      String tags, String date, String time, String maxPeople) {
+      String date, String time, String maxPeople) {
     if (!_useLocation) {
+      PostEvent(
+          description: description.toString(),
+          title: title.toString(),
+          locationBased: "false",
+          latitude: "0",
+          longitude: "0",
+          hostID: "0",
+          maxPeople: maxPeople.toString(),
+          minPeople: "1",
+          startEvent: "2022-05-14T08:34:59.506Z",
+          hasStarted: "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
@@ -391,17 +414,28 @@ class _NewEventFormState extends State<NewEventForm> {
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople;
+          _maxPeople.toString();
     } else {
+      PostEvent(
+          description: description,
+          title: title,
+          locationBased: "true",
+          latitude: posLat,
+          longitude: posLong,
+          hostID: "0",
+          maxPeople: maxPeople,
+          minPeople: "1",
+          startEvent: "2022-05-14T08:34:59.506Z",
+          hasStarted: "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
           description +
           '\nLocationBased = true' +
           '\nLat: ' +
-          posLat +
+          posLat.toString() +
           '\nLong: ' +
-          posLong +
+          posLong.toString() +
           '\nTags: ' +
           _tags +
           '\ndate: ' +
@@ -409,7 +443,7 @@ class _NewEventFormState extends State<NewEventForm> {
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople;
+          _maxPeople.toString();
     }
   }
 }
