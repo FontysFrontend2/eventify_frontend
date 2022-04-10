@@ -9,8 +9,8 @@ class AllEventsData {
   final List? members;
   final String title;
   final bool locationBased;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
   final int hostID;
   final int maxPeople;
   final int minPeople;
@@ -40,8 +40,8 @@ class AllEventsData {
       members: json['members'],
       title: json['title'],
       locationBased: json['locationBased'],
-      latitude: 65.025615,
-      longitude: 65.025615,
+      latitude: json['latitude'].toDouble(),
+      longitude: json['longitude'].toDouble(),
       hostID: json['hostID'],
       maxPeople: json['maxPeople'],
       minPeople: json['minPeople'],

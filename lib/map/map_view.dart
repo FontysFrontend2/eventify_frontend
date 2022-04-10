@@ -23,9 +23,8 @@ class _MapScreenState extends State<MapView> {
 
   @override
   void initState() {
-    super.initState();
     futureAllEventsData = fetchAllEventsData();
-    print('mappi' + futureAllEventsData.toString());
+    super.initState();
   }
 
   var _state = '';
@@ -51,15 +50,17 @@ class _MapScreenState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     //print('eventdata: ' + (futureEventData.data.title).toString());
+
     if (_state == '') {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
           body: GoogleMap(
+            mapType: MapType.terrain,
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) => _googleMapController = controller,
             markers: getmarkers(),
+            onMapCreated: (controller) => _googleMapController = controller,
           ),
           floatingActionButton: Container(
               color: Colors.white,
@@ -102,12 +103,12 @@ class _MapScreenState extends State<MapView> {
 
   Set<Marker> getmarkers() {
 // Get list items from api
-    Future<List> markersFromApi = futureAllEventsData;
-
-    List filteredMarkersFromApi = eventsOfInterestWithLocation;
     print('mappi' + futureAllEventsData.toString());
 
     setState(() {
+      Future<List> markersFromApi = futureAllEventsData;
+
+      List filteredMarkersFromApi = eventsOfInterestWithLocation;
       markerlist.clear();
       Future<List> setMarkers;
       var counter = 0;
@@ -124,7 +125,8 @@ class _MapScreenState extends State<MapView> {
                 print('valuetitle: ' + value[i].title),
                 markerlist.add(Marker(
                   markerId: MarkerId(value.toString()),
-                  position: LatLng(65.025615, 25.421453), //position of marker
+                  position: LatLng(value[i].latitude,
+                      value[i].longitude), //position of marker
                   infoWindow: InfoWindow(
                     //popup info
                     title: value[i].title,
