@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 import 'profile/themes.dart';
 
-var isPlatformDark = false;
+bool isPlatformDark = false;
 
 // sprint 3
 void main() => runApp(const MyApp());
@@ -28,6 +28,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 1;
   int _navState = 1;
+  bool dark = false;
 
   var initTheme = isPlatformDark ? Themes.dark : Themes.light;
 
@@ -38,6 +39,9 @@ class MyAppState extends State<MyApp> {
     if (i <= 2) {
       _navState = i;
     }
+    if (i == 2) {
+      isPlatformDark ? i = i : i += 1;
+    }
     setState(() {
       _state = i;
     });
@@ -47,8 +51,8 @@ class MyAppState extends State<MyApp> {
   static const List<Widget> _widgetOptions = <Widget>[
     Expanded(flex: 2, child: ChatFeedView()),
     Expanded(flex: 2, child: HomeFeedView()),
-    Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: MapView()),
+    Expanded(flex: 2, child: MapView(true)),
+    Expanded(flex: 2, child: MapView(false)),
     Expanded(flex: 2, child: EventCardView('')),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),

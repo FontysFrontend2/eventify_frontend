@@ -1,10 +1,12 @@
 import 'package:eventify_frontend/event/eventcard_view.dart';
+import 'package:eventify_frontend/map/map_styles.dart';
 import 'package:eventify_frontend/models/all_events_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapView extends StatefulWidget {
-  const MapView();
+  final bool dark;
+  const MapView(this.dark);
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -59,6 +61,12 @@ class _MapViewState extends State<MapView> {
       CameraPosition(target: LatLng(65.012615, 25.471453), zoom: 11.5);
 
   late GoogleMapController _googleMapController;
+  void _onMapCreated(GoogleMapController controller) {
+    _googleMapController = controller;
+    if (widget.dark) {
+      _googleMapController.setMapStyle(map_style_dark);
+    }
+  }
 
   @override
   void dispose() {
@@ -77,7 +85,7 @@ class _MapViewState extends State<MapView> {
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) => _googleMapController = controller,
+            onMapCreated: (controller) => _onMapCreated(controller),
             markers: Set<Marker>.of(allMarkers),
           ),
           floatingActionButton: Container(
