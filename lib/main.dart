@@ -8,10 +8,9 @@ import 'package:eventify_frontend/map/map_view.dart';
 import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'profile/themes.dart';
-
-var isPlatformDark = false;
 
 // sprint 3
 void main() => runApp(const MyApp());
@@ -29,14 +28,57 @@ class MyAppState extends State<MyApp> {
   int _state = 1;
   int _navState = 1;
 
-  var initTheme = isPlatformDark ? Themes.dark : Themes.light;
+  late SharedPreferences prefs;
+  late bool isPlatformDark;
+
+  retrieve() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        isPlatformDark = true;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      } else {
+        isPlatformDark = false;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      }
+    });
+  }
+
+  save() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (isPlatformDark) {
+        prefs.setString("darkMode", "false");
+        isPlatformDark = false;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      } else {
+        prefs.setString("darkMode", "true");
+        isPlatformDark = true;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      }
+      // print('dark?: ' + isPlatformDark.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    retrieve();
+    super.initState();
+  }
+
+  var initTheme;
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
+    retrieve();
+    print('prefs: ' + prefs.getString("darkMode").toString());
     initTheme = isPlatformDark ? Themes.dark : Themes.light;
     print('initheme: ' + isPlatformDark.toString());
     if (i <= 2) {
       _navState = i;
+    }
+    if (i == 2) {
+      isPlatformDark ? i = i : i += 1;
     }
     setState(() {
       _state = i;
@@ -47,21 +89,16 @@ class MyAppState extends State<MyApp> {
   static const List<Widget> _widgetOptions = <Widget>[
     Expanded(flex: 2, child: ChatFeedView()),
     Expanded(flex: 2, child: HomeFeedView()),
-    Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: ProfilePage()),
+    Expanded(flex: 2, child: MapView(true)),
+    Expanded(flex: 2, child: MapView(false)),
     Expanded(flex: 2, child: EventCardView('')),
-    //Expanded(flex: 2, child: ChatView(id: )),
-    Expanded(flex: 2, child: CreateEventView()),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),
-    Expanded(flex: 2, child: SelectLocation()),
+    Expanded(flex: 2, child: CreateEventView()),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // code here
-//checks the theme
-
     return MaterialApp(
         theme: initTheme,
         home: Scaffold(
@@ -107,17 +144,11 @@ class MyAppState extends State<MyApp> {
               child: Column(
                   children: ([
                 // select theme painike
-                (_state == 3)
+                (_state == 1)
                     ? (TextButton(
                         onPressed: () => {
                           setState(() {
-                            if (isPlatformDark) {
-                              isPlatformDark = false;
-                            } else {
-                              isPlatformDark = true;
-                            }
-                            initTheme =
-                                isPlatformDark ? Themes.dark : Themes.light;
+                            save();
                           })
                         },
                         child: const Text('Change theme',
@@ -143,19 +174,9 @@ class MyAppState extends State<MyApp> {
                           fontWeight: FontWeight.bold,
                         )),
                   ),
-                  // joined event painike
-                  TextButton(
-                    onPressed: () => _stateCounter(5),
-                    child: const Text('Chat wiew',
-                        style: TextStyle(
-                          //
-                          fontSize: 10, //
-                          fontWeight: FontWeight.bold,
-                        )), //
-                  ), //
                   // login painike
                   TextButton(
-                    onPressed: () => _stateCounter(7),
+                    onPressed: () => _stateCounter(5),
                     child: const Text('login',
                         style: TextStyle(
                           fontSize: 10,
@@ -164,33 +185,23 @@ class MyAppState extends State<MyApp> {
                   ),
                   // register painike
                   TextButton(
-                      onPressed: () => _stateCounter(8),
+                      onPressed: () => _stateCounter(6),
                       child: const Text('register',
                           style: TextStyle(
                             fontSize: 10, //
                             fontWeight: FontWeight.bold,
                           ))),
                 ]),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  // profile painike
-                  TextButton(
-                    onPressed: () => _stateCounter(3),
-                    child: const Text('Profile',
-                        style: TextStyle(
-                          fontSize: 10, //
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  // create event painike
-                  TextButton(
-                    onPressed: () => _stateCounter(6),
-                    child: const Text('Create Event',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                ])
+
+                // create event painike
+                TextButton(
+                  onPressed: () => _stateCounter(7),
+                  child: const Text('Create Event',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
               ]))),
 
           // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
