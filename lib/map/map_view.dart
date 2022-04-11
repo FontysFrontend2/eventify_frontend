@@ -129,8 +129,7 @@ class _MapViewState extends State<MapView> {
                   ))));
     } else {
       return Scaffold(
-          body: Column(
-              children: [Expanded(flex: 2, child: EventCardView(_state))]));
+          body: Column(children: [Expanded(flex: 2, child: EventCardView(1))]));
     }
   }
 }

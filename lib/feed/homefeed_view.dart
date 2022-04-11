@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:eventify_frontend/event/eventcard_shortview.dart';
-import '../a_data/events_data.dart' as event_data;
+import 'package:eventify_frontend/models/all_events_model.dart';
+
+import '../event/eventcard_view.dart';
 
 class HomeFeedView extends StatefulWidget {
   const HomeFeedView({Key? key}) : super(key: key);
@@ -11,42 +14,54 @@ class HomeFeedView extends StatefulWidget {
 
 class HomeFeedState extends State<HomeFeedView> {
   int state = 1;
-  final events = event_data.eventsWithLocation;
+
+  late Future<List> futureAllEventsData;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAllEventsData = fetchAllEventsData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void selectedEvent(int evId) {
+    setState(() {
+      state = evId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final d1 = [
-      {
-        'name': 'Tapahtuma1',
-        'desc': 'Testitapahtuma',
-        'long': 123.12,
-        'lat': 123.12,
-      },
-      {
-        'name': 'Tapahtuma2',
-        'desc': 'Testitapahtuma',
-        'long': 132.12,
-        'lat': 111.12,
-      }
-    ];
-
     return Container(
-      color: Colors.white,
+      //color: Colors.white,
       width: double.infinity,
       padding: const EdgeInsets.all(5.0),
       child: (state == 1)
-          ? ListView(
-              children: [
-                ...events.map((e) {
-                  return EventCardShortView(e);
-                }).toList(),
-              ],
-            )
-          : (Container()),
+          ? FutureBuilder<List>(
+              future: futureAllEventsData,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (_, index) => Center(
+                      child: EventCardShortView(
+                        snapshot.data![index],
+                        () => selectedEvent(snapshot.data![index].id),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              })
+          : (Expanded(flex: 2, child: EventCardView(state))),
     );
   }
 }
-  
 
 
 // open eventcard view = Column(children: const [Expanded(flex: 2, child: EventCardView('id'))])
