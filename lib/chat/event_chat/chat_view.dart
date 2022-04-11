@@ -34,7 +34,6 @@ class _ChatViewState extends State<ChatView> {
   void initState() {
     super.initState();
     futureEventFromId = fetchEventFromId(widget.id);
-    print('iidee');
   }
 
   @override
