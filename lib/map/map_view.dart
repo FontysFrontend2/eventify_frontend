@@ -17,11 +17,19 @@ class _MapViewState extends State<MapView> {
   _MapViewState();
   bool _filtered = false;
   late Set<Marker> markers;
+  late BitmapDescriptor customIcon;
 
   @override
   void initState() {
     loadLocations();
     super.initState();
+
+// make sure to initialize before map loading
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(40, 40)), 'assets/images/paw.png')
+        .then((d) {
+      customIcon = d;
+    });
   }
 
   var _state = 'load';
@@ -49,7 +57,7 @@ class _MapViewState extends State<MapView> {
               snippet: locations[i].description + ' tap to join',
               onTap: () => selectEvent(locations[i].id.toString()),
             ),
-            icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+            icon: customIcon, //Icon for Marker
           ));
     }
     setState(() {
