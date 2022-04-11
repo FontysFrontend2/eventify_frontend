@@ -65,7 +65,6 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
         theme: initTheme,
         home: Scaffold(
-
           appBar: AppBar(
             title: const Text('Eventify'),
           ),
