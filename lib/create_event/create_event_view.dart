@@ -94,6 +94,7 @@ class _NewEventFormState extends State<NewEventForm> {
             fontWeight: FontWeight.bold,
           )),
       TextFormField(
+          autofocus: false,
           textAlign: TextAlign.center,
           controller: nameController,
           validator: (eventValue) {
@@ -110,6 +111,7 @@ class _NewEventFormState extends State<NewEventForm> {
       const Text('Event description:',
           style: TextStyle(fontWeight: FontWeight.bold)),
       TextFormField(
+        autofocus: false,
         textAlign: TextAlign.center,
         controller: descriptionController,
         validator: (descriptionValue) {
