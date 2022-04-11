@@ -133,34 +133,4 @@ class _MapViewState extends State<MapView> {
               children: [Expanded(flex: 2, child: EventCardView(_state))]));
     }
   }
-/*
-  Set<Marker> getMarkers() {
-    print('mappi' + widget.futureAllEventsData.toString());
-    setState(() {
-      Future<List> setMarkers;
-      var counter = 0;
-      setMarkers = widget.futureAllEventsData;
-      print('sdasdjsoajdas odjasodsjad saodsao sa:');
-      widget.futureAllEventsData.then((value) => {
-            for (int i = 0; i < value.length; i++)
-              {
-                print('sdasdjsoajdas odjasodsjad saodsao sa:' +
-                    value[i].id.toString()),
-                markerlist.add(Marker(
-                  markerId: MarkerId(value[i].id.toString()),
-                  position: LatLng(value[i].latitude,
-                      value[i].longitude), //position of marker
-                  infoWindow: InfoWindow(
-                    //popup info
-                    title: value[i].title,
-                    snippet: value[i].description + ' tap to join',
-                    onTap: () => selectEvent(value[i].id.toString()),
-                  ),
-                  icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-                ))
-              }
-          });
-    });
-    return markerlist;
-  }*/
 }
