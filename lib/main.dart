@@ -47,14 +47,12 @@ class MyAppState extends State<MyApp> {
   static const List<Widget> _widgetOptions = <Widget>[
     Expanded(flex: 2, child: ChatFeedView()),
     Expanded(flex: 2, child: HomeFeedView()),
+    Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: ProfilePage()),
     Expanded(flex: 2, child: EventCardView('')),
-    //Expanded(flex: 2, child: ChatView(id: )),
-    Expanded(flex: 2, child: CreateEventView()),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),
-    Expanded(flex: 2, child: SelectLocation()),
+    Expanded(flex: 2, child: CreateEventView()),
   ];
 
   @override
@@ -107,7 +105,7 @@ class MyAppState extends State<MyApp> {
               child: Column(
                   children: ([
                 // select theme painike
-                (_state == 3)
+                (_state == 1)
                     ? (TextButton(
                         onPressed: () => {
                           setState(() {
@@ -143,19 +141,9 @@ class MyAppState extends State<MyApp> {
                           fontWeight: FontWeight.bold,
                         )),
                   ),
-                  // joined event painike
-                  TextButton(
-                    onPressed: () => _stateCounter(5),
-                    child: const Text('Chat wiew',
-                        style: TextStyle(
-                          //
-                          fontSize: 10, //
-                          fontWeight: FontWeight.bold,
-                        )), //
-                  ), //
                   // login painike
                   TextButton(
-                    onPressed: () => _stateCounter(7),
+                    onPressed: () => _stateCounter(5),
                     child: const Text('login',
                         style: TextStyle(
                           fontSize: 10,
@@ -164,33 +152,23 @@ class MyAppState extends State<MyApp> {
                   ),
                   // register painike
                   TextButton(
-                      onPressed: () => _stateCounter(8),
+                      onPressed: () => _stateCounter(6),
                       child: const Text('register',
                           style: TextStyle(
                             fontSize: 10, //
                             fontWeight: FontWeight.bold,
                           ))),
                 ]),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  // profile painike
-                  TextButton(
-                    onPressed: () => _stateCounter(3),
-                    child: const Text('Profile',
-                        style: TextStyle(
-                          fontSize: 10, //
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  // create event painike
-                  TextButton(
-                    onPressed: () => _stateCounter(6),
-                    child: const Text('Create Event',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                ])
+
+                // create event painike
+                TextButton(
+                  onPressed: () => _stateCounter(7),
+                  child: const Text('Create Event',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
               ]))),
 
           // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
