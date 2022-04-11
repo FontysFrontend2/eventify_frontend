@@ -77,7 +77,7 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     if (_state == 'load') {
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     } else if (_state == '') {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
@@ -88,38 +88,45 @@ class _MapViewState extends State<MapView> {
             onMapCreated: (controller) => _onMapCreated(controller),
             markers: Set<Marker>.of(allMarkers),
           ),
-          floatingActionButton: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-              child: DropdownButton<String>(
-                value: _filterValue,
-                icon: const Icon(
-                  Icons.arrow_drop_down_circle,
-                ),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _filterValue = newValue!;
-                    if (_filterValue == 'INTERESTS') {
-                      _filtered = false;
-                    } else {
-                      _filtered = true;
-                    }
-                  });
-                },
-                items: <String>['ALL', 'INTERESTS']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )));
+          floatingActionButton: Card(
+              color: widget.dark ? Colors.black : Colors.white,
+              margin: EdgeInsets.all(5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                  child: DropdownButton<String>(
+                    value: _filterValue,
+                    icon: const Icon(
+                      Icons.arrow_drop_down_circle,
+                    ),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(
+                      color: Colors.pink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _filterValue = newValue!;
+                        if (_filterValue == 'INTERESTS') {
+                          _filtered = false;
+                        } else {
+                          _filtered = true;
+                        }
+                      });
+                    },
+                    items: <String>['ALL', 'INTERESTS']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ))));
     } else {
       return Scaffold(
           body: Column(
