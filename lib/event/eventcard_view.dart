@@ -1,8 +1,10 @@
 import 'package:eventify_frontend/models/event_from_id.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCardView extends StatefulWidget {
   final int id;
+
   const EventCardView(this.id);
 
   @override
@@ -12,7 +14,7 @@ class EventCardView extends StatefulWidget {
 class EventCardState extends State<EventCardView> {
   int state = 1;
 
-  late Future futureEventData;
+  late Future<EventFromIdData> futureEventData;
 
   @override
   void initState() {
@@ -27,16 +29,33 @@ class EventCardState extends State<EventCardView> {
       width: double.infinity,
       height: 100.0,
       padding: const EdgeInsets.all(10.0),
-      child: FutureBuilder(
+      child: FutureBuilder<EventFromIdData>(
           future: futureEventData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Center(
-                child: Text(
-                  'This is Eventcard view\n Event id is: ' +
-                      widget.id.toString(),
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                ),
+              String dmy(String dtString) {
+                final date = DateTime.parse(dtString);
+                final format = DateFormat('d MMMM y - H:m');
+                final clockString = format.format(date);
+
+                return clockString;
+              }
+
+              return Column(
+                children: [
+                  Text(
+                    snapshot.data!.title,
+                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Tähän tietoa eventistä niin paljon kuin tarvis... gadsjhfkghsldkjfkjfhlkijsdhfkljhsdkljfhskjldhflkjshdlkfjhsdlkjfhlkjshdflkjhsdlkjfhlskjdhflkjshdlkjfhslkjdhflkjshdfjkhsdlkjhflksjhdfkljhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
+                        snapshot.data!.description.toString(),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    dmy(snapshot.data!.startEvent),
+                  )
+                ],
               );
             } else {
               return Center(child: CircularProgressIndicator());
