@@ -91,7 +91,7 @@ class MyAppState extends State<MyApp> {
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView(true)),
     Expanded(flex: 2, child: MapView(false)),
-    Expanded(flex: 2, child: EventCardView('')),
+    Expanded(flex: 2, child: ProfilePage()),
     Expanded(flex: 2, child: LoginView()),
     Expanded(flex: 2, child: RegisterationView()),
     Expanded(flex: 2, child: CreateEventView()),
@@ -167,7 +167,7 @@ class MyAppState extends State<MyApp> {
                   // event card painike
                   TextButton(
                     onPressed: () => _stateCounter(4),
-                    child: const Text('event card',
+                    child: const Text('Profile',
                         style: TextStyle(
                           //
                           fontSize: 10, //
@@ -185,23 +185,24 @@ class MyAppState extends State<MyApp> {
                   ),
                   // register painike
                   TextButton(
-                      onPressed: () => _stateCounter(6),
-                      child: const Text('register',
-                          style: TextStyle(
-                            fontSize: 10, //
-                            fontWeight: FontWeight.bold,
-                          ))),
+                    onPressed: () => _stateCounter(6),
+                    child: const Text('register',
+                        style: TextStyle(
+                          fontSize: 10, //
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  TextButton(
+                    onPressed: () => _stateCounter(7),
+                    child: const Text('Create Event',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                 ]),
 
                 // create event painike
-                TextButton(
-                  onPressed: () => _stateCounter(7),
-                  child: const Text('Create Event',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
               ]))),
 
           // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
