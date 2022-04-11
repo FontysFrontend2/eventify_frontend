@@ -47,7 +47,7 @@ class MyAppState extends State<MyApp> {
   static const List<Widget> _widgetOptions = <Widget>[
     Expanded(flex: 2, child: ChatFeedView()),
     Expanded(flex: 2, child: HomeFeedView()),
-    Expanded(flex: 2, child: HomeFeedView()),
+    Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: EventCardView('')),
     Expanded(flex: 2, child: LoginView()),
