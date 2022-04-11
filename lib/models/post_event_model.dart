@@ -74,7 +74,7 @@ Future<PostEvent> createPostEvent(
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    print('result: ' + jsonDecode(response.body));
+    print('resultti: ' + jsonDecode(response.body));
     throw Exception('Failed to create album.');
   }
 }

@@ -292,17 +292,7 @@ class _NewEventFormState extends State<NewEventForm> {
                   // you'd often call a server or save the information in a database.
                   sendData(nameController.text, descriptionController.text,
                       _posLat, _posLong, _date, _time, _maxPeople);
-                  PostEvent(
-                      description: descriptionController.text,
-                      title: nameController.text,
-                      locationBased: "false",
-                      latitude: "0",
-                      longitude: "0",
-                      hostID: "0",
-                      maxPeople: _maxPeople,
-                      minPeople: "1",
-                      startEvent: "2022-05-14T08:34:59.506Z",
-                      hasStarted: "false");
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text('Processing Data: ' + infoTestString)),
@@ -390,18 +380,11 @@ class _NewEventFormState extends State<NewEventForm> {
   // sends data to database
   void sendData(String title, String description, String posLat, String posLong,
       String date, String time, String maxPeople) {
+    print('puusti');
     if (!_useLocation) {
-      PostEvent(
-          description: description.toString(),
-          title: title.toString(),
-          locationBased: "false",
-          latitude: "0",
-          longitude: "0",
-          hostID: "0",
-          maxPeople: maxPeople.toString(),
-          minPeople: "1",
-          startEvent: "2022-05-14T08:34:59.506Z",
-          hasStarted: "false");
+      print('puusti1');
+      createPostEvent(description, title, 'false', '0', '0', "0", maxPeople,
+          "1", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
@@ -416,17 +399,9 @@ class _NewEventFormState extends State<NewEventForm> {
           '\nmax people: ' +
           _maxPeople.toString();
     } else {
-      PostEvent(
-          description: description,
-          title: title,
-          locationBased: "true",
-          latitude: posLat,
-          longitude: posLong,
-          hostID: "0",
-          maxPeople: maxPeople,
-          minPeople: "1",
-          startEvent: "2022-05-14T08:34:59.506Z",
-          hasStarted: "false");
+      print('puusti2');
+      createPostEvent(description, title, 'true', posLat, posLong, "0",
+          maxPeople, "1", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
