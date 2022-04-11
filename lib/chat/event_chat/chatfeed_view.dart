@@ -59,28 +59,37 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          height: 6,
-                        ),
-                        Text(
-                          "EVENTS",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 28,
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
+                        Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Text(
+                                  "EVENTS",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 28,
+                                  ),
+                                ))),
                       ],
                     ),
                   ),
-                  Text(
-                    "CHATROOMS",
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 20,
-                      backgroundColor: Colors.grey,
-                    ),
-                  ),
+                  Card(
+                      margin: EdgeInsets.all(5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 2.0, horizontal: 10.0),
+                          child: Text(
+                            "CHATROOMS",
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 20,
+                            ),
+                          ))),
                 ],
               ),
             ),
