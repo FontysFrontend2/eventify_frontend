@@ -8,10 +8,9 @@ import 'package:eventify_frontend/map/map_view.dart';
 import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'profile/themes.dart';
-
-bool isPlatformDark = false;
 
 // sprint 3
 void main() => runApp(const MyApp());
@@ -28,12 +27,51 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 1;
   int _navState = 1;
-  bool dark = false;
 
-  var initTheme = isPlatformDark ? Themes.dark : Themes.light;
+  late SharedPreferences prefs;
+  late bool isPlatformDark;
+
+  retrieve() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        isPlatformDark = true;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      } else {
+        isPlatformDark = false;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      }
+    });
+  }
+
+  save() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (isPlatformDark) {
+        prefs.setString("darkMode", "false");
+        isPlatformDark = false;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      } else {
+        prefs.setString("darkMode", "true");
+        isPlatformDark = true;
+        initTheme = isPlatformDark ? Themes.dark : Themes.light;
+      }
+      // print('dark?: ' + isPlatformDark.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    retrieve();
+    super.initState();
+  }
+
+  var initTheme;
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
+    retrieve();
+    print('prefs: ' + prefs.getString("darkMode").toString());
     initTheme = isPlatformDark ? Themes.dark : Themes.light;
     print('initheme: ' + isPlatformDark.toString());
     if (i <= 2) {
@@ -61,9 +99,6 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // code here
-//checks the theme
-
     return MaterialApp(
         theme: initTheme,
         home: Scaffold(
@@ -113,13 +148,7 @@ class MyAppState extends State<MyApp> {
                     ? (TextButton(
                         onPressed: () => {
                           setState(() {
-                            if (isPlatformDark) {
-                              isPlatformDark = false;
-                            } else {
-                              isPlatformDark = true;
-                            }
-                            initTheme =
-                                isPlatformDark ? Themes.dark : Themes.light;
+                            save();
                           })
                         },
                         child: const Text('Change theme',
