@@ -70,12 +70,12 @@ class ProfileState extends State<ProfilePage> {
             name(user),
             const SizedBox(height: 24),
             Ranking(),
+            const SizedBox(height: 25),
+            interests(user),
             const SizedBox(height: 50),
             description(user),
             const SizedBox(height: 24),
             password(user),
-            const SizedBox(height: 25),
-            interests(user),
             const SizedBox(height: 25),
             eventChatNot(),
             const SizedBox(height: 25),
@@ -152,20 +152,13 @@ class ProfileState extends State<ProfilePage> {
       );
 
   //interests
-  Widget interests(User user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'My interests',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 16),
-            SwitchScreen(),
-          ],
-        ),
-      );
+  Widget interests(User user) => Card(
+      color: Colors.greenAccent,
+      child: Column(children: [
+        Text('Chosen Interests:',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        InterestsCheckBoxList()
+      ]));
 
   Widget eventChatNot() => Container(
         padding: EdgeInsets.symmetric(horizontal: 50),

@@ -79,21 +79,21 @@ class MyAppState extends State<MyApp> {
         home: Builder(
             builder: (context) => Scaffold(
                   appBar: AppBar(
-                    title: const Text('Eventify'),
-                    actions: <Widget>[
-                      IconButton(
-                          onPressed: () => {
-                                _navState = _state,
-                                Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage()))
-                                    .then((_) => _stateCounter(_navState)),
-                              },
-                          icon: Icon((Icons.settings)))
-                    ],
-                  ),
+                      title: const Text('Eventify'),
+                      flexibleSpace: SafeArea(
+                          child: IconButton(
+                              alignment: Alignment.center,
+                              onPressed: () => {
+                                    _navState = _state,
+                                    Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage()))
+                                        .then((_) => _stateCounter(_navState)),
+                                  },
+                              icon: Image.asset("assets/images/user.png",
+                                  color: Colors.amber)))),
 
                   // bottom navigation bar
                   bottomNavigationBar: BottomNavigationBar(

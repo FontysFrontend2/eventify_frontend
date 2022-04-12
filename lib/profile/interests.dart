@@ -1,156 +1,125 @@
-import 'package:flutter/cupertino.dart';
+import 'package:eventify_frontend/a_data/interests_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
-//all the interests will be put here when they have been decided
-// post/get into the database later in a list
-//
-
-class SwitchScreen extends StatefulWidget {
-  const SwitchScreen({Key? key}) : super(key: key);
+class InterestsCheckBoxList extends StatefulWidget {
+  const InterestsCheckBoxList();
   @override
-  SwitchButton createState() => SwitchButton();
+  InterestsCheckBoxListState createState() => InterestsCheckBoxListState();
 }
 
-class SwitchButton extends State<SwitchScreen> {
-  bool isSwitched = false;
-  bool isSwitched2 = false;
-  bool isSwitched3 = false;
-  bool isSwitched4 = false;
-
-  var textValue1 = 'Coding';
-  var textValue2 = 'Golf';
-  var textValue3 = 'Tennis';
-  var textValue4 = 'Call Of Duty';
-
-  void toggleSwitch(bool value) {
-    if (isSwitched == false) {
-      setState(() {
-        isSwitched = true;
-      });
-    } else {
-      setState(() {
-        isSwitched = false;
-      });
-    }
-  }
-
-  void toggleSwitch2(bool value2) {
-    if (isSwitched2 == false) {
-      setState(() {
-        isSwitched2 = true;
-      });
-    } else {
-      setState(() {
-        isSwitched2 = false;
-      });
-    }
-  }
-
-  void toggleSwitch3(bool value2) {
-    if (isSwitched3 == false) {
-      setState(() {
-        isSwitched3 = true;
-      });
-    } else {
-      setState(() {
-        isSwitched3 = false;
-      });
-    }
-  }
-
-  void toggleSwitch4(bool value2) {
-    if (isSwitched4 == false) {
-      setState(() {
-        isSwitched4 = true;
-      });
-    } else {
-      setState(() {
-        isSwitched4 = false;
-      });
-    }
-  }
-
+class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
+  List<CheckBoxListTileModel> checkBoxListTileModel =
+      CheckBoxListTileModel.getUsers();
+  List<CheckBoxListTileModel> copyList = CheckBoxListTileModel.getUsers();
+  late ScrollController _controller;
+  bool save_option = false;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Text(textValue1,
-                  style: const TextStyle(fontSize: 15),
+    print('equals: ' + listEquals(checkBoxListTileModel, copyList).toString());
+    return Column(children: [
+      Container(
+          height: 200.0,
+          child: RawScrollbar(
+              thumbColor: Colors.redAccent,
+              radius: Radius.circular(20),
+              thickness: 10,
+              isAlwaysShown: true,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: (3 / 1),
                 ),
-            Transform.scale(
-              scale: 1,
-              child: Switch(
-                onChanged: toggleSwitch,
-                value: isSwitched,
-                activeColor: Colors.blueAccent,
-                activeTrackColor: Colors.lightBlueAccent,
-                inactiveTrackColor: Colors.grey,
-                inactiveThumbColor: Colors.black54,
+                itemCount: checkBoxListTileModel.length,
+                itemBuilder: (BuildContext context, int index) {
+                  // ignore: unnecessary_new
+                  return new Card(
+                    //padding: EdgeInsets.all(10.0),
+
+                    child: Column(
+                      children: <Widget>[
+                        CheckboxListTile(
+                            activeColor: Colors.pink[300],
+                            dense: true,
+                            //font change
+                            title: Text(
+                              checkBoxListTileModel[index].title!,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.5),
+                            ),
+                            value: checkBoxListTileModel[index].isCheck,
+                            onChanged: (bool? val) {
+                              itemChange(val!, index);
+                            })
+                      ],
+                    ),
+                  );
+                },
+              ))),
+      (save_option)
+          ? Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
               ),
-            ),
-    ],
-            ),
-            Row(
-              children: [
-                Text(
-                  textValue2,
-                  style: const TextStyle(fontSize: 15),
-                ),
-            Transform.scale(
-              scale: 1,
-              child: Switch(
-                onChanged: toggleSwitch2,
-                value: isSwitched2,
-                activeColor: Colors.blueAccent,
-                activeTrackColor: Colors.lightBlueAccent,
-                inactiveTrackColor: Colors.grey,
-                inactiveThumbColor: Colors.black54,
-              ),
-            ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  textValue3,
-                  style: const TextStyle(fontSize: 15),
-                ),
-            Transform.scale(
-              scale: 1,
-              child: Switch(
-                onChanged: toggleSwitch3,
-                value: isSwitched3,
-                activeColor: Colors.blueAccent,
-                activeTrackColor: Colors.lightBlueAccent,
-                inactiveTrackColor: Colors.grey,
-                inactiveThumbColor: Colors.black54,
-              ),
-            ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  textValue4,
-                  style: const TextStyle(fontSize: 15),
-                ),
-            Transform.scale(
-              scale: 1,
-              child: Switch(
-                onChanged: toggleSwitch4,
-                value: isSwitched4,
-                activeColor: Colors.blueAccent,
-                activeTrackColor: Colors.lightBlueAccent,
-                inactiveTrackColor: Colors.grey,
-                inactiveThumbColor: Colors.black54,
-              ),
-            ),
-              ],
-            )
-          ],
-    );
+              color: Colors.lightGreenAccent,
+              child: TextButton(
+                  onPressed: () => {},
+                  child: Text('Save',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold))))
+          : (Container())
+    ]);
+  }
+
+  void itemChange(bool val, int index) {
+    setState(() {
+      checkBoxListTileModel[index].isCheck = val;
+
+      int a = 0;
+      for (int i = 0; i < checkBoxListTileModel.length; i++) {
+        if (checkBoxListTileModel[i].isCheck != copyList[i].isCheck) {
+          a += 1;
+        }
+      }
+      if (a == 0) {
+        save_option = false;
+      } else {
+        save_option = true;
+      }
+    });
+  }
+}
+
+class CheckBoxListTileModel {
+  int? interestId;
+  String? title;
+  bool? isCheck;
+
+  CheckBoxListTileModel({this.interestId, this.title, this.isCheck});
+
+  static List<CheckBoxListTileModel> getUsers() {
+    return <CheckBoxListTileModel>[
+      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
+      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
+      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
+      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
+      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
+      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
+      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
+      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
+      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
+      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
+      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
+      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
+      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
+    ];
   }
 }
