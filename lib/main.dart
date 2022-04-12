@@ -161,7 +161,7 @@ class MyAppState extends State<MyApp> {
           color: Colors.grey,
           width: 40,
           child: TextButton(
-              onPressed: () => _stateCounter(4),
+              onPressed: () => _stateCounter(3),
               child: Text('login',
                   style: TextStyle(
                       fontSize: 10,
@@ -183,7 +183,7 @@ class MyAppState extends State<MyApp> {
           color: Colors.brown,
           width: 40,
           child: TextButton(
-              onPressed: () => _stateCounter(4),
+              onPressed: () => _stateCounter(5),
               child: Text('create event',
                   style: TextStyle(
                       fontSize: 8,
