@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:eventify_frontend/profile/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:eventify_frontend/profile/interests.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
 import 'package:eventify_frontend/profile/themes.dart';
 import 'package:eventify_frontend/profile/notifications.dart';
-import '../main.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -17,50 +14,87 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfilePage> {
+  late SharedPreferences prefs;
+  bool isPlatformDark = false;
+
+  changeTheme() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        prefs.setString("darkMode", "false");
+        isPlatformDark = false;
+      } else {
+        prefs.setString("darkMode", "true");
+        isPlatformDark = true;
+      }
+    });
+  }
+
+  retrieveTheme() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        isPlatformDark = true;
+      } else {
+        isPlatformDark = false;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    retrieveTheme();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = UserInformation.myUser;
 
-    return ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              Profile(
-                  path: user.path,
-                  onClicked: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                EditProfile()) //edit through a button
-                        );
-                  }),
-              const SizedBox(height: 25),
-              name(user),
-              const SizedBox(height: 24),
-              Ranking(),
-              const SizedBox(height: 50),
-              description(user),
-              const SizedBox(height: 24),
-              password(user),
-              const SizedBox(height: 25),
-              interests(user),
-              const SizedBox(height: 25),
-              eventChatNot(),
-              const SizedBox(height: 25),
-              interestChatNot(),
-              const SizedBox(height: 25),
-              feedNot(),
-              const SizedBox(height: 25),
-              ElevatedButton(
-                child: Text('Edit Profile'),
-                onPressed: () {
+    return MaterialApp(
+        theme: isPlatformDark ? Themes.dark : Themes.light,
+        home: Scaffold(
+            body: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            TextButton(onPressed: changeTheme, child: Text('Theme')),
+            Profile(
+                path: user.path,
+                onClicked: () {
                   Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
                               EditProfile()) //edit through a button
                       );
-                },
-              ),
-            ],
-          );
-        /*),
+                }),
+            const SizedBox(height: 25),
+            name(user),
+            const SizedBox(height: 24),
+            Ranking(),
+            const SizedBox(height: 50),
+            description(user),
+            const SizedBox(height: 24),
+            password(user),
+            const SizedBox(height: 25),
+            interests(user),
+            const SizedBox(height: 25),
+            eventChatNot(),
+            const SizedBox(height: 25),
+            interestChatNot(),
+            const SizedBox(height: 25),
+            feedNot(),
+            const SizedBox(height: 25),
+            ElevatedButton(
+              child: Text('Edit Profile'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            EditProfile()) //edit through a button
+                    );
+              },
+            ),
+          ],
+        )));
+    /*),
       ),
     );*/
   }
@@ -287,8 +321,7 @@ class Ranking extends StatelessWidget {
   Widget numberButton(BuildContext context, int value, String text) =>
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 4),
-        onPressed: () {
-        },
+        onPressed: () {},
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
