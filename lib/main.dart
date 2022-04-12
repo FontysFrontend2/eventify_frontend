@@ -58,6 +58,11 @@ class MyAppState extends State<MyApp> {
     retrieve();
     setState(() {
       _state = i;
+      if (i > 2) {
+        _navState = 1;
+      } else {
+        _navState = _state;
+      }
     });
   }
   // code here
@@ -96,7 +101,7 @@ class MyAppState extends State<MyApp> {
 
                   // bottom navigation bar
                   bottomNavigationBar: BottomNavigationBar(
-                    currentIndex: _state,
+                    currentIndex: _navState,
                     type: BottomNavigationBarType.shifting,
                     items: const <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
