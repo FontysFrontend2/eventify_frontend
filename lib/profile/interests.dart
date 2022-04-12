@@ -15,6 +15,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   List<CheckBoxListTileModel> copyList = CheckBoxListTileModel.getUsers();
   late ScrollController _controller;
   bool save_option = false;
+
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('equals: ' + listEquals(checkBoxListTileModel, copyList).toString());
@@ -22,11 +29,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
       Container(
           height: 200.0,
           child: RawScrollbar(
+              controller: _scrollController,
+              isAlwaysShown: true,
               thumbColor: Colors.redAccent,
               radius: Radius.circular(20),
               thickness: 10,
-              isAlwaysShown: true,
               child: GridView.builder(
+                controller: _scrollController,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: (3 / 1),
@@ -66,7 +75,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
               ),
               color: Colors.lightGreenAccent,
               child: TextButton(
-                  onPressed: () => {},
+                  onPressed: sendInterests,
                   child: Text('Save',
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.bold))))
@@ -91,6 +100,23 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
       }
     });
   }
+
+  void sendInterests() {
+    List<CheckBoxListTileModel> sendList = [];
+    for (int i = 0; i < checkBoxListTileModel.length; i++) {
+      if (checkBoxListTileModel[i].isCheck == true) {
+        sendList.add(checkBoxListTileModel[i]);
+      }
+    }
+    String listString = '';
+    for (int i = 0; i < sendList.length; i++) {
+      listString += sendList[i].interestId.toString();
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Processing Data: ' + listString),
+    ));
+    //postData(checkBoxListTileModel);
+  }
 }
 
 class CheckBoxListTileModel {
@@ -107,19 +133,21 @@ class CheckBoxListTileModel {
       CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
       CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
       CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
-      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
-      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
-      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
-      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
-      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
-      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
-      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
-      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Golf", isCheck: true),
+      CheckBoxListTileModel(interestId: 6, title: "Golf", isCheck: true),
+      CheckBoxListTileModel(interestId: 7, title: "Airsoft", isCheck: true),
+      CheckBoxListTileModel(interestId: 8, title: "Beach Ball", isCheck: false),
+      CheckBoxListTileModel(interestId: 9, title: "CS GO", isCheck: false),
+      CheckBoxListTileModel(
+          interestId: 4, title: "League Of Legends", isCheck: false),
+      CheckBoxListTileModel(interestId: 10, title: "Coding", isCheck: false),
+      CheckBoxListTileModel(interestId: 11, title: "Hacking", isCheck: true),
+      CheckBoxListTileModel(interestId: 12, title: "Travelling", isCheck: true),
+      CheckBoxListTileModel(interestId: 13, title: "Bars", isCheck: false),
+      CheckBoxListTileModel(interestId: 14, title: "Walking", isCheck: false),
+      CheckBoxListTileModel(interestId: 15, title: "Shouting", isCheck: false),
+      CheckBoxListTileModel(interestId: 16, title: "Talking", isCheck: false),
+      CheckBoxListTileModel(
+          interestId: 17, title: "Board Games", isCheck: true),
     ];
   }
 }

@@ -57,7 +57,15 @@ class ProfileState extends State<ProfilePage> {
             body: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            TextButton(onPressed: changeTheme, child: Text('Theme')),
+            Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                  onPressed: changeTheme,
+                  icon: Icon(
+                    Icons.bedtime_outlined,
+                    size: 40,
+                  )),
+            ),
             Profile(
                 path: user.path,
                 onClicked: () {
@@ -72,26 +80,29 @@ class ProfileState extends State<ProfilePage> {
             Ranking(),
             const SizedBox(height: 25),
             interests(user),
-            const SizedBox(height: 50),
-            description(user),
+            const SizedBox(height: 25),
+            /*description(user),
             const SizedBox(height: 24),
             password(user),
-            const SizedBox(height: 25),
+            const SizedBox(height: 25),*/
             eventChatNot(),
             const SizedBox(height: 25),
             interestChatNot(),
             const SizedBox(height: 25),
             feedNot(),
             const SizedBox(height: 25),
-            ElevatedButton(
-              child: Text('Edit Profile'),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            EditProfile()) //edit through a button
-                    );
-              },
-            ),
+            Container(
+              padding: EdgeInsets.only(left: 60, right: 60),
+              child: ElevatedButton(
+                child: Text('Edit Profile'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              EditProfile()) //edit through a button
+                      );
+                },
+              ),
+            )
           ],
         )));
     /*),
@@ -109,8 +120,13 @@ class ProfileState extends State<ProfilePage> {
           SizedBox(height: 4),
           Text(
             user.email,
-            style: TextStyle(color: Colors.grey),
-          )
+            style: TextStyle(color: Colors.grey, fontSize: 10),
+          ),
+          SizedBox(height: 15),
+          Text(
+            user.description,
+            style: TextStyle(color: Colors.grey, fontSize: 20),
+          ),
         ],
       );
 
@@ -237,7 +253,7 @@ class Profile extends StatelessWidget {
           buildImage(),
           Positioned(
             bottom: 0,
-            right: 4,
+            right: 0,
             child: buildEditIcon(color),
           ),
         ],
@@ -257,7 +273,6 @@ class Profile extends StatelessWidget {
           fit: BoxFit.cover,
           width: 128,
           height: 128,
-          child: InkWell(onTap: onClicked),
         ),
       ),
     );
@@ -265,18 +280,20 @@ class Profile extends StatelessWidget {
 
   //edit profile through the picture
   Widget buildEditIcon(Color color) => buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: buildCircle(
-          color: color,
-          all: 8,
-          child: Icon(
+      color: Colors.white,
+      all: 3,
+      child: buildCircle(
+        color: color,
+        all: 1,
+        child: IconButton(
+          onPressed: onClicked,
+          icon: Icon(
             edit ? Icons.add_a_photo : Icons.edit,
             color: Colors.white,
             size: 20,
           ),
         ),
-      );
+      ));
 
   Widget buildCircle({
     required Widget child,
