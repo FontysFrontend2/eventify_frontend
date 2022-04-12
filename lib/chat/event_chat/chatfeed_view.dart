@@ -106,7 +106,10 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                               id: int.parse("${snapshot.data![index].id}"),
                               title: "${snapshot.data![index].title}",
                               description:
-                                  "${snapshot.data![index].description}"),
+                                  "${snapshot.data![index].description}",
+                              dateTime: "${snapshot.data![index].startEvent}",
+                              locationBased:
+                                  "${snapshot.data![index].locationBased}"),
                         ));
               } else {
                 return Center(child: CircularProgressIndicator());

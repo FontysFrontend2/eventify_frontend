@@ -7,8 +7,14 @@ class ChatCardList extends StatefulWidget {
   int id;
   String title;
   String description;
+  String dateTime;
+  String locationBased;
   ChatCardList(
-      {required this.id, required this.title, required this.description});
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.dateTime,
+      required this.locationBased});
   @override
   _ChatCardListState createState() => _ChatCardListState();
 }
@@ -74,15 +80,32 @@ class _ChatCardListState extends State<ChatCardList> {
                     SizedBox(
                       width: 12,
                     ),
-                    Text(
-                      'time',
-                      style: TextStyle(
-                        fontSize: 12,
+                    Center(
+                        child: Column(children: [
+                      Container(
+                        child: Text(
+                          widget.dateTime.substring(0, 10),
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Container(
+                        alignment: Alignment.bottomRight,
+                        child: (widget.locationBased == "true")
+                            ? (Image.asset(
+                                "assets/images/golf.png",
+                                scale: 5,
+                              ))
+                            : (Container()),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                    ]))
                   ],
                 ),
               ),
