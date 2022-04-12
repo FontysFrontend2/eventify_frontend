@@ -1,4 +1,4 @@
-const interests = [
+List<Map<String, Object>> interests = [
   {"id": 0, "name": "Football", "description": "string"},
   {"id": 1, "name": "Gaming", "description": "string"},
   {"id": 2, "name": "Outdoors", "description": "string"},

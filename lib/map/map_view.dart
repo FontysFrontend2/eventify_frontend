@@ -8,9 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MapView extends StatefulWidget {
-  final bool dark;
-  const MapView(this.dark);
+  const MapView();
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -23,9 +24,23 @@ class _MapViewState extends State<MapView> {
   late Set<Marker> markers;
   late BitmapDescriptor customIcon;
 
+  late SharedPreferences prefs;
+  late bool isPlatformDark;
+  retrieveTheme() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        isPlatformDark = true;
+      } else {
+        isPlatformDark = false;
+      }
+    });
+  }
+
   @override
   void initState() {
     loadmarkers();
+    retrieveTheme();
     super.initState();
   }
 
@@ -83,7 +98,7 @@ class _MapViewState extends State<MapView> {
   late GoogleMapController _googleMapController;
   void _onMapCreated(GoogleMapController controller) {
     _googleMapController = controller;
-    if (widget.dark) {
+    if (isPlatformDark) {
       _googleMapController.setMapStyle(map_style_dark);
     }
   }
@@ -109,7 +124,7 @@ class _MapViewState extends State<MapView> {
             markers: Set<Marker>.of(allMarkers),
           ),
           floatingActionButton: Card(
-              color: widget.dark ? Colors.black : Colors.white,
+              color: isPlatformDark ? Colors.black : Colors.white,
               margin: EdgeInsets.all(5),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
