@@ -85,19 +85,29 @@ class MyAppState extends State<MyApp> {
                   appBar: AppBar(
                       title: const Text('Eventify'),
                       flexibleSpace: SafeArea(
-                          child: IconButton(
-                              alignment: Alignment.center,
-                              onPressed: () => {
-                                    _navState = _state,
-                                    Navigator.push(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 140,
+                              ),
+                              IconButton(
+                                  alignment: Alignment.center,
+                                  onPressed: () => {
+                                        _navState = _state,
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ProfilePage()))
-                                        .then((_) => _stateCounter(_navState)),
-                                  },
-                              icon: Image.asset("assets/images/user.png",
-                                  color: Colors.amber)))),
+                                                    ProfilePage())).then(
+                                            (_) => _stateCounter(_navState)),
+                                      },
+                                  icon: Image.asset("assets/images/user.png",
+                                      color: Colors.amber)),
+                              SizedBox(width: 20),
+                              SizedBox(width: 140, child: TestButtons(context)),
+                            ]),
+                      )),
 
                   // bottom navigation bar
                   bottomNavigationBar: BottomNavigationBar(
@@ -140,42 +150,47 @@ class MyAppState extends State<MyApp> {
 
                         // TESTIPAINIKKEET
                         // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
-
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // login painike
-                              TextButton(
-                                onPressed: () => _stateCounter(3),
-                                child: const Text('login',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                              // register painike
-                              TextButton(
-                                onPressed: () => _stateCounter(4),
-                                child: const Text('register',
-                                    style: TextStyle(
-                                      fontSize: 10, //
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                              TextButton(
-                                onPressed: () => _stateCounter(5),
-                                child: const Text('Create Event',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                            ]),
-
-                        // create event painike
                       ]))),
-
-                  // TÄHÄN ASTI POISTUU MOLEMMAT ROWIT!
                 )));
+  }
+
+  Widget TestButtons(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          color: Colors.grey,
+          width: 40,
+          child: TextButton(
+              onPressed: () => _stateCounter(4),
+              child: Text('login',
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black))),
+        ),
+        Container(
+          color: Colors.amber,
+          width: 40,
+          child: TextButton(
+              onPressed: () => _stateCounter(4),
+              child: Text('register',
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black))),
+        ),
+        Container(
+          color: Colors.brown,
+          width: 40,
+          child: TextButton(
+              onPressed: () => _stateCounter(4),
+              child: Text('create event',
+                  style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black))),
+        ),
+      ],
+    );
   }
 }
