@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:eventify_frontend/map/map_styles.dart';
 import 'package:eventify_frontend/models/all_events_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
 
 class MapView extends StatefulWidget {
   final bool dark;
@@ -21,15 +25,8 @@ class _MapViewState extends State<MapView> {
 
   @override
   void initState() {
-    loadLocations();
+    loadmarkers();
     super.initState();
-
-// make sure to initialize before map loading
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(40, 40)), 'assets/images/paw.png')
-        .then((d) {
-      customIcon = d;
-    });
   }
 
   var _state = 'load';
@@ -41,23 +38,38 @@ class _MapViewState extends State<MapView> {
     });
   }
 
+// Marker icon
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   List<Marker> allMarkers = [];
-  loadLocations() async {
-    List<AllEventsData> locations = [];
-    locations = await fetchAllEventsData(); //we store the response in a list
-    for (int i = 0; i < locations.length; i++) {
-      LatLng latlng =
-          new LatLng(locations[i].latitude!, locations[i].longitude!);
-      this.allMarkers.add(Marker(
-            markerId: MarkerId(locations[i].id.toString()),
-            position: latlng,
-            infoWindow: InfoWindow(
-              //popup info
-              title: locations[i].title,
-              snippet: locations[i].description + ' tap to join',
-              onTap: () => selectEvent(locations[i].id.toString()),
-            ),
-            icon: customIcon, //Icon for Marker
+
+  loadmarkers() async {
+    // Get marker image from assets and set marker size
+    final Uint8List markerIcon =
+        await getBytesFromAsset('assets/images/jake.png', 120);
+    List<AllEventsData> markers = [];
+    markers = await fetchAllEventsData(); //we store the response in a list
+    // Set markers on list
+    for (int i = 0; i < markers.length; i++) {
+      LatLng latlng = new LatLng(markers[i].latitude!, markers[i].longitude!);
+      allMarkers.add(Marker(
+          markerId: MarkerId(markers[i].id.toString()),
+          position: latlng,
+          infoWindow: InfoWindow(
+            //popup info
+            title: markers[i].title,
+            snippet: markers[i].description + ' tap to join',
+            onTap: () => selectEvent(markers[i].id.toString()),
+          ),
+          icon: BitmapDescriptor.fromBytes(markerIcon) //Icon for Marker
           ));
     }
     setState(() {
