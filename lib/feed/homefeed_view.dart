@@ -62,7 +62,8 @@ class HomeFeedState extends State<HomeFeedView> {
               flex: 2,
               child: EventCardView(
                 state,
-              ))),
+              ),
+            )),
     );
   }
 }
