@@ -88,9 +88,8 @@ class MyAppState extends State<MyApp> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 140,
-                              ),
+                              const Spacer(),
+                              SizedBox(child: TestButtons(context)),
                               IconButton(
                                   alignment: Alignment.center,
                                   onPressed: () => {
@@ -104,8 +103,6 @@ class MyAppState extends State<MyApp> {
                                       },
                                   icon: Image.asset("assets/images/user.png",
                                       color: Colors.amber)),
-                              SizedBox(width: 20),
-                              SizedBox(width: 140, child: TestButtons(context)),
                             ]),
                       )),
 
@@ -176,17 +173,6 @@ class MyAppState extends State<MyApp> {
               child: Text('register',
                   style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
-        Container(
-          color: Colors.brown,
-          width: 40,
-          child: TextButton(
-              onPressed: () => _stateCounter(5),
-              child: Text('create event',
-                  style: TextStyle(
-                      fontSize: 8,
                       fontWeight: FontWeight.bold,
                       color: Colors.black))),
         ),

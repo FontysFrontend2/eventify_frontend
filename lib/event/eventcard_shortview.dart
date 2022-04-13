@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCardShortView extends StatelessWidget {
   final d;
   final VoidCallback cb;
 
   const EventCardShortView(this.d, this.cb);
+
+  String dmy(String dtString) {
+    final date = DateTime.parse(dtString);
+    final format = DateFormat('d MMMM y - H:m');
+    final clockString = format.format(date);
+
+    return clockString;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +46,7 @@ class EventCardShortView extends StatelessWidget {
                   ),
                 ),
                 //Event time
-                Text(
-                  d.startEvent.split('T').toString(),
-                ),
+                Text(dmy(d.startEvent)),
                 //Event participant count and max participants
                 /*(limitedPeople)
                     ? (Text(d['members'].length.toString() +
