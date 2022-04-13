@@ -23,6 +23,14 @@ class EventCardState extends State<EventCardView> {
     futureEventData = fetchEventFromId(widget.id);
   }
 
+  String dmy(String dtString) {
+    final date = DateTime.parse(dtString);
+    final format = DateFormat('d MMMM y - H:m');
+    final clockString = format.format(date);
+
+    return clockString;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,14 +42,6 @@ class EventCardState extends State<EventCardView> {
           future: futureEventData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              String dmy(String dtString) {
-                final date = DateTime.parse(dtString);
-                final format = DateFormat('d MMMM y - H:m');
-                final clockString = format.format(date);
-
-                return clockString;
-              }
-
               return Column(
                 children: [
                   //Event title

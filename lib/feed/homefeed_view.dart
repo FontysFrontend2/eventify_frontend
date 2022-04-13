@@ -1,7 +1,9 @@
+import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eventify_frontend/event/eventcard_shortview.dart';
 import 'package:eventify_frontend/models/all_events_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../event/eventcard_view.dart';
 
@@ -20,6 +22,7 @@ class HomeFeedState extends State<HomeFeedView> {
   @override
   void initState() {
     super.initState();
+    print('refresh');
     futureAllEventsData = fetchAllEventsData();
   }
 
@@ -37,7 +40,6 @@ class HomeFeedState extends State<HomeFeedView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //color: Colors.white,
       width: double.infinity,
       padding: const EdgeInsets.all(5.0),
       child: (state == -1)
@@ -45,25 +47,61 @@ class HomeFeedState extends State<HomeFeedView> {
               future: futureAllEventsData,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (_, index) => Center(
-                      child: EventCardShortView(
-                        snapshot.data![index],
-                        () => selectedEvent(snapshot.data![index].id),
-                      ),
-                    ),
-                  );
+                  return RefreshIndicator(
+                      //refreshindicator to refresh feed
+                      onRefresh: () async {
+                        initState();
+                        //staten settaaminen -1 ei päivitä feediä jostain syystä?
+                      },
+                      child: Stack(
+                        children: [
+                          ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (_, index) => Center(
+                              child: EventCardShortView(
+                                snapshot.data![index],
+                                () => selectedEvent(snapshot.data![index].id),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(40, 40),
+                                shape: const CircleBorder(),
+                                primary: Colors.blue,
+                                onPrimary: Colors.black,
+                                shadowColor: Colors.white,
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 30,
+                              ),
+                              onPressed: () => setState(() {
+                                state = -2;
+                              }),
+                            ),
+                          ),
+                        ],
+                      ));
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               })
-          : (Expanded(
-              flex: 2,
-              child: EventCardView(
-                state,
-              ),
-            )),
+          : (state == -2)
+              ? (const Expanded(
+                  flex: 2,
+                  child: CreateEventView(),
+                ))
+              : (Expanded(
+                  flex: 2,
+                  child: EventCardView(
+                    state,
+                  ),
+                )),
     );
   }
 }
