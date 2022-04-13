@@ -16,11 +16,6 @@ class EventCardShortView extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(40),
           onTap: cb,
-          /*Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EventCardView(d.id.toString());
-            }));*/
-          //tähän täytyy vielä keksiä järkevä tapa avata eventcardview...
-
           child: SizedBox(
             width: double.infinity,
             height: 120,

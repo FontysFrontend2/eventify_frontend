@@ -13,7 +13,7 @@ class HomeFeedView extends StatefulWidget {
 }
 
 class HomeFeedState extends State<HomeFeedView> {
-  int state = 1;
+  int state = -1;
 
   late Future<List> futureAllEventsData;
 
@@ -40,7 +40,7 @@ class HomeFeedState extends State<HomeFeedView> {
       //color: Colors.white,
       width: double.infinity,
       padding: const EdgeInsets.all(5.0),
-      child: (state == 1)
+      child: (state == -1)
           ? FutureBuilder<List>(
               future: futureAllEventsData,
               builder: (context, snapshot) {
@@ -58,7 +58,12 @@ class HomeFeedState extends State<HomeFeedView> {
                   return Center(child: CircularProgressIndicator());
                 }
               })
-          : (Expanded(flex: 2, child: EventCardView(state))),
+          : (Expanded(
+              flex: 2,
+              child: EventCardView(
+                state,
+              ),
+            )),
     );
   }
 }
