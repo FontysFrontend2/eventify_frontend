@@ -79,6 +79,7 @@ Future<List<AllEventsData>> fetchAllEventsData() async {
       print(
           'Request failed and no data in Shared preferences: USING LOCAL DATA SAMPLES');
       jsonResponseOffline = eventsOfInterest;
+      prefs.setString("allEvents", json.encode(eventsOfInterest));
     } else {
       print(
           'Request failed but there is recent data in Shared preferences: USING SHARED PREFERENCES');

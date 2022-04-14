@@ -27,13 +27,15 @@ class AllInterestsData {
 
 Future<List<AllInterestsData>> fetchAllInterestsData() async {
   final response =
-      await http.get(Uri.parse('http://office.pepr.com:25252/Interaests'));
+      await http.get(Uri.parse('http://office.pepr.com:25252/Interests'));
   if (response.statusCode == 200) {
+    print('Request Succeed: USING DATA FROM DATABASE');
     List jsonResponse = json.decode(response.body);
     return jsonResponse
         .map((data) => new AllInterestsData.fromJson(data))
         .toList();
   } else {
+    print('Request failed: USING LOCAL DATA');
     List interestsOffline = interests;
     return interestsOffline
         .map((data) => new AllInterestsData.fromJson(data))
