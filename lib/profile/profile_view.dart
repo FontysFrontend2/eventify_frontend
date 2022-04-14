@@ -1,3 +1,5 @@
+import 'package:eventify_frontend/apis/controllers/user_controller.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:eventify_frontend/profile/user.dart';
 import 'package:eventify_frontend/profile/interests.dart';
@@ -27,8 +29,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfilePage> {
-  late SharedPreferences prefs;
   bool isPlatformDark = false;
+
+  late SharedPreferences prefs;
+  late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
+
+// working thing get user info
+  getUserInfo() async {
+    prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt(
+        "userID")!; // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
+    futureUserFromIdData = await fetchUserFromId(
+        id); // VOI TEHDÄ AWAITILLA TAI WIDGETIN BUILDERISSA, ESIMERKKEJÄ: CHATFEED, MAPVIEW, EVENTCARD
+    print(futureUserFromIdData.interests);
+  }
 
   changeTheme() async {
     prefs = await SharedPreferences.getInstance();
@@ -56,6 +70,7 @@ class ProfileState extends State<ProfilePage> {
 
   @override
   void initState() {
+    getUserInfo();
     retrieveTheme();
     super.initState();
   }
