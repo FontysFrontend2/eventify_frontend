@@ -60,9 +60,12 @@ Future<List<AllEventsData>> fetchAllEventsData() async {
   prefs = await SharedPreferences.getInstance();
   if (prefs.getString("allEvents") != null) {
     prefsNoData = false;
+  } else {
+    prefsNoData = true;
   }
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
+  print('joo');
   if (response.statusCode == 200 && response.body != '[]') {
     prefs.setString("allEvents", json.encode(eventsOfInterest));
     List jsonResponse = json.decode(response.body);
