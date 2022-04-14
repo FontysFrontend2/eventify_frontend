@@ -1,6 +1,8 @@
 const user = {
   "id": 0,
-  "name": "Esimerkki00",
-  "email": "esimerkki@emaili.com",
-  "registrationDate": "2022-04-03T12:22:17.874Z"
+  "name": "TestiKayttaja",
+  "email": "testi@pesti.com",
+  "registrationDate": "2022-05-14T14:06:04.395Z",
+  "events": [0],
+  "interests": [4, 5]
 };

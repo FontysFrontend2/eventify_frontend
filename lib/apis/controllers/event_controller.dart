@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:eventify_frontend/apis/offline_data/event_from_id.dart';
-import 'package:eventify_frontend/apis/offline_data/events_data.dart';
+import 'package:eventify_frontend/apis/offline_data/event_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 

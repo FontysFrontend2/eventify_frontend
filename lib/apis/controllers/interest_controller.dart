@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:eventify_frontend/apis/models/interest_model.dart';
-import 'package:eventify_frontend/apis/offline_data/interests_data.dart';
+import 'package:eventify_frontend/apis/offline_data/interest_data.dart';
 import 'package:http/http.dart' as http;
 
 // Get all events from api
