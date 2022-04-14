@@ -45,37 +45,20 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
     List<InterestData> interests = [];
     interests = await fetchAllInterestData();
     for (int i = 0; i < interests.length; i++) {
-      for (int a = 0; a < userInterests.length; a++) {
-        if (userInterests[a] == interests[i].id) {
-          print(interests[i].name);
-          interestListFromApi.add({
-            'interestId': interests[i].id,
-            'name': interests[i].name,
-            'description': interests[i].description,
-            'isCheck': true
-          });
-
-          copyList.add({
-            'interestId': interests[i].id,
-            'name': interests[i].name,
-            'description': interests[i].description,
-            'isCheck': true
-          });
-        } else {
-          interestListFromApi.add({
-            'interestId': interests[i].id,
-            'name': interests[i].name,
-            'description': interests[i].description,
-            'isCheck': false
-          });
-          copyList.add({
-            'interestId': interests[i].id,
-            'name': interests[i].name,
-            'description': interests[i].description,
-            'isCheck': false
-          });
-        }
-      }
+      print(interests[i].name);
+      interestListFromApi.add({
+        'interestId': interests[i].id,
+        'name': interests[i].name,
+        'description': interests[i].description,
+        'isCheck': userInterests.contains(i) ? true : false
+      });
+      // copyList is for referral when choosing new interests
+      copyList.add({
+        'interestId': interests[i].id,
+        'name': interests[i].name,
+        'description': interests[i].description,
+        'isCheck': userInterests.contains(i) ? true : false
+      });
     }
 
     print(interestListFromApi);
@@ -164,6 +147,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
     });
   }
 
+// This will send a list of all chosen interest id:s to api. Test in application to see
   void sendInterests() {
     List sendList = [];
     setState(() {
