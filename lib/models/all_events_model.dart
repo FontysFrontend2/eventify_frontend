@@ -55,8 +55,12 @@ class AllEventsData {
 }
 
 late SharedPreferences prefs;
+bool prefsNoData = true;
 Future<List<AllEventsData>> fetchAllEventsData() async {
   prefs = await SharedPreferences.getInstance();
+  if (prefs.getString("allEvents") != null) {
+    prefsNoData = false;
+  }
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
   if (response.statusCode == 200) {
@@ -67,10 +71,14 @@ Future<List<AllEventsData>> fetchAllEventsData() async {
         .map((data) => new AllEventsData.fromJson(data))
         .toList();
   } else {
-    List jsonResponseOffline = json.decode(prefs.getString("allEvents")!);
-    if (prefs.getString("allEvents") == null) {
+    late List jsonResponseOffline;
+    if (prefsNoData) {
+      print('nodata');
       jsonResponseOffline = eventsOfInterest;
+    } else {
+      jsonResponseOffline = json.decode(prefs.getString("allEvents")!);
     }
+    prefs.setString("allEvents", json.encode(jsonResponseOffline));
     return jsonResponseOffline
         .map((data) => new AllEventsData.fromJson(data))
         .toList();

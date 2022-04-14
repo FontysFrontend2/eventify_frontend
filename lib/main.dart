@@ -26,6 +26,8 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   int _state = 1;
+  bool _authState =
+      true; // false: not logged in (show login), true: logged in (show application)
   int _navState = 1;
   bool settings = false;
 
@@ -51,7 +53,7 @@ class MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  var initTheme;
+  dynamic initTheme;
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
@@ -80,76 +82,82 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: initTheme,
-        home: Builder(
-            builder: (context) => Scaffold(
-                  appBar: AppBar(
-                      title: const Text('Eventify'),
-                      flexibleSpace: SafeArea(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Spacer(),
-                              SizedBox(child: TestButtons(context)),
-                              IconButton(
-                                  alignment: Alignment.center,
-                                  onPressed: () => {
-                                        _navState = _state,
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage())).then(
-                                            (_) => _stateCounter(_navState)),
-                                      },
-                                  icon: Image.asset("assets/images/user.png",
-                                      color: Colors.amber)),
-                            ]),
-                      )),
+        home: (_authState)
+            ? (Builder(
+                builder: (context) => Scaffold(
+                      appBar: AppBar(
+                          title: const Text('Eventify'),
+                          flexibleSpace: SafeArea(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Spacer(),
+                                  SizedBox(child: TestButtons(context)),
+                                  IconButton(
+                                      alignment: Alignment.center,
+                                      onPressed: () => {
+                                            _navState = _state,
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfilePage())).then(
+                                                (_) =>
+                                                    _stateCounter(_navState)),
+                                          },
+                                      icon: Image.asset(
+                                          "assets/images/user.png",
+                                          color: Colors.amber)),
+                                ]),
+                          )),
 
-                  // bottom navigation bar
-                  bottomNavigationBar: BottomNavigationBar(
-                    currentIndex: _navState,
-                    type: BottomNavigationBarType.shifting,
-                    items: const <BottomNavigationBarItem>[
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.format_list_bulleted),
-                        label: 'Events',
-                        backgroundColor: Colors.blue,
+                      // bottom navigation bar
+                      bottomNavigationBar: BottomNavigationBar(
+                        currentIndex: _navState,
+                        type: BottomNavigationBarType.shifting,
+                        items: const <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.format_list_bulleted),
+                            label: 'Events',
+                            backgroundColor: Colors.blue,
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.home),
+                            label: 'Home',
+                            backgroundColor: Colors.pink,
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.map_outlined),
+                            label: 'Map',
+                            backgroundColor: Colors.purple,
+                          ),
+                        ],
+                        selectedItemColor: Colors.amber[800],
+                        onTap: _stateCounter,
                       ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.home),
-                        label: 'Home',
-                        backgroundColor: Colors.pink,
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.map_outlined),
-                        label: 'Map',
-                        backgroundColor: Colors.purple,
-                      ),
-                    ],
-                    selectedItemColor: Colors.amber[800],
-                    onTap: _stateCounter,
-                  ),
-                  body: WillPopScope(
-                      // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
-                      onWillPop: () async {
-                        if (_state != 1) {
-                          setState(() {
-                            _state = _navState;
-                          });
-                          return false;
-                        }
-                        return true;
-                      },
-                      child: Column(
-                          children: ([
-                        _widgetOptions.elementAt(_state),
+                      body: WillPopScope(
+                          // TAKAISINNÄPPÄINPAINIKKEEN HALLINTA, muista näkymistä vie homeen ja homesta sulkee sovelluksen
+                          onWillPop: () async {
+                            if (_state != 1) {
+                              setState(() {
+                                _state = _navState;
+                              });
+                              return false;
+                            }
+                            return true;
+                          },
+                          child: Column(
+                              children: ([
+                            _widgetOptions.elementAt(_state),
 
-                        // TESTIPAINIKKEET
-                        // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
-                      ]))),
-                )));
+                            // TESTIPAINIKKEET
+                            // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
+                          ]))),
+                    )))
+            : (skipAuth(BuildContext, context)));
   }
+
+// TEST BUTTONS. WILL BE GONE AFTER IMPLEMETATION
 
   Widget TestButtons(BuildContext context) {
     return Row(
@@ -178,5 +186,24 @@ class MyAppState extends State<MyApp> {
         ),
       ],
     );
+  }
+
+  Widget skipAuth(BuildContext, context) {
+    return Builder(
+        builder: (context) => Scaffold(
+            appBar: AppBar(
+              title: const Text('Eventify'),
+              flexibleSpace: SafeArea(
+                child: TextButton(
+                    onPressed: () => {
+                          setState(() => _authState = true),
+                        },
+                    child: Text("Skip Login",
+                        style: TextStyle(color: Colors.amber))),
+              ),
+            ),
+            body: Column(
+              children: [Expanded(flex: 2, child: LoginView())],
+            )));
   }
 }
