@@ -2,7 +2,6 @@ import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
 import 'package:flutter/material.dart';
 import '../../apis/models/event_model.dart';
-import '/a_data/events_data.dart';
 
 import 'chat_card_list.dart';
 

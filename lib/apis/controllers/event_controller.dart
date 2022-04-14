@@ -1,9 +1,6 @@
 import 'dart:convert';
-
-import 'package:eventify_frontend/a_data/event_from_id.dart';
-import 'package:eventify_frontend/a_data/events_data.dart';
-import 'package:eventify_frontend/apis/models/all_location_events_model.dart';
-import 'package:eventify_frontend/apis/models/event_from_id.dart';
+import 'package:eventify_frontend/apis/offline_data/event_from_id.dart';
+import 'package:eventify_frontend/apis/offline_data/events_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -56,5 +53,41 @@ Future<EventData> fetchEventFromId(int id) async {
     return EventData.fromJson(jsonDecode(response.body));
   } else {
     return EventData.fromJson((eventFromId));
+  }
+}
+
+// Post new Event to api
+Future<EventData> createPostEvent(
+  String description,
+  String title,
+  String locationBased,
+  String latitude,
+  String longitude,
+  String hostId,
+  String maxPeople,
+  String minPeople,
+  String startEvent,
+  String hasStarted,
+) async {
+  print('result: ');
+
+  final response = await http.post(
+    Uri.parse(
+        'http://office.pepr.com:25252/Event?description=$description&title=$title&locationbased=$locationBased&latitude=$latitude&longitude=$longitude&hostid=$hostId&maxPeople=$maxPeople&minPeople=$minPeople&startevent=$startEvent&hasstarted=$hasStarted'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print('result: ' + jsonDecode(response.body));
+    return EventData.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print('resultti: ' + jsonDecode(response.body));
+    throw Exception('Failed to create album.');
   }
 }

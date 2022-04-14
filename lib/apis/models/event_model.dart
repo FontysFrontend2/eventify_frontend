@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../a_data/events_data.dart';
-
 class EventData {
   final int id;
   final String description;
