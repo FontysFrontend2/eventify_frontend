@@ -1,4 +1,4 @@
-const eventsWithLocation = [
+List eventsWithLocation = [
   {
     "id": 0,
     "description": "Picnic at the park",
@@ -99,8 +99,8 @@ const eventsOfInterest = [
     "members": [0],
     "title": "Just Playing home",
     "locationBased": false,
-    "latitude": null,
-    "longitude": null,
+    "latitude": 0,
+    "longitude": 0,
     "hostID": 0,
     "maxPeople": 10,
     "minPeople": 0,

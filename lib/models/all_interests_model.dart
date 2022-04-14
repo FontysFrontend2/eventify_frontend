@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../a_data/interests_data.dart';
+
 class AllInterestsData {
   final int id;
   final String name;
@@ -25,13 +27,16 @@ class AllInterestsData {
 
 Future<List<AllInterestsData>> fetchAllInterestsData() async {
   final response =
-      await http.get(Uri.parse('http://office.pepr.com:25252/Interests'));
+      await http.get(Uri.parse('http://office.pepr.com:25252/Interaests'));
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
     return jsonResponse
         .map((data) => new AllInterestsData.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occured!');
+    List interestsOffline = interests;
+    return interestsOffline
+        .map((data) => new AllInterestsData.fromJson(data))
+        .toList();
   }
 }
