@@ -1,23 +1,50 @@
-import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:eventify_frontend/event/eventcard_view.dart';
+import 'package:eventify_frontend/map/map_styles.dart';
+import 'package:eventify_frontend/models/all_events_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapView extends StatefulWidget {
-  // ignore: use_key_in_widget_constructors
   const MapView();
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _MapViewState createState() => _MapViewState();
 }
 
-class _MapScreenState extends State<MapView> {
+class _MapViewState extends State<MapView> {
   final Set<Marker> markerlist = new Set(); //markers for google map
-  _MapScreenState();
+  _MapViewState();
   bool _filtered = false;
+  late Set<Marker> markers;
+  late BitmapDescriptor customIcon;
 
-  var _state = '';
+  late SharedPreferences prefs;
+  late bool isPlatformDark;
+  retrieveTheme() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("darkMode") == "true") {
+        isPlatformDark = true;
+      } else {
+        isPlatformDark = false;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    loadmarkers();
+    retrieveTheme();
+    super.initState();
+  }
+
+  var _state = 'load';
   String _filterValue = 'INTERESTS';
 
   void selectEvent(String id) {
@@ -26,10 +53,55 @@ class _MapScreenState extends State<MapView> {
     });
   }
 
+// Marker icon
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  List<Marker> allMarkers = [];
+
+  loadmarkers() async {
+    // Get marker image from assets and set marker size
+    final Uint8List markerIcon =
+        await getBytesFromAsset('assets/images/jake.png', 120);
+    List<AllEventsData> markers = [];
+    markers = await fetchAllEventsData(); //we store the response in a list
+    // Set markers on list
+    for (int i = 0; i < markers.length; i++) {
+      LatLng latlng = new LatLng(markers[i].latitude!, markers[i].longitude!);
+      allMarkers.add(Marker(
+          markerId: MarkerId(markers[i].id.toString()),
+          position: latlng,
+          infoWindow: InfoWindow(
+            //popup info
+            title: markers[i].title,
+            snippet: markers[i].description + ' tap to join',
+            onTap: () => selectEvent(markers[i].id.toString()),
+          ),
+          icon: BitmapDescriptor.fromBytes(markerIcon) //Icon for Marker
+          ));
+    }
+    setState(() {
+      _state = '';
+    });
+  }
+
   static const _initialCameraPosition =
       CameraPosition(target: LatLng(65.012615, 25.471453), zoom: 11.5);
 
   late GoogleMapController _googleMapController;
+  void _onMapCreated(GoogleMapController controller) {
+    _googleMapController = controller;
+    if (isPlatformDark) {
+      _googleMapController.setMapStyle(map_style_dark);
+    }
+  }
 
   @override
   void dispose() {
@@ -39,143 +111,60 @@ class _MapScreenState extends State<MapView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_state == '') {
+    if (_state == 'load') {
+      return Center(child: CircularProgressIndicator());
+    } else if (_state == '') {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
           body: GoogleMap(
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) => _googleMapController = controller,
-            markers: getmarkers(),
+            onMapCreated: (controller) => _onMapCreated(controller),
+            markers: Set<Marker>.of(allMarkers),
           ),
-          floatingActionButton: Container(
-              color: Colors.deepOrange,
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-              child: DropdownButton<String>(
-                value: _filterValue,
-                icon: const Icon(
-                  Icons.arrow_drop_down_circle,
-                ),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(
-                    color: Colors.deepPurple,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _filterValue = newValue!;
-                    if (_filterValue == 'INTERESTS') {
-                      _filtered = false;
-                    } else {
-                      _filtered = true;
-                    }
-                  });
-                },
-                items: <String>['ALL', 'INTERESTS']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )));
+          floatingActionButton: Card(
+              color: isPlatformDark ? Colors.black : Colors.white,
+              margin: EdgeInsets.all(5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                  child: DropdownButton<String>(
+                    value: _filterValue,
+                    icon: const Icon(
+                      Icons.arrow_drop_down_circle,
+                    ),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(
+                      color: Colors.pink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _filterValue = newValue!;
+                        if (_filterValue == 'INTERESTS') {
+                          _filtered = false;
+                        } else {
+                          _filtered = true;
+                        }
+                      });
+                    },
+                    items: <String>['ALL', 'INTERESTS']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ))));
     } else {
       return Scaffold(
-          body: Column(
-              children: [Expanded(flex: 2, child: EventCardView(_state))]));
+          body: Column(children: [Expanded(flex: 2, child: EventCardView(1))]));
     }
-  }
-
-  Set<Marker> getmarkers() {
-    //markers to place on map
-    log(_filtered.toString());
-
-// Get list items from api
-    List markersFromApi = [
-      {
-        'id': '1',
-        'title': 'event 1',
-        'snippet': 'this is event 1',
-        'lat': 65.012615,
-        'long': 25.412615
-      },
-      {
-        'id': '2',
-        'title': 'event 2',
-        'snippet': 'this is event 2',
-        'lat': 65.022615,
-        'long': 25.481453
-      },
-      {
-        'id': '3',
-        'title': 'event 3',
-        'snippet': 'this is event 3',
-        'lat': 65.002616,
-        'long': 25.441483
-      },
-      {
-        'id': '4',
-        'title': 'event 4',
-        'snippet': 'this is event 4',
-        'lat': 65.012625,
-        'long': 25.482453
-      },
-    ];
-
-    List filteredMarkersFromApi = [
-      {
-        'id': '1',
-        'title': 'event 1',
-        'snippet': 'this is event 1',
-        'lat': 65.012615,
-        'long': 25.412615
-      },
-      {
-        'id': '3',
-        'title': 'event 3',
-        'snippet': 'this is event 3',
-        'lat': 65.002616,
-        'long': 25.441483
-      },
-    ];
-
-    setState(() {
-      markerlist.clear();
-      List setMarkers;
-      var counter = 0;
-      if (_filtered) {
-        log('filtered' + _filtered.toString());
-        setMarkers = markersFromApi;
-      } else {
-        log('all' + _filtered.toString());
-        setMarkers = filteredMarkersFromApi;
-      }
-      log('markers' + setMarkers.toString());
-      for (var element in setMarkers) {
-        String markervalue = setMarkers[counter]['id'];
-        log(element.toString());
-        markerlist.add(Marker(
-          //add first marker
-          markerId: MarkerId(setMarkers[counter]['id']),
-          position: LatLng(setMarkers[counter]['lat'],
-              setMarkers[counter]['long']), //position of marker
-          infoWindow: InfoWindow(
-            //popup info
-            title: setMarkers[counter]['title'],
-            snippet: setMarkers[counter]['snippet'] + ' tap to join',
-            onTap: () => selectEvent(markervalue),
-          ),
-          icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-        ));
-        counter += 1;
-      }
-    });
-    return markerlist;
   }
 }
