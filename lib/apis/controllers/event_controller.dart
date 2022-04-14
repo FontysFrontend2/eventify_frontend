@@ -69,8 +69,6 @@ Future<EventData> createPostEvent(
   String startEvent,
   String hasStarted,
 ) async {
-  print('result: ');
-
   final response = await http.post(
     Uri.parse(
         'http://office.pepr.com:25252/Event?description=$description&title=$title&locationbased=$locationBased&latitude=$latitude&longitude=$longitude&hostid=$hostId&maxPeople=$maxPeople&minPeople=$minPeople&startevent=$startEvent&hasstarted=$hasStarted'),
