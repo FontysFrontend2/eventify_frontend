@@ -163,10 +163,10 @@ class ProfileState extends State<ProfilePage> {
             style: TextStyle(color: Colors.grey, fontSize: 10),
           ),
           SizedBox(height: 15),
-          /*Text(
-            user.description,
+          Text(
+            'Seppo asuu Pihlajakadulla',
             style: TextStyle(color: Colors.grey, fontSize: 20),
-          ),*/
+          ),
         ],
       );
 
