@@ -1,7 +1,6 @@
 import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:eventify_frontend/profile/user.dart';
 import 'package:eventify_frontend/profile/interests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
@@ -30,6 +29,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfileState extends State<ProfilePage> {
   bool isPlatformDark = false;
+  bool hasLoaded = false;
 
   late SharedPreferences prefs;
   late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
@@ -42,6 +42,9 @@ class ProfileState extends State<ProfilePage> {
     futureUserFromIdData = await fetchUserFromId(
         id); // VOI TEHDÄ AWAITILLA TAI WIDGETIN BUILDERISSA, ESIMERKKEJÄ: CHATFEED, MAPVIEW, EVENTCARD
     print(futureUserFromIdData.interests);
+    setState(() {
+      hasLoaded = true;
+    });
   }
 
   changeTheme() async {
@@ -77,69 +80,78 @@ class ProfileState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = UserInformation.myUser;
-
     return MaterialApp(
         theme: isPlatformDark ? Themes.dark : Themes.light,
         home: Scaffold(
-            body: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            Container(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  onPressed: changeTheme,
-                  icon: Icon(
-                    Icons.bedtime_outlined,
-                    size: 40,
-                  )),
-            ),
-            Profile(
-                path: user.path,
-                onClicked: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              EditProfile()) //edit through a button
-                      );
-                }),
-            const SizedBox(height: 25),
-            name(user),
-            const SizedBox(height: 24),
-            Ranking(),
-            const SizedBox(height: 25),
-            interests(user),
-            const SizedBox(height: 25),
-            /*description(user),
+            body: (hasLoaded)
+                ? (ListView(
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                            onPressed: changeTheme,
+                            icon: Icon(
+                              Icons.bedtime_outlined,
+                              size: 40,
+                            )),
+                      ),
+                      // This need to be on database to implement
+                      Profile(
+                          path:
+                              "https://media.istockphoto.com/photos/fi/covid-19-tai-2019-ncov-koronaviruksen-k%C3%A4site-id1212142629",
+                          onClicked: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => EditProfile(
+                                        futureUserFromIdData)) //edit through a button
+                                );
+                          }),
+                      const SizedBox(height: 25),
+                      name(futureUserFromIdData),
+                      const SizedBox(height: 24),
+                      Ranking(),
+                      const SizedBox(height: 25),
+                      interests(futureUserFromIdData),
+                      const SizedBox(height: 25),
+                      /*description(user),
             const SizedBox(height: 24),
             password(user),
             const SizedBox(height: 25),*/
-            eventChatNot(),
-            const SizedBox(height: 25),
-            interestChatNot(),
-            const SizedBox(height: 25),
-            feedNot(),
-            const SizedBox(height: 25),
-            Container(
-              padding: EdgeInsets.only(left: 60, right: 60),
-              child: ElevatedButton(
-                child: Text('Edit Profile'),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              EditProfile()) //edit through a button
-                      );
-                },
-              ),
-            )
-          ],
-        )));
+                      eventChatNot(),
+                      const SizedBox(height: 25),
+                      interestChatNot(),
+                      const SizedBox(height: 25),
+                      feedNot(),
+                      const SizedBox(height: 25),
+                      Container(
+                        padding: EdgeInsets.only(left: 60, right: 60),
+                        child: ElevatedButton(
+                            child: Text('Edit Profile'),
+                            onPressed: () => _editProfile(context)),
+                      )
+                    ],
+                  ))
+                : (Container())));
     /*),
       ),
     );*/
   }
 
+  void _editProfile(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(
+          builder: (context) => EditProfile(futureUserFromIdData)),
+    );
+    print('result:' + '$result');
+    setState(() {});
+  }
+
   //name and email boxes
-  Widget name(User user) => Column(
+  Widget name(UserData user) => Column(
         children: [
           Text(
             user.name,
@@ -151,15 +163,15 @@ class ProfileState extends State<ProfilePage> {
             style: TextStyle(color: Colors.grey, fontSize: 10),
           ),
           SizedBox(height: 15),
-          Text(
+          /*Text(
             user.description,
             style: TextStyle(color: Colors.grey, fontSize: 20),
-          ),
+          ),*/
         ],
       );
 
   //password box
-  Widget password(User user) => Container(
+  Widget password(UserData user) => Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,15 +181,15 @@ class ProfileState extends State<ProfilePage> {
             style: TextStyle(fontSize: 24),
           ),
           SizedBox(height: 4),
-          Text(
+          /*Text(
             changePassword(user),
             style: TextStyle(fontSize: 16, height: 1.4),
-          ),
+          ),*/
         ],
       ));
 
   //biography box
-  Widget description(User user) => Container(
+  Widget description(UserData user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,16 +199,16 @@ class ProfileState extends State<ProfilePage> {
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 16),
-            Text(
+            /*Text(
               user.description,
               style: const TextStyle(fontSize: 16, height: 1.4),
-            ),
+            ),*/
           ],
         ),
       );
 
   //interests
-  Widget interests(User user) => Card(
+  Widget interests(UserData user) => Card(
       color: Colors.greenAccent,
       child: Column(children: [
         Text('Chosen Interests:',
