@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:eventify_frontend/a_data/event_from_id.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventFromIdData {
   final int id;
@@ -52,6 +54,7 @@ class EventFromIdData {
   }
 }
 
+late SharedPreferences prefs;
 Future<EventFromIdData> fetchEventFromId(int id) async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
@@ -61,8 +64,6 @@ Future<EventFromIdData> fetchEventFromId(int id) async {
     // then parse the JSON.
     return EventFromIdData.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    return EventFromIdData.fromJson((eventFromId));
   }
 }

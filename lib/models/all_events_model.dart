@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../a_data/events_data.dart';
 
 class AllEventsData {
   final int id;
@@ -51,15 +54,22 @@ class AllEventsData {
   }
 }
 
+late SharedPreferences prefs;
 Future<List<AllEventsData>> fetchAllEventsData() async {
+  prefs = await SharedPreferences.getInstance();
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
   if (response.statusCode == 200) {
+    prefs.setString("allEvents", json.encode(eventsOfInterest));
     List jsonResponse = json.decode(response.body);
+    print(response.statusCode);
     return jsonResponse
         .map((data) => new AllEventsData.fromJson(data))
         .toList();
   } else {
-    throw Exception('Unexpected error occured!');
+    List jsonResponseOffline = json.decode(prefs.getString("allEvents")!);
+    return jsonResponseOffline
+        .map((data) => new AllEventsData.fromJson(data))
+        .toList();
   }
 }
