@@ -68,6 +68,9 @@ Future<List<AllEventsData>> fetchAllEventsData() async {
         .toList();
   } else {
     List jsonResponseOffline = json.decode(prefs.getString("allEvents")!);
+    if (prefs.getString("allEvents") == null) {
+      jsonResponseOffline = eventsOfInterest;
+    }
     return jsonResponseOffline
         .map((data) => new AllEventsData.fromJson(data))
         .toList();
