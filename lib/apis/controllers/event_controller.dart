@@ -20,7 +20,7 @@ Future<List<EventData>> fetchAllEventsData() async {
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
   if (response.statusCode == 200 && response.body != '[]') {
-    prefs.setString("allEvents", json.encode(eventsOfInterest));
+    prefs.setString("allEvents", json.encode(allEvents));
     List jsonResponse = json.decode(response.body);
     print('Request succeed with code 200: USING DATA FROM DATABASE');
     return jsonResponse.map((data) => new EventData.fromJson(data)).toList();
@@ -29,8 +29,8 @@ Future<List<EventData>> fetchAllEventsData() async {
     if (prefsNoData) {
       print(
           'Request failed and no data in Shared preferences: USING LOCAL DATA SAMPLES');
-      jsonResponseOffline = eventsOfInterest;
-      prefs.setString("allEvents", json.encode(eventsOfInterest));
+      jsonResponseOffline = allEvents;
+      prefs.setString("allEvents", json.encode(allEvents));
     } else {
       print(
           'Request failed but there is recent data in Shared preferences: USING SHARED PREFERENCES');

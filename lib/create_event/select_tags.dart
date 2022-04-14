@@ -1,3 +1,5 @@
+import 'package:eventify_frontend/apis/controllers/interest_controller.dart';
+import 'package:eventify_frontend/apis/models/interest_model.dart';
 import 'package:flutter/material.dart';
 
 class SelectTags extends StatefulWidget {
@@ -9,14 +11,9 @@ class SelectTags extends StatefulWidget {
 
 class _SelectTagsState extends State<SelectTags> {
   final List _selecteCategorys = [];
+  late List interestListFromApi = []; // Interest List from database
 
-  final Map<String, dynamic> _categories = {
-    "responseBody": [
-      {"tag_id": "0", "tag_name": "Football"},
-      {"tag_id": "1", "tag_name": "Gaming"},
-      {"tag_id": "2", "tag_name": "Studying"}
-    ]
-  };
+  late Future<List<InterestData>> futureAllInterestsData;
 
   void _onCategorySelected(bool selected, categoryId) {
     if (selected == true) {
@@ -30,30 +27,47 @@ class _SelectTagsState extends State<SelectTags> {
     }
   }
 
+  loadInterests() async {
+    interestListFromApi = await fetchAllInterestData();
+    setState(() {
+      List<InterestData> interests = [];
+      print(interestListFromApi[0].name);
+    });
+  }
+
+  @override
+  void initState() {
+    loadInterests();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ListView.builder(
-          itemCount: _categories["responseBody"].length,
-          itemBuilder: (BuildContext context, int index) {
-            return Column(children: [
-              CheckboxListTile(
-                value: _selecteCategorys
-                    .contains(_categories['responseBody'][index]['tag_name']),
-                onChanged: (bool? selected) {
-                  _onCategorySelected(selected!,
-                      _categories['responseBody'][index]['tag_name']);
-                },
-                title: Text(_categories['responseBody'][index]['tag_name']),
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    Navigator.pop(context, _selecteCategorys.toString()),
-                child: const Text('Select'),
-              ),
-            ]);
-          }),
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        body: Column(children: [
+          (interestListFromApi.length > 0)
+              ? (Column(children: [
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: interestListFromApi.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CheckboxListTile(
+                          value: _selecteCategorys
+                              .contains(interestListFromApi[index].id),
+                          onChanged: (bool? selected) {
+                            _onCategorySelected(
+                                selected!, interestListFromApi[index].id);
+                          },
+                          title: Text(interestListFromApi[index].name),
+                        );
+                      }),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context, _selecteCategorys),
+                    child: const Text('Select'),
+                  ),
+                ]))
+              : (Container())
+        ]));
   }
 }

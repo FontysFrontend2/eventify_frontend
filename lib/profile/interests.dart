@@ -1,8 +1,11 @@
 import 'package:eventify_frontend/apis/controllers/interest_controller.dart';
+import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/interest_model.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InterestsCheckBoxList extends StatefulWidget {
   const InterestsCheckBoxList();
@@ -13,7 +16,8 @@ class InterestsCheckBoxList extends StatefulWidget {
 class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   late Future<List<InterestData>> checkBoxListTileModel;
   late List copyList = [];
-  late List checkBoxList = [];
+  late List interestListFromApi = []; // Interest List from database
+  late List userInterests = []; // Users chosen interests
   late ScrollController _controller;
   bool save_option = false;
 
@@ -24,26 +28,40 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
     super.initState();
   }
 
+  late SharedPreferences prefs;
+  late UserData futureUserData; // USER LUOKKA MITEN DATA TALLENTUU
+
   loadInterests() async {
-    // Get marker image from assets and set marker size
+    prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt(
+        "userID")!; // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
+    futureUserData = await fetchUserFromId(id);
+    print(futureUserData.interests);
+    for (int i = 0; i < futureUserData.interests.length; i++) {
+      // Kopioi listaan valittujen interestien idt ja vertaa niitä myöhemmin kaikkiin
+      userInterests.add(futureUserData.interests[i]);
+    }
+    // Hakee kaikki interestit apilta ja listaa ne
     List<InterestData> interests = [];
     interests = await fetchAllInterestData();
     for (int i = 0; i < interests.length; i++) {
-      checkBoxList.add({
+      print(interests[i].name);
+      interestListFromApi.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': true
+        'isCheck': userInterests.contains(i) ? true : false
       });
-
+      // copyList is for referral when choosing new interests
       copyList.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': true
+        'isCheck': userInterests.contains(i) ? true : false
       });
     }
-    print(checkBoxList);
+
+    print(interestListFromApi);
     setState(() {});
   }
 
@@ -64,7 +82,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
                   crossAxisCount: 2,
                   childAspectRatio: (3 / 1),
                 ),
-                itemCount: checkBoxList.length,
+                itemCount: interestListFromApi.length,
                 itemBuilder: (BuildContext context, int index) {
                   // ignore: unnecessary_new
                   return new Card(
@@ -77,13 +95,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
                             dense: true,
                             //font change
                             title: Text(
-                              checkBoxList[index]["name"],
+                              interestListFromApi[index]["name"],
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5),
                             ),
-                            value: checkBoxList[index]["isCheck"]!,
+                            value: interestListFromApi[index]["isCheck"]!,
                             onChanged: (bool? val) {
                               itemChange(val!, index);
                             })
@@ -110,12 +128,12 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   void itemChange(bool val, int index) {
     int a = 0;
     setState(() {
-      checkBoxList[index]["isCheck"] = val;
-      print(checkBoxList[index]["isCheck"].toString() +
+      interestListFromApi[index]["isCheck"] = val;
+      print(interestListFromApi[index]["isCheck"].toString() +
           copyList[index]["isCheck"].toString());
 
-      for (int i = 0; i < checkBoxList.length; i++) {
-        if (checkBoxList[i]["isCheck"] != copyList[i]["isCheck"]) {
+      for (int i = 0; i < interestListFromApi.length; i++) {
+        if (interestListFromApi[i]["isCheck"] != copyList[i]["isCheck"]) {
           a += 1;
           print(a);
         }
@@ -129,12 +147,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
     });
   }
 
+// This will send a list of all chosen interest id:s to api. Test in application to see
   void sendInterests() {
     List sendList = [];
     setState(() {
-      for (int i = 0; i < checkBoxList.length; i++) {
-        if (checkBoxList[i]['isCheck'] == true) {
-          sendList.add(checkBoxList[i]);
+      for (int i = 0; i < interestListFromApi.length; i++) {
+        if (interestListFromApi[i]['isCheck'] == true) {
+          sendList.add(interestListFromApi[i]);
         }
       }
       String listString = '';
