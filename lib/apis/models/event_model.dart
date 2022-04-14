@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:eventify_frontend/a_data/event_from_id.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class EventFromIdData {
+import '../../a_data/events_data.dart';
+
+class EventData {
   final int id;
-  final String? description;
+  final String description;
   final List? interests;
   final List? members;
   final String title;
@@ -19,7 +20,7 @@ class EventFromIdData {
   final String startEvent;
   final bool hasStarted;
 
-  const EventFromIdData(
+  const EventData(
       {required this.id,
       required this.description,
       required this.interests,
@@ -34,9 +35,8 @@ class EventFromIdData {
       required this.startEvent,
       required this.hasStarted});
 
-  factory EventFromIdData.fromJson(Map<String, dynamic> json) {
-    print('json' + json.toString());
-    return EventFromIdData(
+  factory EventData.fromJson(Map<String, dynamic> json) {
+    return EventData(
       id: json['id'],
       description: json['description'],
       interests: json['interests'],
@@ -51,19 +51,5 @@ class EventFromIdData {
       startEvent: json['startEvent'],
       hasStarted: json['hasStarted'],
     );
-  }
-}
-
-late SharedPreferences prefs;
-Future<EventFromIdData> fetchEventFromId(int id) async {
-  final response = await http
-      .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return EventFromIdData.fromJson(jsonDecode(response.body));
-  } else {
-    return EventFromIdData.fromJson((eventFromId));
   }
 }

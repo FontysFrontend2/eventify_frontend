@@ -1,6 +1,6 @@
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
-import 'package:eventify_frontend/models/post_event_model.dart';
+import 'package:eventify_frontend/services/models/post_event_model.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const CreateEventView());

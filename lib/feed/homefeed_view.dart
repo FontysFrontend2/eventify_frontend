@@ -1,8 +1,9 @@
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eventify_frontend/event/eventcard_shortview.dart';
-import 'package:eventify_frontend/models/all_events_model.dart';
+import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../event/eventcard_view.dart';

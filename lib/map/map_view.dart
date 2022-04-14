@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:eventify_frontend/map/map_styles.dart';
-import 'package:eventify_frontend/models/all_events_model.dart';
+import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -70,7 +71,7 @@ class _MapViewState extends State<MapView> {
     // Get marker image from assets and set marker size
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/jake.png', 120);
-    List<AllEventsData> markers = [];
+    List<EventData> markers = [];
     markers = await fetchAllEventsData(); //we store the response in a list
     // Set markers on list
     for (int i = 0; i < markers.length; i++) {
