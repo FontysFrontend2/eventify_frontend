@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:eventify_frontend/models/event_from_id.dart';
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+import 'package:eventify_frontend/apis/models/event_from_id.dart';
+import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 
 import 'chat_card_list.dart';
 import 'chat_message.dart';
@@ -28,7 +29,7 @@ class _ChatViewState extends State<ChatView> {
         messageContent: "Is there any thing wrong?", messageType: "sender"),
   ];
 
-  late Future<EventFromIdData> futureEventFromId;
+  late Future<EventData> futureEventFromId;
 
   @override
   void initState() {
@@ -100,7 +101,7 @@ class _ChatViewState extends State<ChatView> {
       ),
       body: Column(children: [
         Center(
-            child: FutureBuilder<EventFromIdData>(
+            child: FutureBuilder<EventData>(
                 future: futureEventFromId,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {

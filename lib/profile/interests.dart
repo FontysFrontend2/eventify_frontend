@@ -1,5 +1,5 @@
 import 'package:eventify_frontend/a_data/interests_data.dart';
-import 'package:eventify_frontend/models/all_interests_model.dart';
+import 'package:eventify_frontend/services/models/all_interests_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';

@@ -1,5 +1,7 @@
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
-import 'package:eventify_frontend/models/event_from_id.dart';
+import 'package:eventify_frontend/apis/models/event_from_id.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +17,7 @@ class EventCardView extends StatefulWidget {
 class EventCardState extends State<EventCardView> {
   int state = 1;
 
-  late Future<EventFromIdData> futureEventData;
+  late Future<EventData> futureEventData;
 
   @override
   void initState() {
@@ -38,7 +40,7 @@ class EventCardState extends State<EventCardView> {
       width: double.infinity,
       height: 100.0,
       padding: const EdgeInsets.all(10.0),
-      child: FutureBuilder<EventFromIdData>(
+      child: FutureBuilder<EventData>(
           future: futureEventData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {

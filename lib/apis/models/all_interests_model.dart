@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../a_data/interests_data.dart';
+import '../../a_data/interests_data.dart';
 
 class AllInterestsData {
   final int id;

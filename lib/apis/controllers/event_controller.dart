@@ -5,6 +5,7 @@ import 'package:eventify_frontend/a_data/events_data.dart';
 import 'package:eventify_frontend/apis/models/all_location_events_model.dart';
 import 'package:eventify_frontend/apis/models/event_from_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/event_model.dart';
 
@@ -19,7 +20,6 @@ Future<List<EventData>> fetchAllEventsData() async {
   } else {
     prefsNoData = true;
   }
-  var http;
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/getAllEvents'));
   if (response.statusCode == 200 && response.body != '[]') {
@@ -47,7 +47,6 @@ Future<List<EventData>> fetchAllEventsData() async {
 
 // Get event by id from api
 Future<EventData> fetchEventFromId(int id) async {
-  var http;
   final response = await http
       .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventByID?Id=$id'));
 
