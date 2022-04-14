@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:eventify_frontend/apis/controllers/user_controller.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
@@ -31,11 +35,20 @@ class MyAppState extends State<MyApp> {
   int _navState = 1;
   bool settings = false;
 
+  late UserData futureUserFromIdData;
+
   late SharedPreferences prefs;
   late bool isPlatformDark;
 
   retrieve() async {
     prefs = await SharedPreferences.getInstance();
+// get user info from api. Get user ID later in any class from json.encode(prefs.getString("userID"));
+    futureUserFromIdData = await fetchUserFromId(
+        0); // Later this should be done when anbd only when login is done
+    //String tring = json.encode(futureUserFromIdData);
+    prefs.setInt("userID", futureUserFromIdData.id);
+    print(prefs.getInt("userID"));
+    // Check theme
     setState(() {
       if (prefs.getString("darkMode") == "true") {
         isPlatformDark = true;
@@ -57,7 +70,6 @@ class MyAppState extends State<MyApp> {
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
-    retrieve();
     setState(() {
       _state = i;
       if (i > 2) {
@@ -102,8 +114,10 @@ class MyAppState extends State<MyApp> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ProfilePage())).then(
-                                                (_) =>
-                                                    _stateCounter(_navState)),
+                                                (_) => {
+                                                      retrieve(),
+                                                      _stateCounter(_navState)
+                                                    }),
                                           },
                                       icon: Image.asset(
                                           "assets/images/user.png",

@@ -19,7 +19,7 @@ class UserData {
         id: json['id'],
         name: json['name'],
         email: json['email'],
-        registrationDate: json['registerationDate'],
+        registrationDate: json['registrationDate'],
         events: json['events'],
         interests: json['interests']);
   }

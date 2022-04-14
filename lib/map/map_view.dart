@@ -82,7 +82,7 @@ class _MapViewState extends State<MapView> {
           infoWindow: InfoWindow(
             //popup info
             title: markers[i].title,
-            snippet: markers[i].description + ' tap to join',
+            snippet: markers[i].description + '. TAP TO SEE MORE',
             onTap: () => selectEvent(markers[i].id.toString()),
           ),
           icon: BitmapDescriptor.fromBytes(markerIcon) //Icon for Marker
