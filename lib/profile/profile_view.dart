@@ -6,6 +6,19 @@ import 'edit_profile.dart';
 import 'package:eventify_frontend/profile/themes.dart';
 import 'package:eventify_frontend/profile/notifications.dart';
 
+/* 
+GET YOUR OWN USER INFORMATION MIHIN VAAN LUOKKAAN:
+
+  late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
+  late SharedPreferences prefs;
+
+  getUserInfo() async {
+    prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("userID"); // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
+    futureUserFromIdData = await fetchUserFromId(id); // VOI TEHDÄ AWAITILLA TAI WIDGETIN BUILDERISSA, ESIMERKKEJÄ: CHATFEED, MAPVIEW, EVENTCARD
+    }
+*/
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 

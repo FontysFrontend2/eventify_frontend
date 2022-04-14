@@ -1,5 +1,5 @@
-import 'package:eventify_frontend/a_data/interests_data.dart';
-import 'package:eventify_frontend/services/models/all_interests_model.dart';
+import 'package:eventify_frontend/apis/controllers/interest_controller.dart';
+import 'package:eventify_frontend/apis/models/interest_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -11,7 +11,7 @@ class InterestsCheckBoxList extends StatefulWidget {
 }
 
 class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
-  late Future<List<AllInterestsData>> checkBoxListTileModel;
+  late Future<List<InterestData>> checkBoxListTileModel;
   late List copyList = [];
   late List checkBoxList = [];
   late ScrollController _controller;
@@ -26,8 +26,8 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
 
   loadInterests() async {
     // Get marker image from assets and set marker size
-    List<AllInterestsData> interests = [];
-    interests = await fetchAllInterestsData();
+    List<InterestData> interests = [];
+    interests = await fetchAllInterestData();
     for (int i = 0; i < interests.length; i++) {
       checkBoxList.add({
         'interestId': interests[i].id,
@@ -159,30 +159,3 @@ class CheckBoxListTileModel {
   CheckBoxListTileModel(
       {this.interestId, this.name, this.description, this.isCheck});
 }
-/*
-  List<CheckBoxListTileModel> getUsers() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
-      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
-      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
-      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
-      CheckBoxListTileModel(interestId: 6, title: "Golf", isCheck: true),
-      CheckBoxListTileModel(interestId: 7, title: "Airsoft", isCheck: true),
-      CheckBoxListTileModel(interestId: 8, title: "Beach Ball", isCheck: false),
-      CheckBoxListTileModel(interestId: 9, title: "CS GO", isCheck: false),
-      CheckBoxListTileModel(
-          interestId: 4, title: "League Of Legends", isCheck: false),
-      CheckBoxListTileModel(interestId: 10, title: "Coding", isCheck: false),
-      CheckBoxListTileModel(interestId: 11, title: "Hacking", isCheck: true),
-      CheckBoxListTileModel(interestId: 12, title: "Travelling", isCheck: true),
-      CheckBoxListTileModel(interestId: 13, title: "Bars", isCheck: false),
-      CheckBoxListTileModel(interestId: 14, title: "Walking", isCheck: false),
-      CheckBoxListTileModel(interestId: 15, title: "Shouting", isCheck: false),
-      CheckBoxListTileModel(interestId: 16, title: "Talking", isCheck: false),
-      CheckBoxListTileModel(
-          interestId: 17, title: "Board Games", isCheck: true),
-    ];
-  }
-}
-*/

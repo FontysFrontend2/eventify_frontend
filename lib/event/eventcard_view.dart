@@ -1,7 +1,6 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
-import 'package:eventify_frontend/apis/models/event_from_id.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
