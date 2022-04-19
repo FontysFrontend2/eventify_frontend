@@ -56,20 +56,23 @@ class _NewEventFormState extends State<NewEventForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      viewTitle(context),
-      Form(
-          key: _formKey,
-          child: Column(children: [
-            titleForm(context),
-            descriptionForm(context),
-            selectTagsForm(context),
-            selectLocationForm(context),
-            maxPeopleForm(context),
-            dateTimeForm(context),
-            submit(context),
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(title: Text('Create Event')),
+      body: (Column(children: [
+        /*viewTitle(context)*/
+        Form(
+            key: _formKey,
+            child: Column(children: [
+              titleForm(context),
+              descriptionForm(context),
+              selectTagsForm(context),
+              selectLocationForm(context),
+              maxPeopleForm(context),
+              dateTimeForm(context),
+              submit(context),
+            ]))
+      ])),
+    );
   }
 
 // WIDGETS:
