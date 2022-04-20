@@ -24,7 +24,11 @@ class HomeFeedState extends State<HomeFeedView> {
   void initState() {
     super.initState();
     print('refresh');
-    futureAllEventsData = fetchAllEventsData();
+
+    //TO-DO
+    //Fetch interest data from sharedpreferences and pass it to fetchEventsFromInterestsList
+
+    futureAllEventsData = fetchEventsFromInterestsList([0, 1, 2, 3]);
   }
 
   @override
