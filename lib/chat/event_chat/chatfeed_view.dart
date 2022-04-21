@@ -1,7 +1,10 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+//import 'package:eventify_frontend/chat/common_chat/common_chat_card.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
 import 'package:flutter/material.dart';
 import '../../apis/models/event_model.dart';
+
+import 'chat_card.dart';
 
 import 'chat_card_list.dart';
 
@@ -102,7 +105,10 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                 return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (_, index) => Center(
-                          child: ChatCardList(
+                          child: ChatCard(
+                              int.parse("${snapshot.data![index].id}")),
+
+                          /*ChatCardList(
                               id: int.parse("${snapshot.data![index].id}"),
                               hostID:
                                   int.parse("${snapshot.data![index].hostID}"),
@@ -111,7 +117,7 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                                   "${snapshot.data![index].description}",
                               dateTime: "${snapshot.data![index].startEvent}",
                               locationBased:
-                                  "${snapshot.data![index].locationBased}"),
+                                  "${snapshot.data![index].locationBased}"),*/
                         ));
               } else {
                 return Center(child: CircularProgressIndicator());
