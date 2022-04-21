@@ -42,7 +42,7 @@ class HomeFeedState extends State<HomeFeedView> {
     });*/
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return EventCardView(
-        state,
+        evId,
       );
     }));
   }
@@ -102,15 +102,7 @@ class HomeFeedState extends State<HomeFeedView> {
               } else {
                 return const Center(child: CircularProgressIndicator());
               }
-            })
-        /*: (state == -2)
-              ? (const Expanded(
-                  flex: 2,
-                  child: CreateEventView(),
-                ))
-              : */
-
-        );
+            }));
   }
 }
 
