@@ -389,7 +389,7 @@ class _NewEventFormState extends State<NewEventForm> {
     if (!_useLocation) {
       print('puusti1');
       createPostEvent(description, title, 'false', '0', '0', "0", maxPeople,
-          "1", "2022-05-14T08:34:59.506", "false");
+          "2", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
@@ -406,7 +406,7 @@ class _NewEventFormState extends State<NewEventForm> {
     } else {
       print('puusti2');
       createPostEvent(description, title, 'true', posLat, posLong, "0",
-          maxPeople, "1", "2022-05-14T08:34:59.506", "false");
+          maxPeople, "2", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +

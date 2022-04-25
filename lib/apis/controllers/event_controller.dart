@@ -129,7 +129,8 @@ Future<EventData> createPostEvent(
           'http://office.pepr.com:25252/Event?description=$description&title=$title&locationbased=$locationBased&latitude=$latitude&longitude=$longitude&hostid=$hostId&maxPeople=$maxPeople&minPeople=$minPeople&startevent=$startEvent&hasstarted=$hasStarted'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-      });
+      },
+      body: '[0]');
 
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
@@ -140,6 +141,6 @@ Future<EventData> createPostEvent(
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
     print('resultti: ' + jsonDecode(response.body));
-    throw Exception('Failed to create album.');
+    throw Exception('Failed to create event.');
   }
 }
