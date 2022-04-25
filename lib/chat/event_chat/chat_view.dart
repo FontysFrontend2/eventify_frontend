@@ -78,6 +78,7 @@ class _ChatViewState extends State<ChatView> {
                         height: 6,
                       ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: () {
                           print("pushed");
                           Navigator.push(context,
@@ -91,7 +92,7 @@ class _ChatViewState extends State<ChatView> {
                               if (snapshot.hasData) {
                                 return Row(children: [
                                   Expanded(
-                                    flex: 8,
+                                    flex: 5,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -114,35 +115,23 @@ class _ChatViewState extends State<ChatView> {
                                       ],
                                     ),
                                   ),
-                                  Spacer(),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Expanded(
-                                      child: SizedBox(
-                                        child: Row(children: [
-                                          OutlinedButton(
-                                            onPressed: () {},
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(snapshot.data!.minPeople
-                                                        .toString() +
-                                                    "/" +
-                                                    snapshot.data!.maxPeople
-                                                        .toString()), // <-- Text
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Image.asset(
-                                                  "assets/images/user.png",
-                                                  color: Colors.amber,
-                                                  scale: 18,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ]),
-                                      ),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Text(snapshot.data!.minPeople
+                                                .toString() +
+                                            "/" +
+                                            snapshot.data!.maxPeople
+                                                .toString()), // <-- Text
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        ImageIcon(
+                                            AssetImage(
+                                                "assets/images/user.png"),
+                                            color: Colors.amber,
+                                            size: 24),
+                                      ],
                                     ),
                                   ),
                                 ]);
