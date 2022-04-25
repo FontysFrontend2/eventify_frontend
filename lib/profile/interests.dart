@@ -19,6 +19,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   late List interestListFromApi = []; // Interest List from database
   late List userInterests = []; // Users chosen interests
   late ScrollController _controller;
+  var token;
   bool save_option = false;
 
   final ScrollController _scrollController = ScrollController();
@@ -32,6 +33,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   late UserData futureUserData; // USER LUOKKA MITEN DATA TALLENTUU
 
   loadInterests() async {
+    token = prefs.getString("token");
     prefs = await SharedPreferences.getInstance();
     int id = prefs.getInt(
         "userID")!; // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
@@ -163,7 +165,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Processing Data: ' + listString),
       ));
-      //postData(checkBoxListTileModel);
+      //postData(checkBoxListTileModel, token);
       // add checkboxlisttilemodel to uri and authorisation key to body
       save_option = false;
     });

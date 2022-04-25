@@ -14,6 +14,7 @@ import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'apis/controllers/test_login_controller.dart';
 import 'profile/themes.dart';
 
 // sprint 3
@@ -31,7 +32,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 1;
   bool _authState =
-      true; // false: not logged in (show login), true: logged in (show application)
+      false; // false: not logged in (show login), true: logged in (show application)
   int _navState = 1;
   bool settings = false;
 
@@ -40,11 +41,26 @@ class MyAppState extends State<MyApp> {
   late SharedPreferences prefs;
   late bool isPlatformDark;
 
+  void testLoginSkip() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("token")!.length > 20) {
+        _authState = true;
+      } else {
+        _authState = false;
+      }
+      retrieve();
+    });
+  }
+
   retrieve() async {
     prefs = await SharedPreferences.getInstance();
 // get user info from api. Get user ID later in any class from json.encode(prefs.getString("userID"));
+    var testawt = await fetchTestToken();
+    prefs.setString("token", testawt);
+    print(testawt.toString());
     futureUserFromIdData = await fetchUserFromId(
-        2); // Later this should be done when anbd only when login is done
+        6); // Later this should be done when anbd only when login is done
     //String tring = json.encode(futureUserFromIdData);
     prefs.setInt("userID", futureUserFromIdData.id);
     print(prefs.getInt("userID"));
@@ -57,12 +73,13 @@ class MyAppState extends State<MyApp> {
         isPlatformDark = false;
         initTheme = isPlatformDark ? Themes.dark : Themes.light;
       }
+      _authState = true;
     });
   }
 
   @override
   void initState() {
-    retrieve();
+    testLoginSkip();
     super.initState();
   }
 
@@ -154,6 +171,7 @@ class MyAppState extends State<MyApp> {
                           onWillPop: () async {
                             if (_state != 1) {
                               setState(() {
+                                retrieve();
                                 _state = _navState;
                               });
                               return false;
@@ -209,9 +227,7 @@ class MyAppState extends State<MyApp> {
               title: const Text('Eventify'),
               flexibleSpace: SafeArea(
                 child: TextButton(
-                    onPressed: () => {
-                          setState(() => _authState = true),
-                        },
+                    onPressed: () => {(retrieve())},
                     child: Text("Skip Login",
                         style: TextStyle(color: Colors.amber))),
               ),
