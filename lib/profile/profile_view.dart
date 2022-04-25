@@ -30,6 +30,7 @@ class ProfilePage extends StatefulWidget {
 class ProfileState extends State<ProfilePage> {
   bool isPlatformDark = false;
   bool hasLoaded = false;
+  var testawt;
 
   late SharedPreferences prefs;
   late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
@@ -42,6 +43,7 @@ class ProfileState extends State<ProfilePage> {
     futureUserFromIdData = await fetchUserFromId(
         id); // VOI TEHDÄ AWAITILLA TAI WIDGETIN BUILDERISSA, ESIMERKKEJÄ: CHATFEED, MAPVIEW, EVENTCARD
     print(futureUserFromIdData.interests);
+    testawt = prefs.getString("token");
     setState(() {
       hasLoaded = true;
     });
@@ -153,6 +155,10 @@ class ProfileState extends State<ProfilePage> {
   //name and email boxes
   Widget name(UserData user) => Column(
         children: [
+          Text(
+            "test token: " + testawt,
+            style: TextStyle(fontSize: 10),
+          ),
           Text(
             user.name,
             style: TextStyle(fontSize: 24),
