@@ -44,7 +44,7 @@ class MyAppState extends State<MyApp> {
     prefs = await SharedPreferences.getInstance();
 // get user info from api. Get user ID later in any class from json.encode(prefs.getString("userID"));
     futureUserFromIdData = await fetchUserFromId(
-        0); // Later this should be done when anbd only when login is done
+        2); // Later this should be done when anbd only when login is done
     //String tring = json.encode(futureUserFromIdData);
     prefs.setInt("userID", futureUserFromIdData.id);
     print(prefs.getInt("userID"));

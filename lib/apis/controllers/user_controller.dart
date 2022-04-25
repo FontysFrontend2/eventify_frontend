@@ -8,14 +8,17 @@ late SharedPreferences prefs;
 
 Future<UserData> fetchUserFromId(int id) async {
   prefs = await SharedPreferences.getInstance();
+  String idString = id.toString();
   final response = await http
-      .get(Uri.parse('http://office.pepr.com:25252/User/Details/?id=$id'));
+      .get(Uri.parse('http://office.pepr.com:25252/User/Details/$idString'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
+    print(response.statusCode);
     return UserData.fromJson(jsonDecode(response.body));
   } else {
+    print(response.statusCode);
     return UserData.fromJson((user));
   }
 }

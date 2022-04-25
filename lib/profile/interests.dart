@@ -164,6 +164,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
         content: Text('Processing Data: ' + listString),
       ));
       //postData(checkBoxListTileModel);
+      // add checkboxlisttilemodel to uri and authorisation key to body
       save_option = false;
     });
   }
