@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
+import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 
 import 'chat_card_list.dart';
@@ -73,25 +74,86 @@ class _ChatViewState extends State<ChatView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        widget.id.toString(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
+                      const SizedBox(
                         height: 6,
                       ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 13),
-                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("pushed");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return EventCardView(widget.id);
+                          }));
+                        },
+                        child: FutureBuilder<EventData>(
+                            future: futureEventFromId,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Row(children: [
+                                  Expanded(
+                                    flex: 8,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          snapshot.data!.title,
+                                          overflow: TextOverflow.fade,
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const Text(
+                                          "Tap Here to see group info",
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Expanded(
+                                      child: SizedBox(
+                                        child: Row(children: [
+                                          OutlinedButton(
+                                            onPressed: () {},
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(snapshot.data!.minPeople
+                                                        .toString() +
+                                                    "/" +
+                                                    snapshot.data!.maxPeople
+                                                        .toString()), // <-- Text
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Image.asset(
+                                                  "assets/images/user.png",
+                                                  color: Colors.amber,
+                                                  scale: 18,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
+                                    ),
+                                  ),
+                                ]);
+                              } else {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
+                            }),
+                      )
                     ],
                   ),
-                ),
-                Icon(
-                  Icons.settings,
-                  color: Colors.black54,
                 ),
               ],
             ),
@@ -99,23 +161,6 @@ class _ChatViewState extends State<ChatView> {
         ),
       ),
       body: Column(children: [
-        Center(
-            child: FutureBuilder<EventData>(
-                future: futureEventFromId,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    print('snapdata:' + snapshot.data!.title);
-                    return ChatInfo(
-                        id: snapshot.data!.id,
-                        title: snapshot.data!.title,
-                        description: snapshot.data!.description,
-                        latitude: snapshot.data!.latitude,
-                        longitude: snapshot.data!.longitude,
-                        locationBased: snapshot.data!.locationBased);
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                })),
         Expanded(
             child: Stack(
           children: <Widget>[

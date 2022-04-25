@@ -56,17 +56,18 @@ class _ChatCardListState extends State<ChatCardList> {
                                 children: <Widget>[
                                   Text(
                                     widget.title,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 1,
+                                    softWrap: false,
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   SizedBox(
                                     height: 6,
                                   ),
-                                  Text(
-                                      widget.description.length > 100
-                                          ? widget.description
-                                                  .substring(0, 100) +
-                                              ' ...'
-                                          : widget.description,
+                                  Text(widget.description,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                      softWrap: false,
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.grey.shade600)),
