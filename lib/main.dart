@@ -64,14 +64,18 @@ class MyAppState extends State<MyApp> {
     //String tring = json.encode(futureUserFromIdData);
     List<String> interestListFromIdData =
         futureUserFromIdData.interests.map((s) => s.toString()).toList();
+    List<String> eventListFromIdData =
+        futureUserFromIdData.events.map((s) => s.toString()).toList();
     prefs.setInt("userID", futureUserFromIdData.id);
     prefs.setString("userName", futureUserFromIdData.name);
     prefs.setString("userEmail", futureUserFromIdData.email);
     prefs.setStringList("userInterests", interestListFromIdData);
+    prefs.setStringList("userEvents", eventListFromIdData);
     print(prefs.getInt("userID")!.toString() +
         prefs.getString("userName").toString() +
         prefs.getString("userEmail").toString() +
-        prefs.getStringList("userInterests").toString());
+        prefs.getStringList("userInterests").toString() +
+        prefs.getStringList("userEvents").toString());
     // Check theme
     setState(() {
       if (prefs.getString("darkMode") == "true") {
