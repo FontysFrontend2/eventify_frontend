@@ -22,3 +22,45 @@ Future<UserData> fetchUserFromId(int id) async {
     return UserData.fromJson((user));
   }
 }
+
+Future addInterestPost(String interestId, String token) async {
+  final response = await http.post(
+      Uri.parse('http://office.pepr.com:25252/User/AddInterest/$interestId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token
+      });
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print('result: ' + response.body);
+    return response.body;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print('resultti: ' + response.body);
+    throw Exception('Failed to create event.');
+  }
+}
+
+Future removeInterestDelete(String interestId, String token) async {
+  final response = await http.delete(
+      Uri.parse('http://office.pepr.com:25252/User/RemoveInterest/$interestId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token
+      });
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print('result: ' + response.body);
+    return response.body;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print('resultti: ' + response.body);
+    throw Exception('Failed to create event.');
+  }
+}
