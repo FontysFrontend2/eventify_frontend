@@ -16,9 +16,9 @@ class InterestsCheckBoxList extends StatefulWidget {
 class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   List select = [];
   List unselect = [];
+  var userToken;
   late Future<List<InterestData>> checkBoxListTileModel;
   late List copyList = [];
-  late List checkList = [];
   var interestListFromApi = []; // Interest List from database
   var userInterests; // Users chosen interests
   late ScrollController _controller;
@@ -28,7 +28,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    loadInterests();
+    loadData();
     super.initState();
   }
 
@@ -39,12 +39,12 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
     prefs.setStringList("userInterests", userInterests);
   }
 
-  loadInterests() async {
+  loadData() async {
     prefs = await SharedPreferences.getInstance();
+    userToken = prefs.getString("token");
     userInterests = prefs.getStringList("userInterests");
     interestListFromApi.clear();
     copyList.clear();
-    checkList.clear();
     token = prefs.getString("token");
     // Hakee kaikki interestit apilta ja listaa ne
     List<InterestData> interests = [];
@@ -59,12 +59,6 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
       });
       // copyList is for referral when choosing new interests
       copyList.add({
-        'interestId': interests[i].id,
-        'name': interests[i].name,
-        'description': interests[i].description,
-        'isCheck': userInterests.contains(i.toString()) ? true : false
-      });
-      checkList.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
@@ -156,9 +150,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   void sendInterests() {
     setState(() {
       for (int i = 0; i < select.length; i++) {
-        addInterestPost(select[i],
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6Niwia2V5IjoiNDczZjUxZWExY2RhOTEzMjYzNmY3Y2JiNDM5YzcwOGFjMDNhMjFmZmIzMjMzZmZlMjMwNGZmY2U4Y2NlYzNhMyIsImV4cCI6MTY1MjEwMTg1OC4wfQ.BYxwOo_0cEqc4C0nmHXWHA4HhRUy3jsHv08Bka-h4w4');
-
+        addInterestPost(select[i], userToken);
         userInterests.add(select[i]);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Processing Data: ' + select[i]),
@@ -167,14 +159,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
       // add checkboxlisttilemodel to uri and authorisation key to body
       for (int i = 0; i < unselect.length; i++) {
         print("unselect: " + unselect.toString());
-        removeInterestDelete(unselect[i].toString(),
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6Niwia2V5IjoiNDczZjUxZWExY2RhOTEzMjYzNmY3Y2JiNDM5YzcwOGFjMDNhMjFmZmIzMjMzZmZlMjMwNGZmY2U4Y2NlYzNhMyIsImV4cCI6MTY1MjEwMTg1OC4wfQ.BYxwOo_0cEqc4C0nmHXWHA4HhRUy3jsHv08Bka-h4w4');
+        removeInterestDelete(unselect[i].toString(), userToken);
         userInterests.remove(unselect[i]);
       }
       select.clear();
       unselect.clear();
       udpateInterests();
-      loadInterests();
+      loadData();
     });
   }
 }
