@@ -14,10 +14,13 @@ class InterestsCheckBoxList extends StatefulWidget {
 }
 
 class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
+  List select = [];
+  List unselect = [];
   late Future<List<InterestData>> checkBoxListTileModel;
   late List copyList = [];
-  late List interestListFromApi = []; // Interest List from database
-  late List userInterests = []; // Users chosen interests
+  late List checkList = [];
+  var interestListFromApi = []; // Interest List from database
+  var userInterests; // Users chosen interests
   late ScrollController _controller;
   var token;
   bool save_option = false;
@@ -30,39 +33,44 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   }
 
   late SharedPreferences prefs;
-  late UserData futureUserData; // USER LUOKKA MITEN DATA TALLENTUU
+
+  udpateInterests() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("userInterests", userInterests);
+  }
 
   loadInterests() async {
-    token = prefs.getString("token");
     prefs = await SharedPreferences.getInstance();
-    int id = prefs.getInt(
-        "userID")!; // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
-    futureUserData = await fetchUserFromId(id);
-    print(futureUserData.interests);
-    for (int i = 0; i < futureUserData.interests.length; i++) {
-      // Kopioi listaan valittujen interestien idt ja vertaa niitä myöhemmin kaikkiin
-      userInterests.add(futureUserData.interests[i]);
-    }
+    userInterests = prefs.getStringList("userInterests");
+    interestListFromApi.clear();
+    copyList.clear();
+    checkList.clear();
+    token = prefs.getString("token");
     // Hakee kaikki interestit apilta ja listaa ne
     List<InterestData> interests = [];
     interests = await fetchAllInterestData();
     for (int i = 0; i < interests.length; i++) {
-      print(interests[i].name);
       interestListFromApi.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': userInterests.contains(i) ? true : false
+        'isCheck':
+            userInterests.contains(interests[i].id.toString()) ? true : false
       });
       // copyList is for referral when choosing new interests
       copyList.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': userInterests.contains(i) ? true : false
+        'isCheck': userInterests.contains(i.toString()) ? true : false
+      });
+      checkList.add({
+        'interestId': interests[i].id,
+        'name': interests[i].name,
+        'description': interests[i].description,
+        'isCheck': userInterests.contains(i.toString()) ? true : false
       });
     }
-
     print(interestListFromApi);
     setState(() {});
   }
@@ -103,7 +111,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5),
                             ),
-                            value: interestListFromApi[index]["isCheck"]!,
+                            value: interestListFromApi[index]["isCheck"],
                             onChanged: (bool? val) {
                               itemChange(val!, index);
                             })
@@ -130,44 +138,43 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   void itemChange(bool val, int index) {
     int a = 0;
     setState(() {
+      print(interestListFromApi[index]["name"]);
       interestListFromApi[index]["isCheck"] = val;
       print(interestListFromApi[index]["isCheck"].toString() +
           copyList[index]["isCheck"].toString());
-
-      for (int i = 0; i < interestListFromApi.length; i++) {
-        if (interestListFromApi[i]["isCheck"] != copyList[i]["isCheck"]) {
-          a += 1;
-          print(a);
-        }
-      }
-      if (a == 0) {
-        save_option = false;
-      } else {
-        save_option = true;
-      }
+      save_option = true;
       copyList[index]["isCheck"] = val;
+      if (val) {
+        select.add(interestListFromApi[index]["interestId"].toString());
+      } else {
+        unselect.add((interestListFromApi[index]["interestId"].toString()));
+      }
     });
   }
 
 // This will send a list of all chosen interest id:s to api. Test in application to see
   void sendInterests() {
-    List sendList = [];
     setState(() {
-      for (int i = 0; i < interestListFromApi.length; i++) {
-        if (interestListFromApi[i]['isCheck'] == true) {
-          sendList.add(interestListFromApi[i]);
-        }
-      }
-      String listString = '';
-      for (int i = 0; i < sendList.length; i++) {
-        listString += sendList[i]['interestId'].toString();
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Processing Data: ' + listString),
-      ));
-      //postData(checkBoxListTileModel, token);
+      for (int i = 0; i < select.length; i++) {
+        addInterestPost(select[i],
+            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6Niwia2V5IjoiNDczZjUxZWExY2RhOTEzMjYzNmY3Y2JiNDM5YzcwOGFjMDNhMjFmZmIzMjMzZmZlMjMwNGZmY2U4Y2NlYzNhMyIsImV4cCI6MTY1MjEwMTg1OC4wfQ.BYxwOo_0cEqc4C0nmHXWHA4HhRUy3jsHv08Bka-h4w4');
+
+        userInterests.add(select[i]);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Processing Data: ' + select[i]),
+        ));
+      } //postData(checkBoxListTileModel, token);
       // add checkboxlisttilemodel to uri and authorisation key to body
-      save_option = false;
+      for (int i = 0; i < unselect.length; i++) {
+        print("unselect: " + unselect.toString());
+        removeInterestDelete(unselect[i].toString(),
+            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6Niwia2V5IjoiNDczZjUxZWExY2RhOTEzMjYzNmY3Y2JiNDM5YzcwOGFjMDNhMjFmZmIzMjMzZmZlMjMwNGZmY2U4Y2NlYzNhMyIsImV4cCI6MTY1MjEwMTg1OC4wfQ.BYxwOo_0cEqc4C0nmHXWHA4HhRUy3jsHv08Bka-h4w4');
+        userInterests.remove(unselect[i]);
+      }
+      select.clear();
+      unselect.clear();
+      udpateInterests();
+      loadInterests();
     });
   }
 }

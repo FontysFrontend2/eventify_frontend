@@ -62,8 +62,16 @@ class MyAppState extends State<MyApp> {
     futureUserFromIdData = await fetchUserFromId(
         6); // Later this should be done when anbd only when login is done
     //String tring = json.encode(futureUserFromIdData);
+    List<String> interestListFromIdData =
+        futureUserFromIdData.interests.map((s) => s.toString()).toList();
     prefs.setInt("userID", futureUserFromIdData.id);
-    print(prefs.getInt("userID"));
+    prefs.setString("userName", futureUserFromIdData.name);
+    prefs.setString("userEmail", futureUserFromIdData.email);
+    prefs.setStringList("userInterests", interestListFromIdData);
+    print(prefs.getInt("userID")!.toString() +
+        prefs.getString("userName").toString() +
+        prefs.getString("userEmail").toString() +
+        prefs.getStringList("userInterests").toString());
     // Check theme
     setState(() {
       if (prefs.getString("darkMode") == "true") {
