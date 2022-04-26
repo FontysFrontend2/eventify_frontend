@@ -36,7 +36,7 @@ class MyAppState extends State<MyApp> {
   int _navState = 1;
   bool settings = false;
 
-  late UserData futureUserFromIdData;
+  late MyUserData futureUserFromToken;
 
   late SharedPreferences prefs;
   late bool isPlatformDark;
@@ -59,16 +59,16 @@ class MyAppState extends State<MyApp> {
     var testawt = await fetchTestToken();
     prefs.setString("token", testawt);
     print(testawt.toString());
-    futureUserFromIdData = await fetchUserFromId(
-        6); // Later this should be done when anbd only when login is done
+    futureUserFromToken = await fetchUserFromToken(
+        testawt); // Later this should be done when anbd only when login is done
     //String tring = json.encode(futureUserFromIdData);
     List<String> interestListFromIdData =
-        futureUserFromIdData.interests.map((s) => s.toString()).toList();
+        futureUserFromToken.interests.map((s) => s.toString()).toList();
     List<String> eventListFromIdData =
-        futureUserFromIdData.events.map((s) => s.toString()).toList();
-    prefs.setInt("userID", futureUserFromIdData.id);
-    prefs.setString("userName", futureUserFromIdData.name);
-    prefs.setString("userEmail", futureUserFromIdData.email);
+        futureUserFromToken.events.map((s) => s.toString()).toList();
+    prefs.setInt("userID", futureUserFromToken.id);
+    prefs.setString("userName", futureUserFromToken.name);
+    prefs.setString("userEmail", futureUserFromToken.email);
     prefs.setStringList("userInterests", interestListFromIdData);
     prefs.setStringList("userEvents", eventListFromIdData);
     print(prefs.getInt("userID")!.toString() +
