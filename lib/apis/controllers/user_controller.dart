@@ -64,3 +64,45 @@ Future removeInterestDelete(String interestId, String token) async {
     throw Exception('Failed to create event.');
   }
 }
+
+Future joinEvent(String eventID, String token) async {
+  final response = await http.post(
+      Uri.parse('http://office.pepr.com:25252/User/AttendEvent/$eventID'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token
+      });
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print('result: ' + response.body);
+    return response.body;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print('resultti: ' + response.body);
+    throw Exception('Failed to create event.');
+  }
+}
+
+Future leaveEvent(String eventID, String token) async {
+  final response = await http.delete(
+      Uri.parse('http://office.pepr.com:25252/User/UnattendEvent/$eventID'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token
+      });
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    print('result: ' + response.body);
+    return response.body;
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    print('resultti: ' + response.body);
+    throw Exception('Failed to create event.');
+  }
+}
