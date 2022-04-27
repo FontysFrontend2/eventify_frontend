@@ -1,8 +1,10 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventCardView extends StatefulWidget {
   final int id;
@@ -15,6 +17,8 @@ class EventCardView extends StatefulWidget {
 
 class EventCardState extends State<EventCardView> {
   int state = 1;
+  var _token;
+  var _eventList;
 
   late Future<EventData> futureEventData;
 
@@ -22,6 +26,27 @@ class EventCardState extends State<EventCardView> {
   void initState() {
     super.initState();
     futureEventData = fetchEventFromId(widget.id);
+    LoadData();
+  }
+
+  late SharedPreferences prefs;
+  void LoadData() async {
+    prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString("token");
+    _eventList = prefs.getStringList("userEvents");
+    print(_token);
+    print(widget.id);
+    if (_eventList!.contains(widget.id.toString())) {
+      setState(() {
+        print("contains");
+        state = 2;
+      });
+    } else {
+      setState(() {
+        print("not contain");
+        state = 1;
+      });
+    }
   }
 
   String dmy(String dtString) {
@@ -30,6 +55,34 @@ class EventCardState extends State<EventCardView> {
     final clockString = format.format(date);
 
     return clockString;
+  }
+
+// handle join/leave button
+  void HandleJoin(int joined) async {
+    prefs = await SharedPreferences.getInstance();
+    if (joined == 1) {
+      _eventList.add(widget.id.toString());
+      joinEvent(widget.id.toString(), _token);
+      print("joining");
+      setState(() {
+        state = 2;
+      });
+    } else {
+      leaveEvent(widget.id.toString(), _token);
+      for (int i = 0; i < _eventList.length; i++) {
+        //removeInterestDelete(unselect[i].toString(), userToken);
+        print(_eventList[i]);
+        if (_eventList[i].contains(widget.id.toString())) {
+          print("removed" + _eventList[i].toString());
+          _eventList.removeAt(i);
+        }
+      }
+      setState(() {
+        print("leaving");
+        state = 1;
+      });
+    }
+    prefs.setStringList("userEvents", _eventList);
   }
 
   @override
@@ -98,18 +151,32 @@ class EventCardState extends State<EventCardView> {
                           ))
                         : (Container()),
                     Spacer(),
-
+                    // protetcted view when joined
+                    (state == 2)
+                        ? (Expanded(
+                            flex: 2,
+                            child: Container(
+                                color: Colors.red,
+                                child: Column(children: [
+                                  Text(
+                                      "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                ]))))
+                        : (Container()),
                     //Button to join/leave event
                     Align(
                       alignment: Alignment.bottomRight,
                       child: state == 1
                           ? TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                HandleJoin(state);
+                              },
                               child: Text('Join Event'),
                             )
                           : TextButton(
                               child: Text('Leave Event'),
-                              onPressed: () {},
+                              onPressed: () {
+                                HandleJoin(state);
+                              },
                             ),
                     ),
                   ],
