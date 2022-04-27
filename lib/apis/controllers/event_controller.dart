@@ -140,7 +140,7 @@ Future<EventData> createPostEvent(
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    print('resultti: ' + jsonDecode(response.body));
+    print('resultti: no can do');
     throw Exception('Failed to create event.');
   }
 }
