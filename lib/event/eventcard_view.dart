@@ -73,9 +73,7 @@ class EventCardState extends State<EventCardView> {
     if (joined == 3) {
       deleteEvent(widget.id.toString());
       print("Deleting event");
-      setState(() {
-        Navigator.pop(context);
-      });
+      Navigator.pop(context);
     } else if (joined == 2) {
       leaveEvent(widget.id.toString(), _token);
       for (int i = 0; i < _eventList.length; i++) {
@@ -85,6 +83,10 @@ class EventCardState extends State<EventCardView> {
           print("removed" + _eventList[i].toString());
           _eventList.removeAt(i);
         }
+        setState(() {
+          print("leaving");
+          state = 1;
+        });
       }
     } else {
       _eventList.add(widget.id.toString());
@@ -94,10 +96,7 @@ class EventCardState extends State<EventCardView> {
         state = 2;
       });
     }
-    setState(() {
-      print("leaving");
-      state = 1;
-    });
+
     prefs.setStringList("userEvents", _eventList);
   }
 
@@ -168,39 +167,39 @@ class EventCardState extends State<EventCardView> {
                         : (Container()),
                     Spacer(),
                     // protetcted view when joined
-                    (state == 2)
-                        ? (Expanded(
-                            flex: 2,
-                            child: Container(
-                                color: Colors.red,
-                                child: Column(children: [
-                                  Text(
-                                      "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
-                                ]))))
-                        : (Container()),
+                    (state == 1)
+                        ? (Container())
+                        : (state == 2)
+                            ? (Expanded(
+                                flex: 2,
+                                child: Container(
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                    ]))))
+                            : (Expanded(
+                                flex: 2,
+                                child: Container(
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
+                                    ])))),
                     //Button to join/leave event
                     Align(
-                        alignment: Alignment.bottomRight,
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          HandleJoin(state);
+                        },
                         child: state == 1
-                            ? TextButton(
-                                onPressed: () {
-                                  HandleJoin(state);
-                                },
-                                child: Text('Join Event'),
-                              )
-                            : state == 1
-                                ? TextButton(
-                                    child: Text('Leave Event'),
-                                    onPressed: () {
-                                      HandleJoin(state);
-                                    },
-                                  )
-                                : TextButton(
-                                    child: Text('Delete event'),
-                                    onPressed: () {
-                                      HandleJoin(state);
-                                    },
-                                  )),
+                            ? Text('Join Event')
+                            : state == 2
+                                ? Text('Leave Event')
+                                : Text('Delete Event'),
+                      ),
+                    ),
                   ],
                 );
               } else {

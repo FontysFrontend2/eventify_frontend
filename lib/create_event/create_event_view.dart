@@ -417,7 +417,9 @@ class _NewEventFormState extends State<NewEventForm> {
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople.toString();
+          _maxPeople.toString() +
+          "\nhostId: " +
+          _hostID.toString();
     } else {
       print('puusti2');
       createPostEvent(description, title, 'true', posLat, posLong, _hostID,
@@ -439,7 +441,7 @@ class _NewEventFormState extends State<NewEventForm> {
           _time +
           '\nmax people: ' +
           _maxPeople.toString() +
-          "hostId: " +
+          "\nhostId: " +
           _hostID.toString();
     }
   }
