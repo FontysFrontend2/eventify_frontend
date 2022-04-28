@@ -73,7 +73,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-          height: 200.0,
+          height: 300,
           child: RawScrollbar(
               controller: _scrollController,
               isAlwaysShown: true,
