@@ -1,4 +1,4 @@
-import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+/*import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
 import 'package:flutter/material.dart';
 import '../../apis/models/event_model.dart';
@@ -115,3 +115,4 @@ class _CommonChatFeedViewState extends State<CommonChatFeedView> {
             }));
   }
 }
+*/

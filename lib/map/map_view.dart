@@ -94,9 +94,7 @@ class _MapViewState extends State<MapView> {
             snippet: markers[i].description + '. TAP TO SEE MORE',
             onTap: () =>
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EventCardView(
-                markers[i].id,
-              );
+              return EventCardView(markers[i].id, markers[i].hostID);
             })),
           ),
           icon: BitmapDescriptor.fromBytes(markerIcon) //Icon for Marker

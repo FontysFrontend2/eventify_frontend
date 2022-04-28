@@ -8,8 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EventCardView extends StatefulWidget {
   final int id;
+  final int hostID;
 
-  const EventCardView(this.id);
+  const EventCardView(this.id, this.hostID);
 
   @override
   EventCardState createState() => EventCardState();
@@ -19,6 +20,7 @@ class EventCardState extends State<EventCardView> {
   int state = 1;
   var _token;
   var _eventList;
+  var _userID;
 
   late Future<EventData> futureEventData;
 
@@ -34,9 +36,17 @@ class EventCardState extends State<EventCardView> {
     prefs = await SharedPreferences.getInstance();
     _token = prefs.getString("token");
     _eventList = prefs.getStringList("userEvents");
+    _userID = prefs.getInt("userID");
+    print(widget.hostID.toString());
     print(_token);
-    print(widget.id);
-    if (_eventList!.contains(widget.id.toString())) {
+    print(widget.hostID.toString() + _userID.toString());
+    if (widget.hostID == _userID) {
+      setState(() {
+        print("owner");
+        state = 3;
+      });
+    } else if (widget.hostID != _userID &&
+        _eventList!.contains(widget.id.toString())) {
       setState(() {
         print("contains");
         state = 2;
@@ -60,14 +70,11 @@ class EventCardState extends State<EventCardView> {
 // handle join/leave button
   void HandleJoin(int joined) async {
     prefs = await SharedPreferences.getInstance();
-    if (joined == 1) {
-      _eventList.add(widget.id.toString());
-      joinEvent(widget.id.toString(), _token);
-      print("joining");
-      setState(() {
-        state = 2;
-      });
-    } else {
+    if (joined == 3) {
+      deleteEvent(widget.id.toString());
+      print("Deleting event");
+      Navigator.pop(context);
+    } else if (joined == 2) {
       leaveEvent(widget.id.toString(), _token);
       for (int i = 0; i < _eventList.length; i++) {
         //removeInterestDelete(unselect[i].toString(), userToken);
@@ -76,12 +83,20 @@ class EventCardState extends State<EventCardView> {
           print("removed" + _eventList[i].toString());
           _eventList.removeAt(i);
         }
+        setState(() {
+          print("leaving");
+          state = 1;
+        });
       }
+    } else {
+      _eventList.add(widget.id.toString());
+      joinEvent(widget.id.toString(), _token);
+      print("joining");
       setState(() {
-        print("leaving");
-        state = 1;
+        state = 2;
       });
     }
+
     prefs.setStringList("userEvents", _eventList);
   }
 
@@ -152,32 +167,38 @@ class EventCardState extends State<EventCardView> {
                         : (Container()),
                     Spacer(),
                     // protetcted view when joined
-                    (state == 2)
-                        ? (Expanded(
-                            flex: 2,
-                            child: Container(
-                                color: Colors.red,
-                                child: Column(children: [
-                                  Text(
-                                      "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
-                                ]))))
-                        : (Container()),
+                    (state == 1)
+                        ? (Container())
+                        : (state == 2)
+                            ? (Expanded(
+                                flex: 2,
+                                child: Container(
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                    ]))))
+                            : (Expanded(
+                                flex: 2,
+                                child: Container(
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
+                                    ])))),
                     //Button to join/leave event
                     Align(
                       alignment: Alignment.bottomRight,
-                      child: state == 1
-                          ? TextButton(
-                              onPressed: () {
-                                HandleJoin(state);
-                              },
-                              child: Text('Join Event'),
-                            )
-                          : TextButton(
-                              child: Text('Leave Event'),
-                              onPressed: () {
-                                HandleJoin(state);
-                              },
-                            ),
+                      child: TextButton(
+                        onPressed: () {
+                          HandleJoin(state);
+                        },
+                        child: state == 1
+                            ? Text('Join Event')
+                            : state == 2
+                                ? Text('Leave Event')
+                                : Text('Delete Event'),
+                      ),
                     ),
                   ],
                 );

@@ -36,14 +36,12 @@ class HomeFeedState extends State<HomeFeedView> {
     super.dispose();
   }
 
-  void selectedEvent(int evId) {
+  void selectedEvent(int evId, int hostId) {
     /*setState(() {
       state = evId;
     });*/
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EventCardView(
-        evId,
-      );
+      return EventCardView(evId, hostId);
     }));
   }
 
@@ -71,7 +69,8 @@ class HomeFeedState extends State<HomeFeedView> {
                         itemBuilder: (_, index) => Center(
                           child: EventCardShortView(
                             snapshot.data![index],
-                            () => selectedEvent(snapshot.data![index].id),
+                            () => selectedEvent(snapshot.data![index].id,
+                                snapshot.data![index].hostID),
                           ),
                         ),
                       ),

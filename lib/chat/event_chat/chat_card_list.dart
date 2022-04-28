@@ -5,12 +5,14 @@ import 'chat_view.dart';
 
 class ChatCardList extends StatefulWidget {
   int id;
+  int hostID;
   String title;
   String description;
   String dateTime;
   String locationBased;
   ChatCardList(
       {required this.id,
+      required this.hostID,
       required this.title,
       required this.description,
       required this.dateTime,
@@ -25,7 +27,7 @@ class _ChatCardListState extends State<ChatCardList> {
     return GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ChatView(id: widget.id);
+            return ChatView(id: widget.id, hostID: widget.hostID);
           }));
         },
         child: Card(
