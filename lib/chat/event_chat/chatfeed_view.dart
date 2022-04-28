@@ -104,6 +104,8 @@ class _ChatFeedViewState extends State<ChatFeedView> {
                     itemBuilder: (_, index) => Center(
                           child: ChatCardList(
                               id: int.parse("${snapshot.data![index].id}"),
+                              hostID:
+                                  int.parse("${snapshot.data![index].hostID}"),
                               title: "${snapshot.data![index].title}",
                               description:
                                   "${snapshot.data![index].description}",

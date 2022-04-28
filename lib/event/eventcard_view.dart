@@ -8,8 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EventCardView extends StatefulWidget {
   final int id;
+  final int hostID;
 
-  const EventCardView(this.id);
+  const EventCardView(this.id, this.hostID);
 
   @override
   EventCardState createState() => EventCardState();
@@ -19,6 +20,7 @@ class EventCardState extends State<EventCardView> {
   int state = 1;
   var _token;
   var _eventList;
+  var _userID;
 
   late Future<EventData> futureEventData;
 
@@ -34,9 +36,17 @@ class EventCardState extends State<EventCardView> {
     prefs = await SharedPreferences.getInstance();
     _token = prefs.getString("token");
     _eventList = prefs.getStringList("userEvents");
+    _userID = prefs.getInt("userID");
+    print(widget.hostID.toString());
     print(_token);
-    print(widget.id);
-    if (_eventList!.contains(widget.id.toString())) {
+    print(widget.hostID.toString() + _userID.toString());
+    if (widget.hostID == _userID) {
+      setState(() {
+        print("owner");
+        state = 3;
+      });
+    } else if (widget.hostID != _userID &&
+        _eventList!.contains(widget.id.toString())) {
       setState(() {
         print("contains");
         state = 2;
@@ -60,14 +70,13 @@ class EventCardState extends State<EventCardView> {
 // handle join/leave button
   void HandleJoin(int joined) async {
     prefs = await SharedPreferences.getInstance();
-    if (joined == 1) {
-      _eventList.add(widget.id.toString());
-      joinEvent(widget.id.toString(), _token);
-      print("joining");
+    if (joined == 3) {
+      deleteEvent(widget.id.toString());
+      print("Deleting event");
       setState(() {
-        state = 2;
+        Navigator.pop(context);
       });
-    } else {
+    } else if (joined == 2) {
       leaveEvent(widget.id.toString(), _token);
       for (int i = 0; i < _eventList.length; i++) {
         //removeInterestDelete(unselect[i].toString(), userToken);
@@ -77,11 +86,18 @@ class EventCardState extends State<EventCardView> {
           _eventList.removeAt(i);
         }
       }
+    } else {
+      _eventList.add(widget.id.toString());
+      joinEvent(widget.id.toString(), _token);
+      print("joining");
       setState(() {
-        print("leaving");
-        state = 1;
+        state = 2;
       });
     }
+    setState(() {
+      print("leaving");
+      state = 1;
+    });
     prefs.setStringList("userEvents", _eventList);
   }
 
@@ -164,21 +180,27 @@ class EventCardState extends State<EventCardView> {
                         : (Container()),
                     //Button to join/leave event
                     Align(
-                      alignment: Alignment.bottomRight,
-                      child: state == 1
-                          ? TextButton(
-                              onPressed: () {
-                                HandleJoin(state);
-                              },
-                              child: Text('Join Event'),
-                            )
-                          : TextButton(
-                              child: Text('Leave Event'),
-                              onPressed: () {
-                                HandleJoin(state);
-                              },
-                            ),
-                    ),
+                        alignment: Alignment.bottomRight,
+                        child: state == 1
+                            ? TextButton(
+                                onPressed: () {
+                                  HandleJoin(state);
+                                },
+                                child: Text('Join Event'),
+                              )
+                            : state == 1
+                                ? TextButton(
+                                    child: Text('Leave Event'),
+                                    onPressed: () {
+                                      HandleJoin(state);
+                                    },
+                                  )
+                                : TextButton(
+                                    child: Text('Delete event'),
+                                    onPressed: () {
+                                      HandleJoin(state);
+                                    },
+                                  )),
                   ],
                 );
               } else {

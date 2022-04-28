@@ -2,6 +2,7 @@ import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const CreateEventView());
 
@@ -37,6 +38,7 @@ class _NewEventFormState extends State<NewEventForm> {
   String _posLong = '';
   String _date = '';
   String _time = '';
+  String _hostID = '';
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -50,6 +52,19 @@ class _NewEventFormState extends State<NewEventForm> {
     nameController.dispose();
     descriptionController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    loadHostID();
+    super.initState();
+  }
+
+  // fetch user id and place it to hostID when creating new event
+  void loadHostID() async {
+    prefs = await SharedPreferences.getInstance();
+    _hostID = prefs.getInt("userID").toString();
+    print(_hostID);
   }
 
 // SCREEN:
@@ -388,7 +403,7 @@ class _NewEventFormState extends State<NewEventForm> {
     print('puusti');
     if (!_useLocation) {
       print('puusti1');
-      createPostEvent(description, title, 'false', '0', '0', "0", maxPeople,
+      createPostEvent(description, title, 'false', '0', '0', _hostID, maxPeople,
           "2", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
@@ -405,7 +420,7 @@ class _NewEventFormState extends State<NewEventForm> {
           _maxPeople.toString();
     } else {
       print('puusti2');
-      createPostEvent(description, title, 'true', posLat, posLong, "0",
+      createPostEvent(description, title, 'true', posLat, posLong, _hostID,
           maxPeople, "2", "2022-05-14T08:34:59.506", "false");
       infoTestString = '\nname: ' +
           title +
@@ -423,7 +438,9 @@ class _NewEventFormState extends State<NewEventForm> {
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople.toString();
+          _maxPeople.toString() +
+          "hostId: " +
+          _hostID.toString();
     }
   }
 }
