@@ -30,7 +30,6 @@ class ProfilePage extends StatefulWidget {
 class ProfileState extends State<ProfilePage> {
   bool isPlatformDark = false;
   bool hasLoaded = false;
-  var testawt;
 
   late SharedPreferences prefs;
   late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
@@ -43,7 +42,6 @@ class ProfileState extends State<ProfilePage> {
     futureUserFromIdData = await fetchUserFromId(
         id); // VOI TEHDÄ AWAITILLA TAI WIDGETIN BUILDERISSA, ESIMERKKEJÄ: CHATFEED, MAPVIEW, EVENTCARD
     print(futureUserFromIdData.interests);
-    testawt = prefs.getString("token");
     setState(() {
       hasLoaded = true;
     });
@@ -119,12 +117,12 @@ class ProfileState extends State<ProfilePage> {
             const SizedBox(height: 24),
             password(user),
             const SizedBox(height: 25),*/
-                      eventChatNot(),
+                      /*eventChatNot(),
                       const SizedBox(height: 25),
                       interestChatNot(),
                       const SizedBox(height: 25),
                       feedNot(),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 25),*/
                       Container(
                         padding: EdgeInsets.only(left: 60, right: 60),
                         child: ElevatedButton(
@@ -156,10 +154,6 @@ class ProfileState extends State<ProfilePage> {
   Widget name(UserData user) => Column(
         children: [
           Text(
-            "test token: " + testawt,
-            style: TextStyle(fontSize: 10),
-          ),
-          Text(
             user.name,
             style: TextStyle(fontSize: 24),
           ),
@@ -169,10 +163,10 @@ class ProfileState extends State<ProfilePage> {
             style: TextStyle(color: Colors.grey, fontSize: 10),
           ),
           SizedBox(height: 15),
-          Text(
+          /*Text(
             'Seppo asuu Pihlajakadulla',
             style: TextStyle(color: Colors.grey, fontSize: 20),
-          ),
+          ),*/
         ],
       );
 

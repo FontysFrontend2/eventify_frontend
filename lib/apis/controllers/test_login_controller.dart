@@ -9,8 +9,8 @@ late SharedPreferences prefs;
 
 Future fetchTestToken() async {
   final response = await http.get(Uri.parse(
-      'http://office.pepr.com:25252/login?email=testemail1@test.com&password=testpassword'));
-
+      'http://office.pepr.com:25252/login?email=frontend2@test.com&password=frontend2'));
+  print(response.body);
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

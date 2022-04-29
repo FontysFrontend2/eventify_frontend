@@ -21,7 +21,7 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   final Set<Marker> markerlist = new Set(); //markers for google map
   _MapViewState();
-  bool _filtered = false;
+  bool _filtered = true;
   late Set<Marker> markers;
   late BitmapDescriptor customIcon;
   var interestList;
@@ -75,15 +75,19 @@ class _MapViewState extends State<MapView> {
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/jake.png', 120);
     List<EventData> markers = [];
+    allMarkers.clear();
     if (_filtered) {
-      markers = await fetchAllEventsData();
-    } //we store the response in a list
-    else {
+      print("filtered");
       markers = await fetchEventsFromInterestsList(
           interestList); // later interestList when its having it
+    } //we store the response in a list
+    else {
+      print("not filtered");
+      markers = await fetchAllEventsData();
     }
     // Set markers on list
     for (int i = 0; i < markers.length; i++) {
+      print(markers[i].id);
       LatLng latlng = new LatLng(markers[i].latitude!, markers[i].longitude!);
       allMarkers.add(Marker(
           markerId: MarkerId(markers[i].id.toString()),
@@ -160,14 +164,14 @@ class _MapViewState extends State<MapView> {
                     onChanged: (String? newValue) {
                       setState(() {
                         _filterValue = newValue!;
-                        if (_filterValue == 'INTERESTS') {
+                        if (_filtered) {
                           _filtered = false;
+                          print(_filtered);
                         } else {
                           _filtered = true;
+                          print(_filtered);
                         }
-                        setState(() {
-                          loadmarkers();
-                        });
+                        loadmarkers();
                       });
                     },
                     items: <String>['ALL', 'INTERESTS']
