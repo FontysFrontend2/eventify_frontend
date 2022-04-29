@@ -11,20 +11,27 @@ class SelectTags extends StatefulWidget {
 
 class _SelectTagsState extends State<SelectTags> {
   final List _selecteCategorys = [];
+  final List _selecteCategoryNames = [];
+  final List bothLists = [];
   late List interestListFromApi = []; // Interest List from database
 
   late Future<List<InterestData>> futureAllInterestsData;
 
-  void _onCategorySelected(bool selected, categoryId) {
+  void _onCategorySelected(bool selected, categoryId, caregoryName) {
+    bothLists.clear();
     if (selected == true) {
       setState(() {
         _selecteCategorys.add(categoryId);
+        _selecteCategoryNames.add(caregoryName);
       });
     } else {
       setState(() {
         _selecteCategorys.remove(categoryId);
+        _selecteCategoryNames.remove(categoryId);
       });
     }
+    bothLists.add(_selecteCategorys);
+    bothLists.add(_selecteCategoryNames);
   }
 
   loadInterests() async {
@@ -57,13 +64,15 @@ class _SelectTagsState extends State<SelectTags> {
                               .contains(interestListFromApi[index].id),
                           onChanged: (bool? selected) {
                             _onCategorySelected(
-                                selected!, interestListFromApi[index].id);
+                                selected!,
+                                interestListFromApi[index].id,
+                                interestListFromApi[index].name);
                           },
                           title: Text(interestListFromApi[index].name),
                         );
                       }),
                   ElevatedButton(
-                    onPressed: () => Navigator.pop(context, _selecteCategorys),
+                    onPressed: () => Navigator.pop(context, bothLists),
                     child: const Text('Select'),
                   ),
                 ]))

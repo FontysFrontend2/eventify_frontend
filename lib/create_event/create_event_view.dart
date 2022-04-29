@@ -33,7 +33,10 @@ class _NewEventFormState extends State<NewEventForm> {
   int _maxPeople = 1;
   bool _useLocation = false;
   String infoTestString = '';
-  List _tags = ["0"];
+  List _tags = [
+    ["0"],
+    [""]
+  ];
   double _posLat = 0;
   double _posLong = 0;
   String _date = '';
@@ -158,7 +161,7 @@ class _NewEventFormState extends State<NewEventForm> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
-        Text(_tags.toString()),
+        Text(_tags[1].toString()),
       ])
     ]);
   }
@@ -310,7 +313,7 @@ class _NewEventFormState extends State<NewEventForm> {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
                   sendData(nameController.text, descriptionController.text,
-                      _tags, _posLat, _posLong, _date, _time, _maxPeople);
+                      _tags[0], _posLat, _posLong, _date, _time, _maxPeople);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

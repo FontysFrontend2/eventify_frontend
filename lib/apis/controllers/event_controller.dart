@@ -82,12 +82,15 @@ Future<List<EventData>> fetchEventsFromInterestsList(
   } else {
     prefsNoInterestData = true;
   }
+  late List jsonResponseOffline;
   print(interests);
-  final response = await http
-      .get(Uri.parse('http://office.pepr.com:25252/Event/GetEventsByInterest'));
+  final response = await http.get(
+      Uri.parse('http://office.pepr.com:25252/Event/GetEventsByInterest/'));
   //here send given interests-list to server in query/header/whatever they'll make it to be.
 
   if (response.statusCode == 200 && response.body != '[]') {
+    print('Request succeed, using database');
+    print(response.body);
     prefs.setString("allEventsFromAllInterests", json.encode(allEvents));
     List jsonResponse = json.decode(response.body);
     return jsonResponse.map((data) => new EventData.fromJson(data)).toList();
