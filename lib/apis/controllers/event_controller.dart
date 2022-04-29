@@ -115,23 +115,57 @@ Future<List<EventData>> fetchEventsFromInterestsList(
 Future<EventData> createPostEvent(
   String description,
   String title,
-  String locationBased,
-  String latitude,
-  String longitude,
-  String hostId,
-  String maxPeople,
-  String minPeople,
+  List tagList,
+  bool locationBased,
+  double latitude,
+  double longitude,
+  int hostId,
+  int maxPeople,
+  int minPeople,
   String startEvent,
-  String hasStarted,
+  bool hasStarted,
 ) async {
+  print(description +
+      " " +
+      title +
+      " " +
+      tagList.toString() +
+      " " +
+      locationBased.toString() +
+      " " +
+      latitude.toString() +
+      " " +
+      longitude.toString() +
+      " " +
+      hostId.toString() +
+      " " +
+      maxPeople.toString() +
+      " " +
+      minPeople.toString() +
+      " " +
+      startEvent +
+      " " +
+      hasStarted.toString());
   final response = await http.post(
-      Uri.parse(
-          'http://office.pepr.com:25252/Event?description=$description&title=$title&locationbased=$locationBased&latitude=$latitude&longitude=$longitude&hostid=$hostId&maxPeople=$maxPeople&minPeople=$minPeople&startevent=$startEvent&hasstarted=$hasStarted'),
+      Uri.parse('http://office.pepr.com:25252/Event/CreateEvent'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: '[0]');
-
+      body: jsonEncode({
+        "description": description,
+        "interests": tagList,
+        "members": [0],
+        "title": title,
+        "locationBased": locationBased,
+        "latitude": latitude,
+        "longitude": longitude,
+        "hostID": hostId,
+        "maxPeople": maxPeople,
+        "minPeople": minPeople,
+        "startEvent": startEvent,
+        "hasStarted": hasStarted
+      }));
+  print(json.encode(response.body));
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
