@@ -26,9 +26,9 @@ class _ChatCardListState extends State<ChatCardList> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+          /*Navigator.push(context, MaterialPageRoute(builder: (context) {
             return ChatView(id: widget.id, hostID: widget.hostID);
-          }));
+          }));*/
         },
         child: Card(
             color: Colors.green[50],

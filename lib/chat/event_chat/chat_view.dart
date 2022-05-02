@@ -11,8 +11,9 @@ import 'chat_info.dart';
 
 class ChatView extends StatefulWidget {
   final int id;
-  final int hostID;
-  ChatView({required this.id, required this.hostID});
+  final int hostId;
+  final String room;
+  ChatView({required this.id, required this.hostId, required this.room});
 
   @override
   _ChatViewState createState() => _ChatViewState();
@@ -84,7 +85,7 @@ class _ChatViewState extends State<ChatView> {
                           print("pushed");
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return EventCardView(widget.id, widget.hostID);
+                            return EventCardView(widget.id, widget.hostId);
                           }));
                         },
                         child: FutureBuilder<EventData>(

@@ -1,16 +1,15 @@
-/*import 'package:eventify_frontend/apis/controllers/event_controller.dart';
-import 'package:eventify_frontend/chat/event_chat/chat_card_list.dart';
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:flutter/material.dart';
-import '../../apis/models/event_model.dart';
+import 'chat_card.dart';
 
-class CommonChatFeedView extends StatefulWidget {
-  const CommonChatFeedView({Key? key}) : super(key: key);
+class ChatFeedView extends StatefulWidget {
+  const ChatFeedView({Key? key}) : super(key: key);
 
   @override
-  _CommonChatFeedViewState createState() => _CommonChatFeedViewState();
+  _ChatFeedViewState createState() => _ChatFeedViewState();
 }
 
-class _CommonChatFeedViewState extends State<CommonChatFeedView> {
+class _ChatFeedViewState extends State<ChatFeedView> {
   late Future<List> futureAllEventsData;
 
   @override
@@ -34,7 +33,7 @@ class _CommonChatFeedViewState extends State<CommonChatFeedView> {
           flexibleSpace: SafeArea(
             child: Container(
               color: Colors.amber,
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: Row(
                 children: <Widget>[
                   /*IconButton(
@@ -100,14 +99,20 @@ class _CommonChatFeedViewState extends State<CommonChatFeedView> {
                 return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (_, index) => Center(
-                          child: ChatCardList(
+                        child: ChatCard(snapshot.data![index])
+                        //int.parse("${snapshot.data![index].id}"),
+                        //snapshot.data![index].id.toString()),
+
+                        /*ChatCardList(
                               id: int.parse("${snapshot.data![index].id}"),
+                              hostID:
+                                  int.parse("${snapshot.data![index].hostID}"),
                               title: "${snapshot.data![index].title}",
                               description:
                                   "${snapshot.data![index].description}",
                               dateTime: "${snapshot.data![index].startEvent}",
                               locationBased:
-                                  "${snapshot.data![index].locationBased}"),
+                                  "${snapshot.data![index].locationBased}"),*/
                         ));
               } else {
                 return Center(child: CircularProgressIndicator());
@@ -115,4 +120,3 @@ class _CommonChatFeedViewState extends State<CommonChatFeedView> {
             }));
   }
 }
-*/
