@@ -1,16 +1,11 @@
-import 'dart:convert';
-
-import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/user_model.dart';
-import 'package:eventify_frontend/create_event/create_event_view.dart';
-import 'package:eventify_frontend/create_event/select_location.dart';
-import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/chat/event_chat/chatfeed_view.dart';
+import 'package:eventify_frontend/create_event/create_event_view.dart';
+import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
 import 'package:eventify_frontend/profile/profile_view.dart';
-import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -111,7 +106,7 @@ class MyAppState extends State<MyApp> {
   // code here
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Expanded(flex: 2, child: ChatFeedView()),
+    Expanded(flex: 2, child: ChatFeed()),
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
     Expanded(flex: 2, child: LoginView()),

@@ -26,9 +26,9 @@ class _ChatCardListState extends State<ChatCardList> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+          /*Navigator.push(context, MaterialPageRoute(builder: (context) {
             return ChatView(id: widget.id, hostID: widget.hostID);
-          }));
+          }));*/
         },
         child: Card(
             color: Colors.green[50],
@@ -47,12 +47,13 @@ class _ChatCardListState extends State<ChatCardList> {
                     Expanded(
                       child: Row(
                         children: <Widget>[
-                          SizedBox(
+                          Container(
                             width: 16,
+                            color: Colors.orange,
                           ),
                           Expanded(
                             child: Container(
-                              color: Colors.transparent,
+                              color: Colors.lightBlue,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -80,12 +81,14 @@ class _ChatCardListState extends State<ChatCardList> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    Container(
                       width: 12,
+                      color: Colors.yellowAccent,
                     ),
                     Center(
                         child: Column(children: [
                       Container(
+                        color: Colors.amberAccent,
                         child: Text(
                           widget.dateTime.substring(0, 10),
                           style: TextStyle(
@@ -93,8 +96,9 @@ class _ChatCardListState extends State<ChatCardList> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         height: 12,
+                        color: Colors.red,
                       ),
                       Container(
                         alignment: Alignment.bottomRight,
@@ -105,8 +109,9 @@ class _ChatCardListState extends State<ChatCardList> {
                               ))
                             : (Container()),
                       ),
-                      SizedBox(
+                      Container(
                         width: 12,
+                        color: Colors.green,
                       ),
                     ]))
                   ],

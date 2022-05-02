@@ -1,24 +1,23 @@
+import 'package:eventify_frontend/chat/interest_chat/interest_view.dart';
 import 'package:flutter/material.dart';
-import 'chat_view.dart';
 
-class ChatCard extends StatelessWidget {
-  final event;
+class InterestCard extends StatelessWidget {
+  final interest;
 
-  const ChatCard(this.event, {Key? key}) : super(key: key);
+  const InterestCard(this.interest, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Color.fromARGB(255, 152, 190, 154),
+        color: const Color.fromARGB(255, 152, 190, 154),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         child: InkWell(
           splashColor: Colors.green,
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChatView(
-                  id: event.id, hostId: event.hostID, room: event.title);
+              return InterestChatView(id: int.parse(interest), room: interest);
             }));
           },
           child: Padding(
@@ -30,14 +29,8 @@ class ChatCard extends StatelessWidget {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    Text(event.title.toString()),
+                    Text(interest.toString()),
                     const SizedBox(height: 10),
-                    Text(
-                      event.description.toString(),
-                      style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
                   ],
                 )),
           ),
