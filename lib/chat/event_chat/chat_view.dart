@@ -4,10 +4,7 @@ import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
-
-import 'chat_card_list.dart';
-import 'chat_message.dart';
-import 'chat_info.dart';
+import '../chat_message.dart';
 
 class ChatView extends StatefulWidget {
   final int id;

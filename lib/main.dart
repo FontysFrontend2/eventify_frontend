@@ -36,26 +36,14 @@ class MyAppState extends State<MyApp> {
   late SharedPreferences prefs;
   late bool isPlatformDark;
 
-  void testLoginSkip() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      if (prefs.getString("token")!.length > 20) {
-        _authState = true;
-      } else {
-        _authState = false;
-      }
-      retrieve();
-    });
-  }
-
   retrieve() async {
     prefs = await SharedPreferences.getInstance();
 // get user info from api. Get user ID later in any class from json.encode(prefs.getString("userID"));
-    var testawt = await fetchTestToken();
-    prefs.setString("token", testawt);
-    print(testawt.toString());
+    //var testawt = await fetchTestToken();
+    String token = prefs.getString("jwt").toString();
+    print('token: ' + token);
     futureUserFromToken = await fetchUserFromToken(
-        testawt); // Later this should be done when anbd only when login is done
+        token); // Later this should be done when anbd only when login is done
     //String tring = json.encode(futureUserFromIdData);
     List<String> interestListFromIdData =
         futureUserFromToken.interests.map((s) => s.toString()).toList();
@@ -86,7 +74,7 @@ class MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    testLoginSkip();
+    // here function to check if jwt is valid, if not: authstate = false, if yes = auth_state = true
     super.initState();
   }
 
@@ -109,8 +97,6 @@ class MyAppState extends State<MyApp> {
     Expanded(flex: 2, child: ChatFeed()),
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: LoginView()),
-    Expanded(flex: 2, child: RegisterationView()),
     Expanded(flex: 2, child: CreateEventView()),
   ];
 
@@ -128,18 +114,17 @@ class MyAppState extends State<MyApp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Spacer(),
-                                  SizedBox(child: TestButtons(context)),
                                   IconButton(
                                       alignment: Alignment.center,
                                       onPressed: () => {
                                             _navState = _state,
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProfilePage())).then(
-                                                (_) => {
-                                                      retrieve(),
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProfilePage()))
+                                                .then((_) => {
+                                                      //retrieve(),
                                                       _stateCounter(_navState)
                                                     }),
                                           },
@@ -178,7 +163,7 @@ class MyAppState extends State<MyApp> {
                           onWillPop: () async {
                             if (_state != 1) {
                               setState(() {
-                                retrieve();
+                                //retrieve();
                                 _state = _navState;
                               });
                               return false;
@@ -193,54 +178,20 @@ class MyAppState extends State<MyApp> {
                             // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
                           ]))),
                     )))
-            : (skipAuth(BuildContext, context)));
+            : LoginView(retrieve));
   }
 
-// TEST BUTTONS. WILL BE GONE AFTER IMPLEMETATION
-
-  Widget TestButtons(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          color: Colors.grey,
-          width: 40,
-          child: TextButton(
-              onPressed: () => _stateCounter(3),
-              child: Text('login',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
-        Container(
-          color: Colors.amber,
-          width: 40,
-          child: TextButton(
-              onPressed: () => _stateCounter(4),
-              child: Text('register',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
-      ],
+  /*void login(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => LoginView()),
     );
-  }
-
-  Widget skipAuth(BuildContext, context) {
-    return Builder(
-        builder: (context) => Scaffold(
-            appBar: AppBar(
-              title: const Text('Eventify'),
-              flexibleSpace: SafeArea(
-                child: TextButton(
-                    onPressed: () => {(retrieve())},
-                    child: Text("Skip Login",
-                        style: TextStyle(color: Colors.amber))),
-              ),
-            ),
-            body: Column(
-              children: [Expanded(flex: 2, child: LoginView())],
-            )));
-  }
+    print('result:' + result.toString());
+    setState(() {
+      _authState = true;
+    });
+  }*/
 }

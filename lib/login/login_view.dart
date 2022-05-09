@@ -1,16 +1,14 @@
 import 'package:eventify_frontend/apis/controllers/login_controller.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+class LoginView extends StatelessWidget {
+  //final bool cbfunction;
+  final VoidCallback cb;
 
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
+  LoginView(this.cb, {Key? key}) : super(key: key);
 
-class _LoginViewState extends State<LoginView> {
-  final usernameCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passwdCtrl = TextEditingController();
 
@@ -49,8 +47,15 @@ class _LoginViewState extends State<LoginView> {
               autocorrect: false,
             ),
             ElevatedButton(
-              onPressed: () {
-                loginUser(emailCtrl.text, passwdCtrl.text);
+              onPressed: () async {
+                var status = await loginUser(emailCtrl.text, passwdCtrl.text);
+                if (status == 'success') {
+                  cb();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(status.toString())),
+                  );
+                }
               },
               child: const Text('Submit'),
             ),
@@ -59,7 +64,7 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return RegisterationView();
+                    return RegisterationView(cb);
                   }));
                 },
                 child: const Text('Register')),

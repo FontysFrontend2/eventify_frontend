@@ -1,14 +1,11 @@
 import 'package:eventify_frontend/apis/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 
-class RegisterationView extends StatefulWidget {
-  const RegisterationView({Key? key}) : super(key: key);
+class RegisterationView extends StatelessWidget {
+  final VoidCallback cb;
 
-  @override
-  State<RegisterationView> createState() => _RegisterationViewState();
-}
+  RegisterationView(this.cb, {Key? key}) : super(key: key);
 
-class _RegisterationViewState extends State<RegisterationView> {
   final usernameCtrl = TextEditingController();
 
   final emailCtrl = TextEditingController();
@@ -63,8 +60,13 @@ class _RegisterationViewState extends State<RegisterationView> {
             autocorrect: false,
           ),
           ElevatedButton(
-            onPressed: () {
-              registerUser(usernameCtrl.text, emailCtrl.text, passwdCtrl.text);
+            onPressed: () async {
+              var status = await registerUser(
+                  usernameCtrl.text, emailCtrl.text, passwdCtrl.text);
+              if (status == true) {
+                cb();
+                Navigator.pop(context);
+              }
             },
             child: const Text('Submit'),
           ),

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 late SharedPreferences prefs;
 
-Future<String> registerUser(
+Future<bool> registerUser(
     String username, String email, String password) async {
   final response =
       await http.post(Uri.parse('http://office.pepr.com:25252/Login/Register'),
@@ -20,8 +20,9 @@ Future<String> registerUser(
           }));
 
   if (response.statusCode == 200) {
-    print('onnistui' + response.body);
-    return response.body;
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('jwt', response.body);
+    return true;
   } else {
     print({
       'username': username,
@@ -29,7 +30,7 @@ Future<String> registerUser(
       'password': password,
     });
     print('epäonnistui' + response.body);
-    return 'Error';
+    return false;
   }
 }
 
@@ -42,8 +43,9 @@ Future<String> loginUser(String email, String password) async {
       });
 
   if (response.statusCode == 200) {
-    print(response.body);
-    return response.body;
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('jwt', response.body);
+    return 'success';
   } else if (response.statusCode == 400) {
     print(response.statusCode);
     return 'invalid input';

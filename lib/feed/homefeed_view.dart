@@ -28,7 +28,8 @@ class HomeFeedState extends State<HomeFeedView> {
     //TO-DO
     //Fetch interest data from sharedpreferences and pass it to fetchEventsFromInterestsList
 
-    futureAllEventsData = fetchEventsFromInterestsList([4]);
+    futureAllEventsData = fetchAllEventsData();
+    //futureAllEventsData = fetchEventsFromInterestsList([4]);
   }
 
   @override
