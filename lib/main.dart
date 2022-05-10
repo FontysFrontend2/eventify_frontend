@@ -1,15 +1,15 @@
-import 'package:eventify_frontend/create_event/create_event_view.dart';
-import 'package:eventify_frontend/create_event/select_location.dart';
-import 'package:eventify_frontend/feed/homefeed_view.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/chat/event_chat/chatfeed_view.dart';
+import 'package:eventify_frontend/create_event/create_event_view.dart';
+import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
 import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
 import 'package:eventify_frontend/profile/profile_view.dart';
-import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'apis/controllers/test_login_controller.dart';
 import 'profile/themes.dart';
 
 // sprint 3
@@ -27,15 +27,39 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _state = 1;
   bool _authState =
-      true; // false: not logged in (show login), true: logged in (show application)
+      false; // false: not logged in (show login), true: logged in (show application)
   int _navState = 1;
   bool settings = false;
+
+  late MyUserData futureUserFromToken;
 
   late SharedPreferences prefs;
   late bool isPlatformDark;
 
   retrieve() async {
     prefs = await SharedPreferences.getInstance();
+// get user info from api. Get user ID later in any class from json.encode(prefs.getString("userID"));
+    //var testawt = await fetchTestToken();
+    String token = prefs.getString("jwt").toString();
+    print('token: ' + token);
+    futureUserFromToken = await fetchUserFromToken(
+        token); // Later this should be done when anbd only when login is done
+    //String tring = json.encode(futureUserFromIdData);
+    List<String> interestListFromIdData =
+        futureUserFromToken.interests.map((s) => s.toString()).toList();
+    List<String> eventListFromIdData =
+        futureUserFromToken.events.map((s) => s.toString()).toList();
+    prefs.setInt("userID", futureUserFromToken.id);
+    prefs.setString("userName", futureUserFromToken.name);
+    prefs.setString("userEmail", futureUserFromToken.email);
+    prefs.setStringList("userInterests", interestListFromIdData);
+    prefs.setStringList("userEvents", eventListFromIdData);
+    print(prefs.getInt("userID")!.toString() +
+        prefs.getString("userName").toString() +
+        prefs.getString("userEmail").toString() +
+        prefs.getStringList("userInterests").toString() +
+        prefs.getStringList("userEvents").toString());
+    // Check theme
     setState(() {
       if (prefs.getString("darkMode") == "true") {
         isPlatformDark = true;
@@ -44,12 +68,13 @@ class MyAppState extends State<MyApp> {
         isPlatformDark = false;
         initTheme = isPlatformDark ? Themes.dark : Themes.light;
       }
+      _authState = true;
     });
   }
 
   @override
   void initState() {
-    retrieve();
+    // here function to check if jwt is valid, if not: authstate = false, if yes = auth_state = true
     super.initState();
   }
 
@@ -57,7 +82,6 @@ class MyAppState extends State<MyApp> {
 
   // State määrittää näytettävän näkymän
   void _stateCounter(int i) {
-    retrieve();
     setState(() {
       _state = i;
       if (i > 2) {
@@ -70,11 +94,9 @@ class MyAppState extends State<MyApp> {
   // code here
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Expanded(flex: 2, child: ChatFeedView()),
+    Expanded(flex: 2, child: ChatFeed()),
     Expanded(flex: 2, child: HomeFeedView()),
     Expanded(flex: 2, child: MapView()),
-    Expanded(flex: 2, child: LoginView()),
-    Expanded(flex: 2, child: RegisterationView()),
     Expanded(flex: 2, child: CreateEventView()),
   ];
 
@@ -92,18 +114,19 @@ class MyAppState extends State<MyApp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Spacer(),
-                                  SizedBox(child: TestButtons(context)),
                                   IconButton(
                                       alignment: Alignment.center,
                                       onPressed: () => {
                                             _navState = _state,
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProfilePage())).then(
-                                                (_) =>
-                                                    _stateCounter(_navState)),
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProfilePage()))
+                                                .then((_) => {
+                                                      //retrieve(),
+                                                      _stateCounter(_navState)
+                                                    }),
                                           },
                                       icon: Image.asset(
                                           "assets/images/user.png",
@@ -140,6 +163,7 @@ class MyAppState extends State<MyApp> {
                           onWillPop: () async {
                             if (_state != 1) {
                               setState(() {
+                                //retrieve();
                                 _state = _navState;
                               });
                               return false;
@@ -154,56 +178,20 @@ class MyAppState extends State<MyApp> {
                             // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
                           ]))),
                     )))
-            : (skipAuth(BuildContext, context)));
+            : LoginPage(cb: retrieve));
   }
 
-// TEST BUTTONS. WILL BE GONE AFTER IMPLEMETATION
-
-  Widget TestButtons(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          color: Colors.grey,
-          width: 40,
-          child: TextButton(
-              onPressed: () => _stateCounter(3),
-              child: Text('login',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
-        Container(
-          color: Colors.amber,
-          width: 40,
-          child: TextButton(
-              onPressed: () => _stateCounter(4),
-              child: Text('register',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black))),
-        ),
-      ],
+  /*void login(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => LoginView()),
     );
-  }
-
-  Widget skipAuth(BuildContext, context) {
-    return Builder(
-        builder: (context) => Scaffold(
-            appBar: AppBar(
-              title: const Text('Eventify'),
-              flexibleSpace: SafeArea(
-                child: TextButton(
-                    onPressed: () => {
-                          setState(() => _authState = true),
-                        },
-                    child: Text("Skip Login",
-                        style: TextStyle(color: Colors.amber))),
-              ),
-            ),
-            body: Column(
-              children: [Expanded(flex: 2, child: LoginView())],
-            )));
-  }
+    print('result:' + result.toString());
+    setState(() {
+      _authState = true;
+    });
+  }*/
 }

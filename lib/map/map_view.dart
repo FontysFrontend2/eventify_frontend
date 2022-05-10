@@ -21,14 +21,17 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   final Set<Marker> markerlist = new Set(); //markers for google map
   _MapViewState();
-  bool _filtered = false;
+  bool _filtered = true;
   late Set<Marker> markers;
   late BitmapDescriptor customIcon;
+  var interestList;
 
   late SharedPreferences prefs;
   late bool isPlatformDark;
   retrieveTheme() async {
     prefs = await SharedPreferences.getInstance();
+    interestList =
+        prefs.getStringList("userInterests")?.map(int.parse).toList();
     setState(() {
       if (prefs.getString("darkMode") == "true") {
         isPlatformDark = true;
@@ -72,9 +75,19 @@ class _MapViewState extends State<MapView> {
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/jake.png', 120);
     List<EventData> markers = [];
-    markers = await fetchAllEventsData(); //we store the response in a list
+    allMarkers.clear();
+    if (_filtered) {
+      print("filtered");
+      markers = await fetchEventsFromInterestsList(
+          interestList); // later interestList when its having it
+    } //we store the response in a list
+    else {
+      print("not filtered");
+      markers = await fetchAllEventsData();
+    }
     // Set markers on list
     for (int i = 0; i < markers.length; i++) {
+      print(markers[i].id);
       LatLng latlng = new LatLng(markers[i].latitude!, markers[i].longitude!);
       allMarkers.add(Marker(
           markerId: MarkerId(markers[i].id.toString()),
@@ -82,8 +95,11 @@ class _MapViewState extends State<MapView> {
           infoWindow: InfoWindow(
             //popup info
             title: markers[i].title,
-            snippet: markers[i].description + ' tap to join',
-            onTap: () => selectEvent(markers[i].id.toString()),
+            snippet: markers[i].description + '. TAP TO SEE MORE',
+            onTap: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EventCardView(markers[i].id, markers[i].hostID);
+            })),
           ),
           icon: BitmapDescriptor.fromBytes(markerIcon) //Icon for Marker
           ));
@@ -114,7 +130,7 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     if (_state == 'load') {
       return Center(child: CircularProgressIndicator());
-    } else if (_state == '') {
+    } else {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
           body: GoogleMap(
@@ -148,11 +164,14 @@ class _MapViewState extends State<MapView> {
                     onChanged: (String? newValue) {
                       setState(() {
                         _filterValue = newValue!;
-                        if (_filterValue == 'INTERESTS') {
+                        if (_filtered) {
                           _filtered = false;
+                          print(_filtered);
                         } else {
                           _filtered = true;
+                          print(_filtered);
                         }
+                        loadmarkers();
                       });
                     },
                     items: <String>['ALL', 'INTERESTS']
@@ -163,9 +182,6 @@ class _MapViewState extends State<MapView> {
                       );
                     }).toList(),
                   ))));
-    } else {
-      return Scaffold(
-          body: Column(children: [Expanded(flex: 2, child: EventCardView(1))]));
     }
   }
 }

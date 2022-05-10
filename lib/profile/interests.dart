@@ -1,8 +1,11 @@
-import 'package:eventify_frontend/a_data/interests_data.dart';
-import 'package:eventify_frontend/services/models/all_interests_model.dart';
+import 'package:eventify_frontend/apis/controllers/interest_controller.dart';
+import 'package:eventify_frontend/apis/controllers/user_controller.dart';
+import 'package:eventify_frontend/apis/models/interest_model.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InterestsCheckBoxList extends StatefulWidget {
   const InterestsCheckBoxList();
@@ -11,39 +14,58 @@ class InterestsCheckBoxList extends StatefulWidget {
 }
 
 class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
-  late Future<List<AllInterestsData>> checkBoxListTileModel;
+  List select = [];
+  List unselect = [];
+  var userToken;
+  late Future<List<InterestData>> checkBoxListTileModel;
   late List copyList = [];
-  late List checkBoxList = [];
+  var interestListFromApi = []; // Interest List from database
+  var userInterests; // Users chosen interests
   late ScrollController _controller;
+  var token;
   bool save_option = false;
 
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    loadInterests();
+    loadData();
     super.initState();
   }
 
-  loadInterests() async {
-    // Get marker image from assets and set marker size
-    List<AllInterestsData> interests = [];
-    interests = await fetchAllInterestsData();
+  late SharedPreferences prefs;
+
+  udpateInterests() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("userInterests", userInterests);
+  }
+
+  loadData() async {
+    prefs = await SharedPreferences.getInstance();
+    userToken = prefs.getString("token");
+    userInterests = prefs.getStringList("userInterests");
+    interestListFromApi.clear();
+    copyList.clear();
+    token = prefs.getString("token");
+    // Hakee kaikki interestit apilta ja listaa ne
+    List<InterestData> interests = [];
+    interests = await fetchAllInterestData();
     for (int i = 0; i < interests.length; i++) {
-      checkBoxList.add({
+      interestListFromApi.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': true
+        'isCheck':
+            userInterests.contains(interests[i].id.toString()) ? true : false
       });
-
+      // copyList is for referral when choosing new interests
       copyList.add({
         'interestId': interests[i].id,
         'name': interests[i].name,
         'description': interests[i].description,
-        'isCheck': true
+        'isCheck': userInterests.contains(i.toString()) ? true : false
       });
     }
-    print(checkBoxList);
+    print(interestListFromApi);
     setState(() {});
   }
 
@@ -51,7 +73,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-          height: 200.0,
+          height: 300,
           child: RawScrollbar(
               controller: _scrollController,
               isAlwaysShown: true,
@@ -64,7 +86,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
                   crossAxisCount: 2,
                   childAspectRatio: (3 / 1),
                 ),
-                itemCount: checkBoxList.length,
+                itemCount: interestListFromApi.length,
                 itemBuilder: (BuildContext context, int index) {
                   // ignore: unnecessary_new
                   return new Card(
@@ -77,13 +99,13 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
                             dense: true,
                             //font change
                             title: Text(
-                              checkBoxList[index]["name"],
+                              interestListFromApi[index]["name"],
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5),
                             ),
-                            value: checkBoxList[index]["isCheck"]!,
+                            value: interestListFromApi[index]["isCheck"],
                             onChanged: (bool? val) {
                               itemChange(val!, index);
                             })
@@ -110,42 +132,40 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
   void itemChange(bool val, int index) {
     int a = 0;
     setState(() {
-      checkBoxList[index]["isCheck"] = val;
-      print(checkBoxList[index]["isCheck"].toString() +
+      print(interestListFromApi[index]["name"]);
+      interestListFromApi[index]["isCheck"] = val;
+      print(interestListFromApi[index]["isCheck"].toString() +
           copyList[index]["isCheck"].toString());
-
-      for (int i = 0; i < checkBoxList.length; i++) {
-        if (checkBoxList[i]["isCheck"] != copyList[i]["isCheck"]) {
-          a += 1;
-          print(a);
-        }
-      }
-      if (a == 0) {
-        save_option = false;
-      } else {
-        save_option = true;
-      }
+      save_option = true;
       copyList[index]["isCheck"] = val;
+      if (val) {
+        select.add(interestListFromApi[index]["interestId"].toString());
+      } else {
+        unselect.add((interestListFromApi[index]["interestId"].toString()));
+      }
     });
   }
 
+// This will send a list of all chosen interest id:s to api. Test in application to see
   void sendInterests() {
-    List sendList = [];
     setState(() {
-      for (int i = 0; i < checkBoxList.length; i++) {
-        if (checkBoxList[i]['isCheck'] == true) {
-          sendList.add(checkBoxList[i]);
-        }
+      for (int i = 0; i < select.length; i++) {
+        addInterestPost(select[i], userToken);
+        userInterests.add(select[i]);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Processing Data: ' + select[i]),
+        ));
+      } //postData(checkBoxListTileModel, token);
+      // add checkboxlisttilemodel to uri and authorisation key to body
+      for (int i = 0; i < unselect.length; i++) {
+        print("unselect: " + unselect.toString());
+        removeInterestDelete(unselect[i].toString(), userToken);
+        userInterests.remove(unselect[i]);
       }
-      String listString = '';
-      for (int i = 0; i < sendList.length; i++) {
-        listString += sendList[i]['interestId'].toString();
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Processing Data: ' + listString),
-      ));
-      //postData(checkBoxListTileModel);
-      save_option = false;
+      select.clear();
+      unselect.clear();
+      udpateInterests();
+      loadData();
     });
   }
 }
@@ -159,30 +179,3 @@ class CheckBoxListTileModel {
   CheckBoxListTileModel(
       {this.interestId, this.name, this.description, this.isCheck});
 }
-/*
-  List<CheckBoxListTileModel> getUsers() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(interestId: 1, title: "Football", isCheck: true),
-      CheckBoxListTileModel(interestId: 2, title: "Gaming", isCheck: false),
-      CheckBoxListTileModel(interestId: 3, title: "Studying", isCheck: false),
-      CheckBoxListTileModel(interestId: 4, title: "Swimming", isCheck: false),
-      CheckBoxListTileModel(interestId: 5, title: "Drinking", isCheck: false),
-      CheckBoxListTileModel(interestId: 6, title: "Golf", isCheck: true),
-      CheckBoxListTileModel(interestId: 7, title: "Airsoft", isCheck: true),
-      CheckBoxListTileModel(interestId: 8, title: "Beach Ball", isCheck: false),
-      CheckBoxListTileModel(interestId: 9, title: "CS GO", isCheck: false),
-      CheckBoxListTileModel(
-          interestId: 4, title: "League Of Legends", isCheck: false),
-      CheckBoxListTileModel(interestId: 10, title: "Coding", isCheck: false),
-      CheckBoxListTileModel(interestId: 11, title: "Hacking", isCheck: true),
-      CheckBoxListTileModel(interestId: 12, title: "Travelling", isCheck: true),
-      CheckBoxListTileModel(interestId: 13, title: "Bars", isCheck: false),
-      CheckBoxListTileModel(interestId: 14, title: "Walking", isCheck: false),
-      CheckBoxListTileModel(interestId: 15, title: "Shouting", isCheck: false),
-      CheckBoxListTileModel(interestId: 16, title: "Talking", isCheck: false),
-      CheckBoxListTileModel(
-          interestId: 17, title: "Board Games", isCheck: true),
-    ];
-  }
-}
-*/

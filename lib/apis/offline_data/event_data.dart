@@ -91,7 +91,7 @@ List eventsWithLocation = [
   }
 ];
 
-const eventsOfInterest = [
+const allEvents = [
   {
     "id": 0,
     "description": "Lets play games from home together online",

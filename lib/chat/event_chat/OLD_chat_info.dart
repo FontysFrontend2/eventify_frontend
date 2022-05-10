@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:eventify_frontend/a_data/event_from_id.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_members.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
 import 'package:eventify_frontend/map/map_view.dart';
-import 'package:eventify_frontend/apis/models/event_from_id.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../a_data/events_data.dart';
 import '../../create_event/select_location.dart';
 
 class ChatInfo extends StatelessWidget {

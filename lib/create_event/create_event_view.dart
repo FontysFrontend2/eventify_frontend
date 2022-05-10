@@ -1,7 +1,8 @@
+import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/create_event/select_location.dart';
 import 'package:eventify_frontend/create_event/select_tags.dart';
-import 'package:eventify_frontend/services/models/post_event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const CreateEventView());
 
@@ -29,14 +30,18 @@ class _NewEventFormState extends State<NewEventForm> {
   //and use it to retrieve the current value
   // of the TextField.
 
-  String _maxPeople = '1';
+  int _maxPeople = 1;
   bool _useLocation = false;
   String infoTestString = '';
-  String _tags = '';
-  String _posLat = '';
-  String _posLong = '';
+  List _tags = [
+    ["0"],
+    [""]
+  ];
+  double _posLat = 0;
+  double _posLong = 0;
   String _date = '';
   String _time = '';
+  int _hostID = 0;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -52,24 +57,40 @@ class _NewEventFormState extends State<NewEventForm> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    loadHostID();
+    super.initState();
+  }
+
+  // fetch user id and place it to hostID when creating new event
+  void loadHostID() async {
+    prefs = await SharedPreferences.getInstance();
+    _hostID = prefs.getInt("userID")!;
+    print(_hostID);
+  }
+
 // SCREEN:
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      viewTitle(context),
-      Form(
-          key: _formKey,
-          child: Column(children: [
-            titleForm(context),
-            descriptionForm(context),
-            selectTagsForm(context),
-            selectLocationForm(context),
-            maxPeopleForm(context),
-            dateTimeForm(context),
-            submit(context),
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(title: Text('Create Event')),
+      body: (Column(children: [
+        /*viewTitle(context)*/
+        Form(
+            key: _formKey,
+            child: Column(children: [
+              titleForm(context),
+              descriptionForm(context),
+              selectTagsForm(context),
+              selectLocationForm(context),
+              maxPeopleForm(context),
+              dateTimeForm(context),
+              submit(context),
+            ]))
+      ])),
+    );
   }
 
 // WIDGETS:
@@ -140,7 +161,7 @@ class _NewEventFormState extends State<NewEventForm> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
-        Text(_tags),
+        Text(_tags[1].toString()),
       ])
     ]);
   }
@@ -197,7 +218,7 @@ class _NewEventFormState extends State<NewEventForm> {
       children: [
         const Text('Max People: ',
             style: TextStyle(fontWeight: FontWeight.bold)),
-        DropdownButton<String>(
+        DropdownButton<int>(
           value: _maxPeople,
           icon: const Icon(
             Icons.arrow_drop_down_circle,
@@ -212,16 +233,15 @@ class _NewEventFormState extends State<NewEventForm> {
             height: 2,
             color: Colors.deepPurpleAccent,
           ),
-          onChanged: (String? newValue) {
+          onChanged: (int? newValue) {
             setState(() {
               _maxPeople = newValue!;
             });
           },
-          items: <String>['1', '2', '3', '4', '5']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
+          items: <int>[1, 2, 3, 4, 5].map<DropdownMenuItem<int>>((int value) {
+            return DropdownMenuItem<int>(
               value: value,
-              child: Text(value),
+              child: Text(value.toString()),
             );
           }).toList(),
         )
@@ -267,13 +287,13 @@ class _NewEventFormState extends State<NewEventForm> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          if (_tags == '' || _tags == '[]' || _tags == 'null') {
+          if (_tags.isEmpty || _tags == [0] || _tags == 'null') {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                   content: Text('You have to set at least one tag!')),
             );
           } else {
-            if (_useLocation && (_posLat == '' || _posLat == 'null')) {
+            if (_useLocation && (_posLat == 0 || _posLat == null)) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content: Text(
@@ -293,7 +313,7 @@ class _NewEventFormState extends State<NewEventForm> {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
                   sendData(nameController.text, descriptionController.text,
-                      _posLat, _posLong, _date, _time, _maxPeople);
+                      _tags[0], _posLat, _posLong, _date, _time, _maxPeople);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -356,11 +376,11 @@ class _NewEventFormState extends State<NewEventForm> {
       MaterialPageRoute(builder: (context) => const SelectLocation()),
     );
 
-    var _latLong = '$result'.split(", ");
+    var _latLong = result.toString().split(", ");
 
     setState(() {
-      _posLat = _latLong[0];
-      _posLong = _latLong[1];
+      _posLat = double.parse(_latLong[0]);
+      _posLong = double.parse(_latLong[1]);
     });
   }
 
@@ -373,37 +393,39 @@ class _NewEventFormState extends State<NewEventForm> {
       // Create the SelectionScreen in the next step.
       MaterialPageRoute(builder: (context) => const SelectTags()),
     );
-    print('result:' + '$result');
+    print('result:' + result.toString());
     setState(() {
-      _tags = '$result';
+      _tags = result;
     });
   }
 
   // sends data to database
-  void sendData(String title, String description, String posLat, String posLong,
-      String date, String time, String maxPeople) {
+  void sendData(String title, String description, List tagList, double posLat,
+      double posLong, String date, String time, int maxPeople) {
     print('puusti');
     if (!_useLocation) {
       print('puusti1');
-      createPostEvent(description, title, 'false', '0', '0', "0", maxPeople,
-          "1", "2022-05-14T08:34:59.506", "false");
+      createPostEvent(description, title, tagList, false, 0, 0, _hostID,
+          maxPeople, 2, "2022-05-14T08:34:59.506", false);
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
           description +
           '\nLocationBased = false' +
           '\nTags: ' +
-          _tags +
+          _tags.toString() +
           '\ndate: ' +
           _date +
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople.toString();
+          _maxPeople.toString() +
+          "\nhostId: " +
+          _hostID.toString();
     } else {
       print('puusti2');
-      createPostEvent(description, title, 'true', posLat, posLong, "0",
-          maxPeople, "1", "2022-05-14T08:34:59.506", "false");
+      createPostEvent(description, title, tagList, true, posLat, posLong,
+          _hostID, maxPeople, 2, "2022-05-14T08:34:59.506", false);
       infoTestString = '\nname: ' +
           title +
           '\ndescription: ' +
@@ -414,13 +436,15 @@ class _NewEventFormState extends State<NewEventForm> {
           '\nLong: ' +
           posLong.toString() +
           '\nTags: ' +
-          _tags +
+          _tags.toString() +
           '\ndate: ' +
           _date +
           '\ntime: ' +
           _time +
           '\nmax people: ' +
-          _maxPeople.toString();
+          _maxPeople.toString() +
+          "\nhostId: " +
+          _hostID.toString();
     }
   }
 }

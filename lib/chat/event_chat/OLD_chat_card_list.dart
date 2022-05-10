@@ -5,12 +5,14 @@ import 'chat_view.dart';
 
 class ChatCardList extends StatefulWidget {
   int id;
+  int hostID;
   String title;
   String description;
   String dateTime;
   String locationBased;
   ChatCardList(
       {required this.id,
+      required this.hostID,
       required this.title,
       required this.description,
       required this.dateTime,
@@ -24,9 +26,9 @@ class _ChatCardListState extends State<ChatCardList> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ChatView(id: widget.id);
-          }));
+          /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return ChatView(id: widget.id, hostID: widget.hostID);
+          }));*/
         },
         child: Card(
             color: Colors.green[50],
@@ -45,28 +47,30 @@ class _ChatCardListState extends State<ChatCardList> {
                     Expanded(
                       child: Row(
                         children: <Widget>[
-                          SizedBox(
+                          Container(
                             width: 16,
+                            color: Colors.orange,
                           ),
                           Expanded(
                             child: Container(
-                              color: Colors.transparent,
+                              color: Colors.lightBlue,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     widget.title,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 1,
+                                    softWrap: false,
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   SizedBox(
                                     height: 6,
                                   ),
-                                  Text(
-                                      widget.description.length > 100
-                                          ? widget.description
-                                                  .substring(0, 100) +
-                                              ' ...'
-                                          : widget.description,
+                                  Text(widget.description,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                      softWrap: false,
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.grey.shade600)),
@@ -77,12 +81,14 @@ class _ChatCardListState extends State<ChatCardList> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    Container(
                       width: 12,
+                      color: Colors.yellowAccent,
                     ),
                     Center(
                         child: Column(children: [
                       Container(
+                        color: Colors.amberAccent,
                         child: Text(
                           widget.dateTime.substring(0, 10),
                           style: TextStyle(
@@ -90,8 +96,9 @@ class _ChatCardListState extends State<ChatCardList> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      Container(
                         height: 12,
+                        color: Colors.red,
                       ),
                       Container(
                         alignment: Alignment.bottomRight,
@@ -102,8 +109,9 @@ class _ChatCardListState extends State<ChatCardList> {
                               ))
                             : (Container()),
                       ),
-                      SizedBox(
+                      Container(
                         width: 12,
+                        color: Colors.green,
                       ),
                     ]))
                   ],
