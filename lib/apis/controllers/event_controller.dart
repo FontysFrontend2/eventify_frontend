@@ -74,9 +74,12 @@ Future<List<EventData>> fetchEventByInterest(int interestId) async {
 }
 
 //Get event by all your interests'
-Future<List<EventData>> fetchEventsFromInterestsList(
-    List<int> interests) async {
+Future<List<EventData>> fetchEventsFromInterestsList() async {
   prefs = await SharedPreferences.getInstance();
+  String interests = prefs.getStringList("userInterests").toString();
+  interests =
+      interests.replaceAll("[", "").replaceAll("]", "").replaceAll(" ", "");
+  print(interests);
   if (prefs.getString("allEventsFromAllInterests") != null) {
     prefsNoInterestData = false;
   } else {
@@ -84,11 +87,11 @@ Future<List<EventData>> fetchEventsFromInterestsList(
   }
   late List jsonResponseOffline;
   print(interests);
-  final response = await http.get(
-      Uri.parse('http://office.pepr.com:25252/Event/GetEventsByInterest/'));
+  final response = await http.get(Uri.parse(
+      'http://office.pepr.com:25252/Event/GetEventsByInterests?ids=$interests'));
   //here send given interests-list to server in query/header/whatever they'll make it to be.
 
-  if (response.statusCode == 200 && response.body != '[]') {
+  if (response.statusCode == 200) {
     print('Request succeed, using database');
     print(response.body);
     prefs.setString("allEventsFromAllInterests", json.encode(allEvents));

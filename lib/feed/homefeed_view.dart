@@ -18,7 +18,7 @@ class HomeFeedView extends StatefulWidget {
 class HomeFeedState extends State<HomeFeedView> {
   int state = -1;
 
-  late Future<List> futureAllEventsData;
+  late Future<List> futureEventsWithInterest;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class HomeFeedState extends State<HomeFeedView> {
     //TO-DO
     //Fetch interest data from sharedpreferences and pass it to fetchEventsFromInterestsList
 
-    futureAllEventsData = fetchAllEventsData();
+    futureEventsWithInterest = fetchEventsFromInterestsList();
     //futureAllEventsData = fetchEventsFromInterestsList([4]);
   }
 
@@ -54,7 +54,7 @@ class HomeFeedState extends State<HomeFeedView> {
         /*child: (state == -1)
           ?*/
         child: FutureBuilder<List>(
-            future: futureAllEventsData,
+            future: futureEventsWithInterest,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return RefreshIndicator(

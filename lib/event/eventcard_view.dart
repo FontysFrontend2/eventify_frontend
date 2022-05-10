@@ -34,7 +34,7 @@ class EventCardState extends State<EventCardView> {
   late SharedPreferences prefs;
   void LoadData() async {
     prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString("token");
+    _token = prefs.getString("jwt");
     _eventList = prefs.getStringList("userEvents");
     _userID = prefs.getInt("userID");
     print(widget.hostID.toString());

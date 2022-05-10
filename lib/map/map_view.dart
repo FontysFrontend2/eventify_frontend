@@ -78,8 +78,8 @@ class _MapViewState extends State<MapView> {
     allMarkers.clear();
     if (_filtered) {
       print("filtered");
-      markers = await fetchEventsFromInterestsList(
-          interestList); // later interestList when its having it
+      markers =
+          await fetchEventsFromInterestsList(); // later interestList when its having it
     } //we store the response in a list
     else {
       print("not filtered");
