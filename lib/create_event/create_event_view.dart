@@ -368,11 +368,8 @@ class _NewEventFormState extends State<NewEventForm> {
 
 // gets location from location class
   void _showLocationSelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
     final result = await Navigator.push(
       context,
-      // Create the SelectionScreen in the next step.
       MaterialPageRoute(builder: (context) => const SelectLocation()),
     );
 
