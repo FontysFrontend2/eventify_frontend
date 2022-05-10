@@ -75,7 +75,22 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     // here function to check if jwt is valid, if not: authstate = false, if yes = auth_state = true
+    checkAuth();
     super.initState();
+  }
+
+  void checkAuth() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString("jwt") != null) {
+        if (prefs.getString("jwt")!.length > 20) {
+          _authState = true;
+        }
+      } else {
+        _authState = false;
+      }
+      retrieve();
+    });
   }
 
   dynamic initTheme;
@@ -119,13 +134,13 @@ class MyAppState extends State<MyApp> {
                                       onPressed: () => {
                                             _navState = _state,
                                             Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProfilePage()))
-                                                .then((_) => {
-                                                      //retrieve(),
-                                                      _stateCounter(_navState)
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfilePage())).then(
+                                                (_) => {
+                                                      _stateCounter(_navState),
+                                                      checkAuth()
                                                     }),
                                           },
                                       icon: Image.asset(

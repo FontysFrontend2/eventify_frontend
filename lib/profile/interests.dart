@@ -41,7 +41,7 @@ class InterestsCheckBoxListState extends State<InterestsCheckBoxList> {
 
   loadData() async {
     prefs = await SharedPreferences.getInstance();
-    userToken = prefs.getString("token");
+    userToken = prefs.getString("jwt");
     userInterests = prefs.getStringList("userInterests");
     interestListFromApi.clear();
     copyList.clear();
