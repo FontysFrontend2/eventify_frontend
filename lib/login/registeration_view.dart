@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:eventify_frontend/login/select_profile_picture.dart';
 import 'package:flutter/material.dart';
 
 import '../apis/controllers/login_controller.dart';
@@ -39,7 +40,22 @@ class RegisterationView extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 60,
+              height: 20,
+            ),
+            ClipOval(
+              child: Material(
+                color: Colors.transparent,
+                child: Ink.image(
+                  image: NetworkImage(
+                      "https://media.istockphoto.com/photos/fi/covid-19-tai-2019-ncov-koronaviruksen-k%C3%A4site-id1212142629"),
+                  fit: BoxFit.cover,
+                  width: 128,
+                  height: 128,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Form(
               key: _formKey,
@@ -52,7 +68,7 @@ class RegisterationView extends StatelessWidget {
                           maxLines: 1,
                           controller: usernameCtrl,
                           decoration: InputDecoration(
-                            hintText: 'First name',
+                            hintText: 'Username',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
