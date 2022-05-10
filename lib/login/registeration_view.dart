@@ -18,6 +18,17 @@ class RegisterationView extends StatelessWidget {
 
   final passwdCtrl = TextEditingController();
 
+  void _showPictureSelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => const selectProfilePicture()),
+    );
+    print('result:' + result.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,17 +53,22 @@ class RegisterationView extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ClipOval(
-              child: Material(
-                color: Colors.transparent,
-                child: Ink.image(
-                  image: NetworkImage(
-                      "https://media.istockphoto.com/photos/fi/covid-19-tai-2019-ncov-koronaviruksen-k%C3%A4site-id1212142629"),
-                  fit: BoxFit.cover,
-                  width: 128,
-                  height: 128,
+            IconButton(
+              icon: ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Ink.image(
+                    image: AssetImage(
+                      "assets/images/profile_pictures/default_image.png",
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
+              iconSize: 100,
+              onPressed: () {
+                _showPictureSelection(context);
+              },
             ),
             const SizedBox(
               height: 20,
