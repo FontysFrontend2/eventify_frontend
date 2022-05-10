@@ -128,27 +128,6 @@ Future<EventData> createPostEvent(
   String startEvent,
   bool hasStarted,
 ) async {
-  print(description +
-      " " +
-      title +
-      " " +
-      tagList.toString() +
-      " " +
-      locationBased.toString() +
-      " " +
-      latitude.toString() +
-      " " +
-      longitude.toString() +
-      " " +
-      hostId.toString() +
-      " " +
-      maxPeople.toString() +
-      " " +
-      minPeople.toString() +
-      " " +
-      startEvent +
-      " " +
-      hasStarted.toString());
   final response = await http.post(
       Uri.parse('http://office.pepr.com:25252/Event/CreateEvent'),
       headers: <String, String>{

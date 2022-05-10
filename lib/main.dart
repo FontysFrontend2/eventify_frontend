@@ -178,7 +178,7 @@ class MyAppState extends State<MyApp> {
                             // TÄSTÄ ALASPÄIN KAIKKI KOODI POISTUU MYÖHEMMIN!!!!!!!!!!!!!
                           ]))),
                     )))
-            : LoginView(retrieve));
+            : LoginPage(cb: retrieve));
   }
 
   /*void login(BuildContext context) async {

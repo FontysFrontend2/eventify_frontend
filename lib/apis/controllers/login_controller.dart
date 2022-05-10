@@ -6,6 +6,7 @@ late SharedPreferences prefs;
 
 Future<bool> registerUser(
     String username, String email, String password) async {
+  print(username + email + password);
   final response =
       await http.post(Uri.parse('http://office.pepr.com:25252/Login/Register'),
           headers: <String, String>{
