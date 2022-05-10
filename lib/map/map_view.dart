@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 
+import 'package:location/location.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapView extends StatefulWidget {
@@ -25,6 +27,9 @@ class _MapViewState extends State<MapView> {
   late Set<Marker> markers;
   late BitmapDescriptor customIcon;
   var interestList;
+  bool not_found = true;
+
+  Location _location = Location();
 
   late SharedPreferences prefs;
   late bool isPlatformDark;
@@ -43,6 +48,7 @@ class _MapViewState extends State<MapView> {
 
   @override
   void initState() {
+    not_found = true;
     loadmarkers();
     retrieveTheme();
     super.initState();
@@ -110,13 +116,23 @@ class _MapViewState extends State<MapView> {
   }
 
   static const _initialCameraPosition =
-      CameraPosition(target: LatLng(65.012615, 25.471453), zoom: 11.5);
+      CameraPosition(target: LatLng(0, 0), zoom: 1);
 
   late GoogleMapController _googleMapController;
   void _onMapCreated(GoogleMapController controller) {
     _googleMapController = controller;
     if (isPlatformDark) {
       _googleMapController.setMapStyle(map_style_dark);
+    }
+    if (not_found) {
+      _location.onLocationChanged.listen((l) {
+        _googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 15),
+          ),
+        );
+        not_found = false;
+      });
     }
   }
 
@@ -134,6 +150,7 @@ class _MapViewState extends State<MapView> {
       return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
           body: GoogleMap(
+            myLocationEnabled: true,
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             initialCameraPosition: _initialCameraPosition,

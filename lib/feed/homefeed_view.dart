@@ -65,7 +65,23 @@ class HomeFeedState extends State<HomeFeedView> {
                   },
                   child: Stack(
                     children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: 40,
+                        color: Colors.blue,
+                        child: //Row(
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            //children: [
+                            Text(
+                          "Events of your interests",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        //Icon(Icons.arrow_circle_down_rounded)
+                        //  ],
+                        //  ),
+                      ),
                       ListView.builder(
+                        padding: EdgeInsets.only(top: 40),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (_, index) => Center(
                           child: EventCardShortView(
