@@ -60,6 +60,14 @@ class ProfileState extends State<ProfilePage> {
     });
   }
 
+  logOut() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.remove("jwt");
+      Navigator.pop(context);
+    });
+  }
+
   retrieveTheme() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -87,14 +95,28 @@ class ProfileState extends State<ProfilePage> {
                 ? (ListView(
                     physics: BouncingScrollPhysics(),
                     children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                            onPressed: changeTheme,
-                            icon: Icon(
-                              Icons.bedtime_outlined,
-                              size: 40,
-                            )),
+                      Row(
+                        children: [
+                          Spacer(),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                                onPressed: logOut,
+                                icon: Icon(
+                                  Icons.key_off,
+                                  size: 40,
+                                )),
+                          ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                                onPressed: changeTheme,
+                                icon: Icon(
+                                  Icons.bedtime_outlined,
+                                  size: 40,
+                                )),
+                          ),
+                        ],
                       ),
                       // This need to be on database to implement
                       Profile(
