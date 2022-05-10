@@ -1,37 +1,74 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../apis/controllers/chat_controller.dart';
 import '../chat_message.dart';
 
 class ChatView extends StatefulWidget {
   final int id;
   final int hostId;
   final String room;
-  ChatView({required this.id, required this.hostId, required this.room});
+
+  ChatView({required this.id, required this.room, required this.hostId});
 
   @override
   _ChatViewState createState() => _ChatViewState();
 }
 
 class _ChatViewState extends State<ChatView> {
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  late SharedPreferences prefs;
+  dynamic hubConnection;
+  late List<ChatMessage> messages = [];
+  late String user;
+
+  final scrollController = ScrollController();
+  final textController = TextEditingController();
 
   late Future<EventData> futureEventFromId;
 
+  void messageReceived(List<Object>? args) async {
+    final String user = args![0].toString();
+    final String message = args[1].toString();
+    messages.add(ChatMessage.short(user, message));
+    print(message.toString() + 'received');
+    Timer(const Duration(milliseconds: 200), () => jump());
+    setState(() {});
+  }
+
+  void getHistory() async {
+    messages = await getMessageHistory(widget.room);
+    Timer(const Duration(milliseconds: 200), () => jump());
+    setState(() {});
+  }
+
+  void join() async {
+    hubConnection = await getService();
+    hubConnection.on('receiveMessage', messageReceived);
+    await joinRoom(widget.room, user);
+  }
+
+  void initUser() async {
+    prefs = await SharedPreferences.getInstance();
+    user = prefs.getString('userName').toString();
+  }
+
+  void jump() {
+    if (scrollController.hasClients) {
+      final position = scrollController.position.maxScrollExtent;
+      scrollController.jumpTo(position);
+    }
+  }
+
   @override
   void initState() {
+    initUser();
+    join();
+    getHistory();
     super.initState();
     futureEventFromId = fetchEventFromId(widget.id);
   }
@@ -155,26 +192,29 @@ class _ChatViewState extends State<ChatView> {
             ListView.builder(
               itemCount: messages.length,
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              physics: NeverScrollableScrollPhysics(),
+              controller: scrollController,
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Container(
                   padding:
-                      EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+                      EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 5),
                   child: Align(
-                    alignment: (messages[index].messageType == "receiver"
-                        ? Alignment.topLeft
-                        : Alignment.topRight),
+                    alignment:
+                        (messages[index].user == user // ==prefs username?
+                            ? Alignment.topRight
+                            : Alignment.topLeft),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: (messages[index].messageType == "receiver"
-                            ? Colors.grey.shade500
-                            : Colors.blue[200]),
+                        color:
+                            (messages[index].user == user // == prefs username?
+                                ? Colors.blue[200]
+                                : Colors.grey.shade500),
                       ),
                       padding: EdgeInsets.all(16),
                       child: Text(
-                        messages[index].messageContent,
+                        messages[index].message, //message
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
@@ -213,6 +253,7 @@ class _ChatViewState extends State<ChatView> {
                 ),
                 Expanded(
                   child: TextField(
+                    controller: textController,
                     decoration: InputDecoration(
                         hintText: "Write message...",
                         hintStyle: TextStyle(color: Colors.black54),
@@ -223,7 +264,12 @@ class _ChatViewState extends State<ChatView> {
                   width: 15,
                 ),
                 FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //send message to server
+                    print(user);
+                    sendMessage(user, textController.text, widget.room);
+                    textController.text = '';
+                  },
                   child: Icon(
                     Icons.send,
                     color: Colors.white,

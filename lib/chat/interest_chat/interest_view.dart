@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../chat_message.dart';
 
@@ -16,7 +17,7 @@ class InterestChatView extends StatefulWidget {
 }
 
 class _InterestChatViewState extends State<InterestChatView> {
-  List<ChatMessage> messages = [
+  /*List<ChatMessage> messages = [
     ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
     ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
     ChatMessage(
@@ -26,6 +27,12 @@ class _InterestChatViewState extends State<InterestChatView> {
     ChatMessage(
         messageContent: "Is there any thing wrong?", messageType: "sender"),
   ];
+*/
+
+  late SharedPreferences prefs;
+  dynamic hubConnection;
+  late List messages = [];
+  late String user;
 
   @override
   Widget build(BuildContext context) {

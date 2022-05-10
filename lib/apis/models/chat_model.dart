@@ -1,24 +1,24 @@
 class MessageData {
+  final int id;
   final String user;
   final String room;
   final String message;
-  final bool join;
-  final bool leave;
+  final String timeStamp;
 
   const MessageData({
+    required this.id,
     required this.user,
     required this.room,
     required this.message,
-    required this.join,
-    required this.leave,
+    required this.timeStamp,
   });
 
   factory MessageData.fromJson(Map<String, dynamic> json) {
     return MessageData(
+        id: json['id'],
         user: json['user'],
         room: json['room'],
         message: json['message'],
-        join: json['join'],
-        leave: json['leave']);
+        timeStamp: json['join']);
   }
 }
