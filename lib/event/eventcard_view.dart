@@ -145,11 +145,38 @@ class EventCardState extends State<EventCardView> {
                     ),
 
                     //Event description
-                    Text(
-                      'Tähän tietoa eventistä niin paljon kuin tarvis... jhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
-                          snapshot.data!.description.toString(),
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    Row(children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Text(
+                          'Tähän tietoa eventistä niin paljon kuin tarvis... jhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
+                              snapshot.data!.description.toString(),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      // protetcted view when joined
+                      (state == 1)
+                          ? (Container())
+                          : (state == 2)
+                              ? (Container(
+                                  alignment: Alignment.centerRight,
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                  color: Colors.red,
+                                  child: Column(children: [
+                                    Text(
+                                        "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                  ])))
+                              : (Container(
+                                  alignment: Alignment.centerRight,
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                  color: Colors.red,
+                                  child: Column(children: [
+                                    Text(
+                                        "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
+                                  ]))),
+                    ]),
 
                     //Just a spacer container, any better solution?
                     Container(
@@ -167,37 +194,35 @@ class EventCardState extends State<EventCardView> {
                         : (Container()),
                     Spacer(),
                     // protetcted view when joined
-                    (state == 1)
-                        ? (Container())
-                        : (state == 2)
-                            ? (Expanded(
-                                flex: 2,
-                                child: Container(
-                                    color: Colors.red,
-                                    child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
-                                    ]))))
-                            : (Expanded(
-                                flex: 2,
-                                child: Container(
-                                    color: Colors.red,
-                                    child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
-                                    ])))),
+
                     //Button to join/leave event
                     Align(
-                      alignment: Alignment.bottomRight,
-                      child: TextButton(
-                        onPressed: () {
-                          HandleJoin(state);
-                        },
-                        child: state == 1
-                            ? Text('Join Event')
-                            : state == 2
-                                ? Text('Leave Event')
-                                : Text('Delete Event'),
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: 200,
+                        height: 60,
+                        color: Colors.amber,
+                        child: TextButton(
+                          onPressed: () {
+                            HandleJoin(state);
+                          },
+                          child: state == 1
+                              ? Text(
+                                  'Join Event',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : state == 2
+                                  ? Text('Leave Event',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold))
+                                  : Text('Delete Event',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ),
                   ],
