@@ -1,8 +1,11 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_card.dart';
 import 'package:eventify_frontend/chat/interest_chat/interest_card.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../apis/controllers/chat_controller.dart';
 
 class ChatFeed extends StatefulWidget {
   const ChatFeed({Key? key}) : super(key: key);
@@ -30,14 +33,24 @@ class _ChatFeedState extends State<ChatFeed> {
     interests = prefs.getStringList("userInterests");
   }
 
+  void startConnection() async {
+    connectService();
+  }
+
+  void stopConnection() async {
+    disconnectService();
+  }
+
   @override
   void initState() {
     super.initState();
+    startConnection();
     futureAllEventsData = fetchAllEventsData();
   }
 
   @override
   void dispose() {
+    stopConnection();
     super.dispose();
   }
 
@@ -50,43 +63,47 @@ class _ChatFeedState extends State<ChatFeed> {
           backgroundColor: Colors.white,
           flexibleSpace: SafeArea(
             child: Container(
-                color: Colors.amber,
+                height: 50,
                 //padding: const EdgeInsets.all(1),
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
+                      child: Container(
+                        color: Themes.fifth,
+                        margin: const EdgeInsets.all(3),
+                        height: 40,
+                        /*shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
-                        ),
+                        ),*/
                         child: InkWell(
                           onTap: () {
                             changeView(1);
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: const Center(
                             child: Text(
                               "Events",
-                              style: TextStyle(fontSize: 28),
+                              style: TextStyle(fontSize: 24),
                             ),
                           ),
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
+                      child: Container(
+                        color: Themes.fifth,
+                        margin: const EdgeInsets.all(3),
+                        height: 40,
+                        /*shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
-                        ),
+                        ),*/
                         child: InkWell(
                           onTap: () {
                             changeView(2);
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: const Center(
                             child: Text(
                               "Interests",
-                              style: TextStyle(fontSize: 28),
+                              style: TextStyle(fontSize: 24),
                             ),
                           ),
                         ),

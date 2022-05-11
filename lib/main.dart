@@ -3,11 +3,11 @@ import 'package:eventify_frontend/chat/event_chat/chatfeed_view.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
 import 'package:eventify_frontend/feed/homefeed_view.dart';
 import 'package:eventify_frontend/login/login_view.dart';
-import 'package:eventify_frontend/login/registeration_view.dart';
 import 'package:eventify_frontend/map/map_view.dart';
 import 'package:eventify_frontend/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 
 import 'apis/controllers/test_login_controller.dart';
 import 'profile/themes.dart';
@@ -127,7 +127,11 @@ class MyAppState extends State<MyApp> {
             ? (Builder(
                 builder: (context) => Scaffold(
                       appBar: AppBar(
-                          title: const Text('Eventify'),
+                          title: const Text('Eventify',
+                              style: const TextStyle(
+                                color: Themes.first,
+                              )),
+                          backgroundColor: Themes.appBar,
                           flexibleSpace: SafeArea(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -148,8 +152,9 @@ class MyAppState extends State<MyApp> {
                                                     }),
                                           },
                                       icon: Image.asset(
-                                          "assets/images/user.png",
-                                          color: Colors.amber)),
+                                        "assets/images/user.png",
+                                        color: Themes.first,
+                                      )),
                                 ]),
                           )),
 
@@ -161,20 +166,21 @@ class MyAppState extends State<MyApp> {
                           BottomNavigationBarItem(
                             icon: Icon(Icons.format_list_bulleted),
                             label: 'Events',
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Themes.white,
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.home),
                             label: 'Home',
-                            backgroundColor: Colors.pink,
+                            backgroundColor: Themes.white,
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.map_outlined),
                             label: 'Map',
-                            backgroundColor: Colors.purple,
+                            backgroundColor: Themes.white,
                           ),
                         ],
-                        selectedItemColor: Colors.amber[800],
+                        unselectedItemColor: Themes.third,
+                        selectedItemColor: Themes.second,
                         onTap: _stateCounter,
                       ),
                       body: WillPopScope(

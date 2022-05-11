@@ -1,3 +1,4 @@
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -21,7 +22,9 @@ class EventCardShortView extends StatelessWidget {
     //bool limitedPeople = d.maxPeople != 0;
     return Center(
       child: Card(
-        color: Colors.pinkAccent,
+        color: Themes.fifth,
+        shadowColor: Themes.fourth,
+        margin: EdgeInsets.all(6.0),
         child: InkWell(
           splashColor: Colors.blue.withAlpha(40),
           onTap: cb,
@@ -38,28 +41,25 @@ class EventCardShortView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 5),
+
                 //Event Description
                 Text(
                   d.description.toString(),
                   style: const TextStyle(
                     overflow: TextOverflow.ellipsis,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
+                const SizedBox(height: 10),
+
+                //joined/max
+                Text(
+                    d.members.length.toString() + '/' + d.maxPeople.toString()),
+
+                const Spacer(),
                 //Event time
                 Text(dmy(d.startEvent)),
-                //Event participant count and max participants
-                /*(limitedPeople)
-                    ? (Text(d['members'].length.toString() +
-                        '/' +
-                        d['maxPeople'].toString()))
-                    : (Container())*/
-                /*
-                //Small map to show location in small scale.
-                (locationBased)
-                    ? (SizedBox(
-                        height: 80,
-                        child: EventLocation(d['latitude'], d['longitude'])))
-                    : (Container()),*/
               ],
             ),
           ),

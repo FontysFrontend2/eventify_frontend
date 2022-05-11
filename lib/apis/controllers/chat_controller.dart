@@ -1,4 +1,3 @@
-import 'package:eventify_frontend/apis/models/chat_model.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,6 +12,10 @@ final hubConnection = HubConnectionBuilder().withUrl(serverUrl).build();
 Future connectService() async {
   await hubConnection.start();
   return hubConnection;
+}
+
+Future disconnectService() async {
+  await hubConnection.stop();
 }
 
 Future getService() async {
@@ -43,8 +46,6 @@ Future<List<ChatMessage>> getMessageHistory(String room) async {
   for (int i = 0; i < responseList.length; i++) {
     messages.add(ChatMessage.fromJson(responseList[i]));
   }
-
-  print(messages);
 
   return messages;
 }

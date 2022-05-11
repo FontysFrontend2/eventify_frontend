@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/event/eventcard_view.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../apis/controllers/chat_controller.dart';
@@ -14,7 +14,9 @@ class ChatView extends StatefulWidget {
   final int hostId;
   final String room;
 
-  ChatView({required this.id, required this.room, required this.hostId});
+  const ChatView(
+      {required this.id, required this.room, required this.hostId, Key? key})
+      : super(key: key);
 
   @override
   _ChatViewState createState() => _ChatViewState();
@@ -64,11 +66,15 @@ class _ChatViewState extends State<ChatView> {
     }
   }
 
+  void leave() async {
+    await leaveRoom(widget.room, user);
+  }
+
   @override
   void initState() {
     initUser();
-    join();
     getHistory();
+    jump();
     super.initState();
     futureEventFromId = fetchEventFromId(widget.id);
   }
@@ -84,7 +90,7 @@ class _ChatViewState extends State<ChatView> {
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Themes.appBar,
         flexibleSpace: SafeArea(
           child: Container(
             padding: EdgeInsets.only(right: 16),
@@ -116,7 +122,6 @@ class _ChatViewState extends State<ChatView> {
                       GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          print("pushed");
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return EventCardView(widget.id, widget.hostId);
@@ -145,34 +150,21 @@ class _ChatViewState extends State<ChatView> {
                                               fontWeight: FontWeight.w600),
                                         ),
                                         const Text(
-                                          "Tap Here to see group info",
+                                          "Tap Here to see event info",
                                           style: TextStyle(fontSize: 10),
                                         ),
                                       ],
                                     ),
                                   ),
                                   Expanded(
-                                    child: Row(
-                                      children: [
-                                        Text(snapshot.data!.minPeople
-                                                .toString() +
-                                            "/" +
-                                            snapshot.data!.maxPeople
-                                                .toString()), // <-- Text
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        ImageIcon(
-                                            AssetImage(
-                                                "assets/images/user.png"),
-                                            color: Colors.amber,
-                                            size: 24),
-                                      ],
-                                    ),
+                                    child: Text('1' +
+                                        "/" +
+                                        snapshot.data!.maxPeople
+                                            .toString()), // <-- Text
                                   ),
                                 ]);
                               } else {
-                                return Center(
+                                return const Center(
                                     child: CircularProgressIndicator());
                               }
                             }),
@@ -196,29 +188,44 @@ class _ChatViewState extends State<ChatView> {
               padding: EdgeInsets.only(top: 5, bottom: 5),
               physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Container(
-                  padding:
-                      EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 5),
-                  child: Align(
-                    alignment:
-                        (messages[index].user == user // ==prefs username?
-                            ? Alignment.topRight
-                            : Alignment.topLeft),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color:
-                            (messages[index].user == user // == prefs username?
-                                ? Colors.blue[200]
-                                : Colors.grey.shade500),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        messages[index].message, //message
-                        style: TextStyle(fontSize: 15),
+                return Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 14, right: 14, top: 5, bottom: 5),
+                      child: Align(
+                        alignment:
+                            (messages[index].user == user // ==prefs username?
+                                ? Alignment.topRight
+                                : Alignment.topLeft),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (messages[index].user ==
+                                    user // == prefs username?
+                                ? Themes.fifth
+                                : Themes.fourth),
+                          ),
+                          padding: EdgeInsets.all(16),
+                          child: Text(
+                            messages[index].message, //message
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Align(
+                        alignment: (messages[index].user == user
+                            ? Alignment.topRight
+                            : Alignment.topLeft),
+                        child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                                ((messages[index].user == user
+                                    ? 'You'
+                                    : messages[index].user)),
+                                style: TextStyle(fontSize: 10)))),
+                  ],
                 );
               },
             ),
