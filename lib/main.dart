@@ -49,16 +49,20 @@ class MyAppState extends State<MyApp> {
         futureUserFromToken.interests.map((s) => s.toString()).toList();
     List<String> eventListFromIdData =
         futureUserFromToken.events.map((s) => s.toString()).toList();
+    print("pic: " + futureUserFromToken.profileImg);
+    prefs.setString("userPic", futureUserFromToken.profileImg);
     prefs.setInt("userID", futureUserFromToken.id);
     prefs.setString("userName", futureUserFromToken.name);
     prefs.setString("userEmail", futureUserFromToken.email);
     prefs.setStringList("userInterests", interestListFromIdData);
     prefs.setStringList("userEvents", eventListFromIdData);
-    print(prefs.getInt("userID")!.toString() +
+    print("info" +
+        prefs.getInt("userID")!.toString() +
         prefs.getString("userName").toString() +
         prefs.getString("userEmail").toString() +
         prefs.getStringList("userInterests").toString() +
-        prefs.getStringList("userEvents").toString());
+        prefs.getStringList("userEvents").toString() +
+        prefs.getString("userPic").toString());
     // Check theme
     setState(() {
       if (prefs.getString("darkMode") == "true") {

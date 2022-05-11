@@ -72,7 +72,7 @@ class _SelectTagsState extends State<SelectTags> {
                         );
                       }),
                   ElevatedButton(
-                    onPressed: () => Navigator.pop(context, bothLists),
+                    onPressed: () => Navigator.pop(context, "samdksmkfsdm"),
                     child: const Text('Select'),
                   ),
                 ]))

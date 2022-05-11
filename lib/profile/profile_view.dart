@@ -30,6 +30,7 @@ class ProfilePage extends StatefulWidget {
 class ProfileState extends State<ProfilePage> {
   bool isPlatformDark = false;
   bool hasLoaded = false;
+  String profilePic = "";
 
   late SharedPreferences prefs;
   late UserData futureUserFromIdData; // USER LUOKKA MITEN DATA TALLENTUU
@@ -37,6 +38,7 @@ class ProfileState extends State<ProfilePage> {
 // working thing get user info
   getUserInfo() async {
     prefs = await SharedPreferences.getInstance();
+    profilePic = prefs.getString("userPic")!;
     int id = prefs.getInt(
         "userID")!; // USER ID ON KIRJAUTUMISVAIHEESSA TALLENNETTU SHARED PREFERENSIIN
     futureUserFromIdData = await fetchUserFromId(
@@ -120,8 +122,7 @@ class ProfileState extends State<ProfilePage> {
                       ),
                       // This need to be on database to implement
                       Profile(
-                          path:
-                              "https://media.istockphoto.com/photos/fi/covid-19-tai-2019-ncov-koronaviruksen-k%C3%A4site-id1212142629",
+                          path: profilePic,
                           onClicked: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => EditProfile(
@@ -325,7 +326,7 @@ class Profile extends StatelessWidget {
 
   //profile picture
   Widget buildImage() {
-    final image = NetworkImage(path);
+    final image = AssetImage(path);
 
     return ClipOval(
       child: Material(
