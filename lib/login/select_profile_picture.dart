@@ -14,14 +14,20 @@ class selectProfilePicture extends StatefulWidget {
 }
 
 class selectProfilePictureState extends State<selectProfilePicture> {
-  String selected = "default_picture";
+  String selected = "defau  lt_picture";
   late ScrollController _controller;
   List images = [
     "assets/images/profile_pictures/ava_1.png",
-    "assets/images/profile_pictures/default_image.png",
-    "assets/images/profile_pictures/default_image.png",
-    "assets/images/profile_pictures/default_image.png",
-    "assets/images/profile_pictures/default_image.png"
+    "assets/images/profile_pictures/ava_2.png",
+    "assets/images/profile_pictures/ava_3.png",
+    "assets/images/profile_pictures/ava_4.png",
+    "assets/images/profile_pictures/ava_5.png",
+    "assets/images/profile_pictures/ava_6.png",
+    "assets/images/profile_pictures/ava_7.png",
+    "assets/images/profile_pictures/ava_9.png",
+    "assets/images/profile_pictures/ava_10.png",
+    "assets/images/profile_pictures/ava_11.png",
+    "assets/images/profile_pictures/ava_12.png"
   ];
 
   final ScrollController _scrollController = ScrollController();
@@ -53,7 +59,7 @@ class selectProfilePictureState extends State<selectProfilePicture> {
                   // ignore: unnecessary_new
                   return new IconButton(
                     icon: Image.asset(images[index]),
-                    onPressed: () => Navigator.pop(context, "samdksmkfsdm"),
+                    onPressed: () => Navigator.pop(context, images[index]),
                   );
                 },
               ))),

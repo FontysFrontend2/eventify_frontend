@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 late SharedPreferences prefs;
 
 Future<bool> registerUser(
-    String username, String email, String password) async {
-  print(username + email + password);
+    String username, String email, String password, String profileImg) async {
+  print("register: " + username + email + password + profileImg);
   final response =
       await http.post(Uri.parse('http://office.pepr.com:25252/Login/Register'),
           headers: <String, String>{
@@ -16,8 +16,7 @@ Future<bool> registerUser(
             'username': username,
             'email': email,
             'password': password,
-            'profileImg':
-                'https://cdn.cnn.com/cnnnext/dam/assets/131108094532-jeffery-watson.jpg',
+            'profileImg': profileImg,
           }));
 
   if (response.statusCode == 200) {
@@ -29,6 +28,7 @@ Future<bool> registerUser(
       'username': username,
       'email': email,
       'password': password,
+      'image': profileImg,
     });
     print('epäonnistui' + response.body);
     return false;

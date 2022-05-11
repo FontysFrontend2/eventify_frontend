@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../apis/controllers/login_controller.dart';
 
-class RegisterationView extends StatelessWidget {
+class RegisterationView extends StatefulWidget {
+  final VoidCallback cb;
+  const RegisterationView(this.cb, {Key? key}) : super(key: key);
+  RegisterationViewState createState() => RegisterationViewState();
+}
+
+class RegisterationViewState extends State<RegisterationView> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
-
-  final VoidCallback cb;
-
-  RegisterationView(this.cb, {Key? key}) : super(key: key);
+  String picture = "assets/images/profile_pictures/default_image.png";
 
   final usernameCtrl = TextEditingController();
 
@@ -26,7 +29,10 @@ class RegisterationView extends StatelessWidget {
       // Create the SelectionScreen in the next step.
       MaterialPageRoute(builder: (context) => const selectProfilePicture()),
     );
-    print('result:' + result.toString());
+    setState(() {
+      picture = result;
+    });
+    print('result:' + result);
   }
 
   @override
@@ -59,7 +65,7 @@ class RegisterationView extends StatelessWidget {
                   color: Colors.transparent,
                   child: Ink.image(
                     image: AssetImage(
-                      "assets/images/profile_pictures/default_image.png",
+                      picture,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -140,11 +146,11 @@ class RegisterationView extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      var status = await registerUser(
-                          usernameCtrl.text, emailCtrl.text, passwdCtrl.text);
+                      var status = await registerUser(usernameCtrl.text,
+                          emailCtrl.text, passwdCtrl.text, picture);
                       print(status);
                       if (status == true) {
-                        cb();
+                        widget.cb();
                         Navigator.pop(context);
                       }
                     },
