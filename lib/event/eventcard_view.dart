@@ -130,14 +130,6 @@ class EventCardState extends State<EventCardView> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
 
-                    //Joined / max
-                    Text(
-                      //snapshot.data!.members.length().toString()
-                      '1/' + snapshot.data!.maxPeople.toString(),
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-
                     //Just a spacer container, any better solution?
                     Container(
                       width: double.infinity,
@@ -146,8 +138,8 @@ class EventCardState extends State<EventCardView> {
 
                     //Event description
                     Row(children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 2,
+                      Expanded(
+                        flex: 2,
                         child: Text(
                           'Tähän tietoa eventistä niin paljon kuin tarvis... jhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
                               snapshot.data!.description.toString(),
@@ -155,27 +147,47 @@ class EventCardState extends State<EventCardView> {
                         ),
                       ),
                       // protetcted view when joined
-                      (state == 1)
-                          ? (Container())
-                          : (state == 2)
-                              ? (Container(
-                                  alignment: Alignment.centerRight,
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  color: Colors.red,
-                                  child: Column(children: [
-                                    Text(
-                                        "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
-                                  ])))
-                              : (Container(
-                                  alignment: Alignment.centerRight,
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  color: Colors.red,
-                                  child: Column(children: [
-                                    Text(
-                                        "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
-                                  ]))),
+                      Column(children: [
+                        //Joined / max
+                        Text(
+                          snapshot.data!.members.toString() +
+                              "/" +
+                              snapshot.data!.maxPeople.toString(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        (state == 1)
+                            ? (Container(
+                                alignment: Alignment.centerRight,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                height: 200,
+                                color: Colors.red,
+                                child: Column(children: [
+                                  Text(
+                                      "You can see the members of this event when you join in")
+                                ])))
+                            : (state == 2)
+                                ? (Container(
+                                    alignment: Alignment.centerRight,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    height: 200,
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                    ])))
+                                : (Container(
+                                    alignment: Alignment.centerRight,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    height: 200,
+                                    color: Colors.red,
+                                    child: Column(children: [
+                                      Text(
+                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
+                                    ]))),
+                      ]),
                     ]),
 
                     //Just a spacer container, any better solution?
