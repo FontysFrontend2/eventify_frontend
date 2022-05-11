@@ -37,7 +37,6 @@ class _ChatViewState extends State<ChatView> {
     final String user = args![0].toString();
     final String message = args[1].toString();
     messages.add(ChatMessage.short(user, message));
-    print(message.toString() + 'received');
     Timer(const Duration(milliseconds: 200), () => jump());
     setState(() {});
   }

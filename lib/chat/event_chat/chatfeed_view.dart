@@ -52,7 +52,7 @@ class _ChatFeedState extends State<ChatFeed> {
 
   @override
   void dispose() {
-    stopConnection();
+    //stopConnection();
     super.dispose();
   }
 
