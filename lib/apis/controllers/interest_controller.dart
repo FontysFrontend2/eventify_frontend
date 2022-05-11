@@ -17,3 +17,17 @@ Future<List<InterestData>> fetchAllInterestData() async {
         .toList();
   }
 }
+
+Future<InterestData> fetchSpecificInterestData(String id) async {
+  final response =
+      await http.get(Uri.parse('http://office.pepr.com:25252/Interests/$id'));
+  if (response.statusCode == 200 && response.body != '[]') {
+    var jsonResponse = json.decode(response.body);
+    return InterestData.fromJson(jsonResponse);
+    //return jsonResponse.map((data) => InterestData.fromJson(data)).toList();
+  } else {
+    var jsonResponse = json.decode(response.body);
+    return InterestData.fromJson(jsonResponse);
+    ;
+  }
+}
