@@ -4,6 +4,7 @@ import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
 import 'package:eventify_frontend/event/event_creator.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,10 +107,11 @@ class EventCardState extends State<EventCardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Themes.fourth,
         title: Text('EventCard'),
       ),
       body: (Container(
-        color: Colors.lightGreen,
+        color: Themes.white,
         width: double.infinity,
         padding: const EdgeInsets.all(10.0),
         child: FutureBuilder<EventData>(
@@ -143,27 +145,32 @@ class EventCardState extends State<EventCardView> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          'Tähän tietoa eventistä niin paljon kuin tarvis... jhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
-                              snapshot.data!.description.toString(),
+                          snapshot.data!.description.toString(),
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       // protetcted view when joined
                       Column(children: [
                         //Joined / max
-                        Text(
-                          snapshot.data!.members.toString() +
-                              "/" +
-                              snapshot.data!.maxPeople.toString(),
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+
+                        Row(
+                          children: [
+                            Text(
+                              snapshot.data!.members!.length.toString() +
+                                  "/" +
+                                  snapshot.data!.maxPeople.toString(),
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.person)
+                          ],
                         ),
                         (state == 1)
                             ? (Container(
                                 alignment: Alignment.centerRight,
                                 width: MediaQuery.of(context).size.width / 2.5,
                                 height: 200,
-                                color: Colors.red,
+                                color: Themes.white,
                                 child: Column(children: [
                                   Text(
                                       "You can see the members of this event when you join in")
@@ -174,7 +181,7 @@ class EventCardState extends State<EventCardView> {
                                     width:
                                         MediaQuery.of(context).size.width / 2.5,
                                     height: 200,
-                                    color: Colors.red,
+                                    color: Themes.white,
                                     child: Column(children: [
                                       Text(
                                           "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
@@ -184,7 +191,7 @@ class EventCardState extends State<EventCardView> {
                                     width:
                                         MediaQuery.of(context).size.width / 2.5,
                                     height: 200,
-                                    color: Colors.red,
+                                    color: Themes.white,
                                     child: Column(children: [
                                       Text(
                                           "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
@@ -214,7 +221,7 @@ class EventCardState extends State<EventCardView> {
                       child: Container(
                         width: 200,
                         height: 60,
-                        color: Colors.amber,
+                        color: Themes.fourth,
                         child: TextButton(
                           onPressed: () {
                             HandleJoin(state);
