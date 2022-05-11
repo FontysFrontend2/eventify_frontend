@@ -1,5 +1,6 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/create_event/create_event_view.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:eventify_frontend/event/eventcard_shortview.dart';
@@ -65,23 +66,8 @@ class HomeFeedState extends State<HomeFeedView> {
                   },
                   child: Stack(
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        color: Colors.blue,
-                        child: //Row(
-                            //mainAxisAlignment: MainAxisAlignment.center,
-                            //children: [
-                            Text(
-                          "Events of your interests",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        //Icon(Icons.arrow_circle_down_rounded)
-                        //  ],
-                        //  ),
-                      ),
                       ListView.builder(
-                        padding: EdgeInsets.only(top: 40),
+                        padding: EdgeInsets.only(top: 7),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (_, index) => Center(
                           child: EventCardShortView(
@@ -98,9 +84,9 @@ class HomeFeedState extends State<HomeFeedView> {
                             style: ElevatedButton.styleFrom(
                               fixedSize: const Size(40, 40),
                               shape: const CircleBorder(),
-                              primary: Colors.blue,
-                              onPrimary: Colors.black,
-                              shadowColor: Colors.white,
+                              primary: Themes.white,
+                              onPrimary: Themes.first,
+                              shadowColor: Themes.third,
                             ),
                             child: const Icon(
                               Icons.add,
