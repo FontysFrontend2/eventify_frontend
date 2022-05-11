@@ -1,4 +1,6 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
+import 'package:eventify_frontend/apis/controllers/interest_controller.dart';
+import 'package:eventify_frontend/apis/models/interest_model.dart';
 import 'package:eventify_frontend/chat/event_chat/chat_card.dart';
 import 'package:eventify_frontend/chat/interest_chat/interest_card.dart';
 import 'package:eventify_frontend/profile/themes.dart';

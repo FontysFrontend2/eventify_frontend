@@ -18,8 +18,6 @@ class EventCardShortView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //bool locationBased = d.locationBased as bool;
-    //bool limitedPeople = d.maxPeople != 0;
     return Center(
       child: Card(
         color: Themes.fifth,
