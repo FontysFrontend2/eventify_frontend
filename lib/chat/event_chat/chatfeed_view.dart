@@ -18,8 +18,10 @@ class ChatFeed extends StatefulWidget {
 
 class _ChatFeedState extends State<ChatFeed> {
   late Future<List> futureAllEventsData;
+  late Future<List> futureJoinedEventsData;
   int _state = 1;
   var interests;
+  var events;
 
   late SharedPreferences prefs;
 
@@ -33,6 +35,7 @@ class _ChatFeedState extends State<ChatFeed> {
   loadData() async {
     prefs = await SharedPreferences.getInstance();
     interests = prefs.getStringList("userInterests");
+    events = prefs.getStringList("userEvents");
   }
 
   void startConnection() async {
@@ -48,6 +51,7 @@ class _ChatFeedState extends State<ChatFeed> {
     super.initState();
     startConnection();
     futureAllEventsData = fetchAllEventsData();
+    futureJoinedEventsData = fetchJoinedEvetns();
   }
 
   @override
@@ -117,7 +121,7 @@ class _ChatFeedState extends State<ChatFeed> {
         ),
         body: _state == 1
             ? FutureBuilder<List>(
-                future: futureAllEventsData,
+                future: futureJoinedEventsData,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
