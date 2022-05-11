@@ -4,6 +4,7 @@ import 'package:eventify_frontend/apis/models/event_model.dart';
 import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
 import 'package:eventify_frontend/event/event_creator.dart';
+import 'package:eventify_frontend/event/members_list.dart';
 import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -183,8 +184,7 @@ class EventCardState extends State<EventCardView> {
                                     height: 200,
                                     color: Themes.white,
                                     child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
+                                      MembersList(snapshot.data!.members)
                                     ])))
                                 : (Container(
                                     alignment: Alignment.centerRight,
@@ -193,8 +193,7 @@ class EventCardState extends State<EventCardView> {
                                     height: 200,
                                     color: Themes.white,
                                     child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
+                                      MembersList(snapshot.data!.members)
                                     ]))),
                       ]),
                     ]),
@@ -212,6 +211,7 @@ class EventCardState extends State<EventCardView> {
                                 snapshot.data!.longitude!),
                           ))
                         : (Container()),
+                    Container(height: 20),
                     EventCreator(widget.hostID),
                     Spacer(),
                     // protetcted view when joined
