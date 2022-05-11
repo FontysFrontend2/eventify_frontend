@@ -1,7 +1,9 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
+import 'package:eventify_frontend/event/event_creator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,7 +191,6 @@ class EventCardState extends State<EventCardView> {
                                     ]))),
                       ]),
                     ]),
-
                     //Just a spacer container, any better solution?
                     Container(
                       width: double.infinity,
@@ -204,9 +205,9 @@ class EventCardState extends State<EventCardView> {
                                 snapshot.data!.longitude!),
                           ))
                         : (Container()),
+                    EventCreator(widget.hostID),
                     Spacer(),
                     // protetcted view when joined
-
                     //Button to join/leave event
                     Align(
                       alignment: Alignment.bottomCenter,
