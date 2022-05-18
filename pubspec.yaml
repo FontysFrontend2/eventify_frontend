@@ -37,6 +37,7 @@ dependencies:
   dio: ^4.0.0
   flutter_polyline_points: ^0.2.6
   google_maps_flutter: ^2.0.2
+  location: ^4.2.0
   http: ^0.13.4
   intl: ^0.17.0
 
@@ -73,6 +74,18 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/profile_pictures/default_image.png
+    - assets/images/profile_pictures/ava_1.png
+    - assets/images/profile_pictures/ava_2.png
+    - assets/images/profile_pictures/ava_3.png
+    - assets/images/profile_pictures/ava_4.png
+    - assets/images/profile_pictures/ava_5.png
+    - assets/images/profile_pictures/ava_6.png
+    - assets/images/profile_pictures/ava_7.png
+    - assets/images/profile_pictures/ava_9.png
+    - assets/images/profile_pictures/ava_10.png
+    - assets/images/profile_pictures/ava_11.png
+    - assets/images/profile_pictures/ava_12.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

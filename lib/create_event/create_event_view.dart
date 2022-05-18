@@ -368,11 +368,8 @@ class _NewEventFormState extends State<NewEventForm> {
 
 // gets location from location class
   void _showLocationSelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
     final result = await Navigator.push(
       context,
-      // Create the SelectionScreen in the next step.
       MaterialPageRoute(builder: (context) => const SelectLocation()),
     );
 
@@ -407,44 +404,13 @@ class _NewEventFormState extends State<NewEventForm> {
       print('puusti1');
       createPostEvent(description, title, tagList, false, 0, 0, _hostID,
           maxPeople, 2, "2022-05-14T08:34:59.506", false);
-      infoTestString = '\nname: ' +
-          title +
-          '\ndescription: ' +
-          description +
-          '\nLocationBased = false' +
-          '\nTags: ' +
-          _tags.toString() +
-          '\ndate: ' +
-          _date +
-          '\ntime: ' +
-          _time +
-          '\nmax people: ' +
-          _maxPeople.toString() +
-          "\nhostId: " +
-          _hostID.toString();
+      infoTestString = 'Event posted succesfully';
+      ;
     } else {
       print('puusti2');
       createPostEvent(description, title, tagList, true, posLat, posLong,
           _hostID, maxPeople, 2, "2022-05-14T08:34:59.506", false);
-      infoTestString = '\nname: ' +
-          title +
-          '\ndescription: ' +
-          description +
-          '\nLocationBased = true' +
-          '\nLat: ' +
-          posLat.toString() +
-          '\nLong: ' +
-          posLong.toString() +
-          '\nTags: ' +
-          _tags.toString() +
-          '\ndate: ' +
-          _date +
-          '\ntime: ' +
-          _time +
-          '\nmax people: ' +
-          _maxPeople.toString() +
-          "\nhostId: " +
-          _hostID.toString();
+      infoTestString = 'Event posted succesfully';
     }
   }
 }

@@ -1,21 +1,39 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:eventify_frontend/login/select_profile_picture.dart';
 import 'package:flutter/material.dart';
 
 import '../apis/controllers/login_controller.dart';
 
-class RegisterationView extends StatelessWidget {
+class RegisterationView extends StatefulWidget {
+  final VoidCallback cb;
+  const RegisterationView(this.cb, {Key? key}) : super(key: key);
+  RegisterationViewState createState() => RegisterationViewState();
+}
+
+class RegisterationViewState extends State<RegisterationView> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
-
-  final VoidCallback cb;
-
-  RegisterationView(this.cb, {Key? key}) : super(key: key);
+  String picture = "assets/images/profile_pictures/default_image.png";
 
   final usernameCtrl = TextEditingController();
 
   final emailCtrl = TextEditingController();
 
   final passwdCtrl = TextEditingController();
+
+  void _showPictureSelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => const selectProfilePicture()),
+    );
+    setState(() {
+      picture = result;
+    });
+    print('result:' + result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +57,27 @@ class RegisterationView extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 60,
+              height: 20,
+            ),
+            IconButton(
+              icon: ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Ink.image(
+                    image: AssetImage(
+                      picture,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              iconSize: 100,
+              onPressed: () {
+                _showPictureSelection(context);
+              },
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Form(
               key: _formKey,
@@ -52,7 +90,7 @@ class RegisterationView extends StatelessWidget {
                           maxLines: 1,
                           controller: usernameCtrl,
                           decoration: InputDecoration(
-                            hintText: 'First name',
+                            hintText: 'Username',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -108,11 +146,11 @@ class RegisterationView extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      var status = await registerUser(
-                          usernameCtrl.text, emailCtrl.text, passwdCtrl.text);
+                      var status = await registerUser(usernameCtrl.text,
+                          emailCtrl.text, passwdCtrl.text, picture);
                       print(status);
                       if (status == true) {
-                        cb();
+                        widget.cb();
                         Navigator.pop(context);
                       }
                     },

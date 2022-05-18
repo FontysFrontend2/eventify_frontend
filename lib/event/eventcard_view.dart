@@ -1,7 +1,11 @@
 import 'package:eventify_frontend/apis/controllers/event_controller.dart';
 import 'package:eventify_frontend/apis/controllers/user_controller.dart';
 import 'package:eventify_frontend/apis/models/event_model.dart';
+import 'package:eventify_frontend/apis/models/user_model.dart';
 import 'package:eventify_frontend/chat/event_chat/event_location.dart';
+import 'package:eventify_frontend/event/event_creator.dart';
+import 'package:eventify_frontend/event/members_list.dart';
+import 'package:eventify_frontend/profile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,10 +108,11 @@ class EventCardState extends State<EventCardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Themes.fourth,
         title: Text('EventCard'),
       ),
       body: (Container(
-        color: Colors.lightGreen,
+        color: Themes.white,
         width: double.infinity,
         padding: const EdgeInsets.all(10.0),
         child: FutureBuilder<EventData>(
@@ -130,14 +135,6 @@ class EventCardState extends State<EventCardView> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
 
-                    //Joined / max
-                    Text(
-                      //snapshot.data!.members.length().toString()
-                      '1/' + snapshot.data!.maxPeople.toString(),
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-
                     //Just a spacer container, any better solution?
                     Container(
                       width: double.infinity,
@@ -145,12 +142,61 @@ class EventCardState extends State<EventCardView> {
                     ),
 
                     //Event description
-                    Text(
-                      'Tähän tietoa eventistä niin paljon kuin tarvis... jhsdlkjfhklshdfhlkjshdflkjhskjdlhflkjshdf' +
+                    Row(children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
                           snapshot.data!.description.toString(),
-                      style: TextStyle(fontSize: 16),
-                    ),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      // protetcted view when joined
+                      Column(children: [
+                        //Joined / max
 
+                        Row(
+                          children: [
+                            Text(
+                              snapshot.data!.members!.length.toString() +
+                                  "/" +
+                                  snapshot.data!.maxPeople.toString(),
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.person)
+                          ],
+                        ),
+                        (state == 1)
+                            ? (Container(
+                                alignment: Alignment.centerRight,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                height: 200,
+                                color: Themes.white,
+                                child: Column(children: [
+                                  Text(
+                                      "You can see the members of this event when you join in")
+                                ])))
+                            : (state == 2)
+                                ? (Container(
+                                    alignment: Alignment.centerRight,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    height: 200,
+                                    color: Themes.white,
+                                    child: Column(children: [
+                                      MembersList(snapshot.data!.members)
+                                    ])))
+                                : (Container(
+                                    alignment: Alignment.centerRight,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    height: 200,
+                                    color: Themes.white,
+                                    child: Column(children: [
+                                      MembersList(snapshot.data!.members)
+                                    ]))),
+                      ]),
+                    ]),
                     //Just a spacer container, any better solution?
                     Container(
                       width: double.infinity,
@@ -165,39 +211,38 @@ class EventCardState extends State<EventCardView> {
                                 snapshot.data!.longitude!),
                           ))
                         : (Container()),
+                    Container(height: 20),
+                    EventCreator(widget.hostID),
                     Spacer(),
                     // protetcted view when joined
-                    (state == 1)
-                        ? (Container())
-                        : (state == 2)
-                            ? (Expanded(
-                                flex: 2,
-                                child: Container(
-                                    color: Colors.red,
-                                    child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW YOU HAVE JOINED THIS EVENT")
-                                    ]))))
-                            : (Expanded(
-                                flex: 2,
-                                child: Container(
-                                    color: Colors.red,
-                                    child: Column(children: [
-                                      Text(
-                                          "THIS IS PROTETCTED VIEW THIS IS YOUR OWN EVENT")
-                                    ])))),
                     //Button to join/leave event
                     Align(
-                      alignment: Alignment.bottomRight,
-                      child: TextButton(
-                        onPressed: () {
-                          HandleJoin(state);
-                        },
-                        child: state == 1
-                            ? Text('Join Event')
-                            : state == 2
-                                ? Text('Leave Event')
-                                : Text('Delete Event'),
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: 200,
+                        height: 60,
+                        color: Themes.fourth,
+                        child: TextButton(
+                          onPressed: () {
+                            HandleJoin(state);
+                          },
+                          child: state == 1
+                              ? Text(
+                                  'Join Event',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : state == 2
+                                  ? Text('Leave Event',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold))
+                                  : Text('Delete Event',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ),
                   ],

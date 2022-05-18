@@ -32,6 +32,7 @@ class MyUserData {
   final String registrationDate;
   final List events;
   final List interests;
+  final String profileImg;
 
   const MyUserData(
       {required this.id,
@@ -39,15 +40,17 @@ class MyUserData {
       required this.email,
       required this.registrationDate,
       required this.events,
-      required this.interests});
+      required this.interests,
+      required this.profileImg});
 
   factory MyUserData.fromJson(Map<String, dynamic> json) {
     return MyUserData(
         id: json['id'],
-        name: json['username'],
+        name: json['name'],
         email: json['email'],
         registrationDate: json['registrationDate'],
-        events: json['eventIDs'],
-        interests: json['interestIDs']);
+        events: json['events'],
+        interests: json['interests'],
+        profileImg: json["img"]);
   }
 }
